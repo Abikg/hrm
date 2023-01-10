@@ -12,7 +12,9 @@
                 <h1>Employees</h1>
             </div>
             <div class="col-sm-2">
-                <button id="add-new-employee" class="btn btn-primary btn-sm pull-right">Add New Employee</button>
+                <a th:href="@{/employee/create}">
+                    <button id="add-new-employee"
+                            class="btn btn-primary btn-sm pull-right">Add New Employee</button></a>
             </div>
         </div>
     </div>

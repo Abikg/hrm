@@ -3,7 +3,9 @@ package com.makalu.hrm.controller;
 import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.model.RestResponseDto;
+import com.makalu.hrm.service.DepartmentService;
 import com.makalu.hrm.service.EmployeeService;
+import com.makalu.hrm.service.PositionService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -21,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final DepartmentService departmentService;
+    private final PositionService positionService;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
@@ -46,16 +50,22 @@ public class EmployeeController {
         return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(employeeService.list()));
     }
 
-    @GetMapping("/getSelectList")
+    @GetMapping("/create")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<RestResponseDto> getSelectList(){
-        return ResponseEntity.ok(employeeService.getPositionAndDepartmentList());
+    public String create(ModelMap map){
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
+        map.put(ParameterConstant.POSITION_LIST, positionService.list());
+        map.put(ParameterConstant.EMPLOYEE,employeeDTO);
+        return "employee/create";
     }
-
     @RequestMapping(path = "/save",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @ResponseBody
-    public ResponseEntity<RestResponseDto> save(@RequestPart("file") MultipartFile file,@RequestPart("data") EmployeeDTO employeeDTO){
-        return ResponseEntity.ok(employeeService.save(employeeDTO));
+    public String save(EmployeeDTO employeeDTO,ModelMap map){
+        map.put(ParameterConstant.DEPARTMENT_LIST,departmentService.list());
+        map.put(ParameterConstant.POSITION_LIST,positionService.list());
+        map.put(ParameterConstant.EMPLOYEE,employeeDTO);
+        map.put(ParameterConstant.RESPONSE,employeeService.save(employeeDTO));
+        return "employee/create";
     }
 }

@@ -24,41 +24,68 @@
                             <div class="form-group">
                                 <label for="fullname" class="col-form-label">Fullname</label>
                                 <input type="text" th:field="*{fullname}" class="form-control" id="fullname">
-                                <p class="error" id="error-fullname"></p>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').fullname != null}"
+                                       class="error" th:text="${response.detail.get('error').fullname}"></p>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="address" class="col-form-label">Address</label>
                                 <input type="text" th:field="*{address}" class="form-control" id="address">
-                                <p class="error" id="error-address"></p>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').address != null}"
+                                       class="error" id="error-address" th:text="${response.detail.get('error').address}"></p>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="col-form-label">Email</label>
                                 <input type="email" th:field="*{email}" class="form-control" id="email">
-                                <p class="error" id="error-email"></p>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').email != null}"
+                                       class="error"  th:text="${response.detail.get('error').email}"></p>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="phone" class="col-form-label">Phone</label>
                                 <input type="text" th:field="*{phone}" class="form-control" id="phone">
-                                <p class="error" id="error-phone"></p>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').phone != null}"
+                                       class="error"  th:text="${response.detail.get('error').phone}"></p>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="position" class="col-form-label">Select Position</label>
-                                <select class="form-control" id="position" name="positionIdList"  multiple>
-                                    <option th:each="position : ${positionList}" th:value="${position.id}" th:text="${position.title}">
+                                <select class="form-control" id="position" name="positionIdList" multiple>
+                                    <option  th:unless="*{positionDTO != null}" th:each="position : ${positionList}" th:value="${position.id}" th:text="${position.title}"></option>
+                                    <option th:if="*{positionDTO != null}" th:each="position : ${positionList}">
+                                        <option th:if="*{positionDTO != null}" th:each="sp : ${employee.positionDTO}" th:selected="${position.id == sp.id}" th:value="${position.id}" th:text="${position.title}"></option>
+                                    </option>
                                 </select>
-                                <p class="error" id="error-position"></p>
+                                <div th:if="*{positionDTO != null}">
+                                   <span class="text-bold">Selected Positions:</span>&nbsp;<span class="text-info" th:each="sp : ${employee.positionDTO}" th:text="${sp.title}">&nbsp;</span>
+                                </div>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').position != null}"
+                                       class="error"  th:text="${response.detail.get('error').position}"></p>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="department"  class="col-form-label">Select Department</label>
                                 <select class="form-control" id="department" name="departmentIdList"  multiple >
                                     <option th:each="department : ${departmentList}" th:value="${department.id}" th:text="${department.title}">
                                 </select>
-                                <p class="error" id="error-department"></p>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').department != null}"
+                                       class="error"  th:text="${response.detail.get('error').department}"></p>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="empImg" class="form-label">Choose image</label>
                                 <input class="form-control form-control-sm" name="empImage" id="empImg" type="file">
-                                <p class="error" id="error-empImage"></p>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').empImage != null}"
+                                       class="error"  th:text="${response.detail.get('error').empImage}"></p>
+                                </div>
                             </div>
                     </div>
                     <div class="card-footer">

@@ -128,7 +128,7 @@ public class EmployeeValidation {
     }
 
     private boolean validateImage(MultipartFile file) {
-        if (file != null) {
+        if (file != null && !file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             String ext = FilenameUtils.getExtension(fileName);
             if (file.getSize() > MAX_FILE_SIZE) {

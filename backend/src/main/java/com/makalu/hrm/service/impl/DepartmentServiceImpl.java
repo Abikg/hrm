@@ -112,4 +112,10 @@ public class DepartmentServiceImpl implements DepartmentService {
             return RestResponseDto.INSTANCE().internalServerError();
         }
     }
+
+    @Override
+    public List<DepartmentDTO> findAllDepartment(Iterable<UUID> uuids) {
+        List<DepartmentDTO> dtoList = departmentConverter.convertToDtoList(departmentRepository.findAllById(uuids));
+        return dtoList;
+    }
 }

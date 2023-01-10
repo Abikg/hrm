@@ -18,4 +18,6 @@ public interface PositionService {
     RestResponseDto update(PositionDTO positionDTO);
 
     RestResponseDto delete(UUID positionId);
+
+    List<PositionDTO> findAllPosition(Iterable<UUID> uuids);
 }

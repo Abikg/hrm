@@ -40,6 +40,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public RestResponseDto save(@NotNull EmployeeDTO employeeDTO) {
+        if(employeeDTO.getDepartmentIdList() != null){
+            List<DepartmentDTO> departmentDTOList = departmentService.findAllDepartment(employeeDTO.getDepartmentIdList());
+            employeeDTO.setDepartmentDTO(departmentDTOList);
+        }
+        if(employeeDTO.getPositionIdList() != null){
+            List<PositionDTO> positionDTOList = positionService.findAllPosition(employeeDTO.getPositionIdList());
+            employeeDTO.setPositionDTO(positionDTOList);
+        }
         EmployeeError error = employeeValidation.validateOnSave(employeeDTO);
 
         if(!error.isValid()){
@@ -47,6 +55,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .validationError()
                     .detail(Map.of("error",error,"data",employeeDTO));
         }
+
+
 
         return  null;
     }
