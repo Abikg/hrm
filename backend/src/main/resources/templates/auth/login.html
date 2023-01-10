@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th ="http://www.thymeleaf.org">
+<head>
+    <title>Makalu Software</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+    <style>
+        .text-color-brand{
+            color: #fd7e14;
+        }
+        label,a{
+            color: #fd7e14 !important;
+        }
+        a,a:hover{
+            outline: none;
+        }
+        .form-control:focus {
+            outline: #fd7e14 !important;
+            border-color: #fd7e14 !important;
+            box-shadow: #f59443 !important;
+        }
+        .gradient-custom-2 {
+            /* fallback for old browsers */
+            background: #1479c4;
+
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: -webkit-linear-gradient(to right, #1479c4, #1479c4);
+
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ fd7e14 */
+            background: linear-gradient(to right, #1479c4, #1479c4);
+        }
+
+        @media (min-width: 768px) {
+            .gradient-form {
+                height: 100vh !important;
+            }
+        }
+        @media (min-width: 769px) {
+            .gradient-custom-2 {
+                border-top-right-radius: .3rem;
+                border-bottom-right-radius: .3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="login-page">
+    <section class="h-100 gradient-form" style="background-color: #eee;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-xl-5">
+                    <div class="card rounded-3 text-black">
+                        <div class="row g-0">
+                            <div class="col-lg-12">
+                                <div class="card-body p-md-5 mx-md-4">
+
+                                    <div class="text-center">
+                                        <img th:src="@{/img/logo.jpg}" style="width: -webkit-fill-available;" alt="Logo" class="mr-3">
+                                        <h4 class="mt-1 mb-5 pb-1 text-color-brand">HRM</h4>
+                                    </div>
+
+                                    <form th:href="@{/auth/authenticate}" method="POST" id="loginForm" class="cssform" autocomplete="off">
+                                        <p th:text="${param.error}" style="color: red">Please login to your account</p>
+
+                                        <div class="form-outline mb-4">
+                                            <input type="email" name="username" id="form2Example11" class="form-control"
+                                                   placeholder="user email" />
+                                            <label class="form-label" for="form2Example11">Username</label>
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <input type="password" name="password"  id="form2Example22" placeholder="password" class="form-control" />
+                                            <label class="form-label" for="form2Example22">Password</label>
+                                        </div>
+
+                                        <div class="text-center pt-1 mb-5 pb-1">
+                                            <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Log
+                                                in</button>
+                                            <a href="#!">Forgot password?</a>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+</body>
+</html>

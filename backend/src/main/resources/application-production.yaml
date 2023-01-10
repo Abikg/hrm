@@ -1,0 +1,15 @@
+spring:
+  banner:
+    location: classpath:/banners/prod.txt
+
+management:
+  endpoint:
+    logfile:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, info, logfile
+logging:
+  file:
+    name: /tmp/malau_hrm.log

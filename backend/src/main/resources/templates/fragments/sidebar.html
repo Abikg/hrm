@@ -1,0 +1,70 @@
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4" th:fragment="sidebar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <!-- Brand Logo -->
+  <a href="index3.html" class="brand-link">
+    <img th:src="@{/img/logo.jpg}" alt="Makalu Software Logo" class="brand-image" style="margin-left: 0;max-height: 40px">
+    <span class="brand-text font-weight-light">Makalu HRM</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="info">
+        <a href="#" class="d-block" th:text="${T(com.book.utils.AuthenticationUtils).getUserName()}">Alexander Pierce</a>
+      </div>
+    </div>
+
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false">
+
+        <li class="nav-item">
+          <a th:href="@{/}" class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+              Dashboard
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item " sec:authorize="hasRole('SUPER_ADMIN')">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-cog"></i>
+            <p>
+              Setting
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+
+            <li class="nav-item">
+              <a  th:href="@{/department/list}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Department</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a th:href="@{/position/list}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Position</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/employee/list}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Employee</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

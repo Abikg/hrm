@@ -1,0 +1,91 @@
+plugins {
+	//String springBootVersion = System.getProperty("springBootVersion")
+	id('org.springframework.boot') version "2.7.2" apply false
+	id('io.spring.dependency-management') version '1.0.12.RELEASE' apply false
+	id('java')
+	id('war')
+}
+
+allprojects {
+	group = 'com.book'
+	version = '0.0.1'
+	sourceCompatibility = '11'
+	targetCompatibility = '11'
+}
+
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+
+
+subprojects{
+	repositories {
+		mavenCentral()
+		maven {
+			setUrl("https://jitpack.io")
+			content {
+				excludeGroup("com.github.paulcwarren")
+			}
+		}
+	}
+
+	sourceCompatibility = '11'
+	targetCompatibility = '11'
+
+	apply plugin: 'io.spring.dependency-management'
+
+	dependencyManagement {
+		dependencies {
+			def springBootVersion = System.getProperty("springBootVersion")
+			def springContentVersion = System.getProperty("springContentVersion")
+			def uuidGeneratorVersion = System.getProperty("uuidGeneratorVersion")
+			def databindNullabaleVersion = System.getProperty("databindNullabaleVersion")
+			def javaxAnnotationApiVersion = System.getProperty("javaxAnnotationApiVersion")
+			def jakartaInterceptorVersion = System.getProperty("jakartaInterceptorVersion")
+			def swaggerIOVersion = System.getProperty("swaggerIOVersion")
+			def forceRestVersion = System.getProperty("forceRestVersion")
+			def javaxXmlBind = System.getProperty("javaxXmlBind")
+			def postgreSQLVersion = System.getProperty("postgreSQLVersion")
+
+			dependency("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-batch:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-data-jdbc:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-mail:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-oauth2-client:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-oauth2-resource-server:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-devtools:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion")
+			dependency("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
+			dependency("org.liquibase:liquibase-core:4.14.0")
+			dependency("org.projectlombok:lombok:1.18.24")
+			dependency("com.github.paulcwarren:spring-content-fs-boot-starter:$springContentVersion")
+			dependency("com.fasterxml.uuid:java-uuid-generator:$uuidGeneratorVersion")
+			dependency("org.openapitools:jackson-databind-nullable:$databindNullabaleVersion")
+			dependency("io.swagger.core.v3:swagger-core:$swaggerIOVersion")
+			dependency("javax.annotation:javax.annotation-api:$javaxAnnotationApiVersion")
+			dependency("com.frejo:force-rest-api:$forceRestVersion")
+			dependency("javax.interceptor:javax.interceptor-api:$jakartaInterceptorVersion")
+			dependency("javax.xml.bind:jaxb-api:$javaxXmlBind")
+			dependency("joda-time:joda-time:2.11.0")
+			dependency("commons-validator:commons-validator:1.7")
+			dependency("org.passay:passay:1.6.2")
+			dependency("com.vladmihalcea:hibernate-types-55:2.18.0")
+			dependency("org.postgresql:postgresql:$postgreSQLVersion")
+
+		}
+	}
+}
+
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

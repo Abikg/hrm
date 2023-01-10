@@ -1,0 +1,30 @@
+spring:
+  profiles:
+    active: "dev"
+    group:
+      test: test,debug,local #,localdb
+      dev: develop,debug,local,localdb
+      prod: production,local
+  application:
+    name: "makalu_hrm"
+  jpa:
+    properties:
+      hibernate:
+        order_updates: true
+        order_inserts: true
+        jdbc:
+          batch_size: 100
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    ROOT: INFO
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /manage
+      cors:
+        allowed-origins: '*'

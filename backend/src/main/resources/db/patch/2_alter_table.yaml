@@ -1,0 +1,27 @@
+databaseChangeLog:
+#  -  changeSet:
+#       id:  2022-12-23-departments_change-table-name-to-department
+#       author:  suvam
+#       changes:
+#         - renameTable:
+#             newTableName: department
+#             oldTableName: departments
+#             schemaName: public
+#
+#  - changeSet:
+#      id: 2022-12-23-positions_change-table-name-to-position
+#      author: suvam
+#      changes:
+#        - renameTable:
+#            newTableName: position
+#            oldTableName: positions
+#            schemaName: public
+
+  - changeSet:
+      id: 2022-12-23-employees_change-table-name-to-employee
+      author: suvam
+      changes:
+        - renameTable:
+            newTableName: employee
+            oldTableName: employees
+            schemaName: public

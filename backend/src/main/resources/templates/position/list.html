@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Position</title>
+</head>
+<body layout:fragment="content">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-10">
+                <h1>Positions</h1>
+            </div>
+            <div class="col-sm-2">
+                <button id="add-new-position" class="btn btn-primary btn-sm pull-right">Add New Position</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table" id="position-table">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Code</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody th:each="position: ${positionList}">
+                            <tr th:id="${position.id}">
+                                <td th:text="${position.title}" class="title"></td>
+                                <td th:text="${position.detail}" class="detail"></td>
+                                <td>
+                                    <button type="button" th:data-id="${position.id}" th:onclick="editPosition([[${position.id}]])" class="position-edit btn btn-info btn-sm">Edit</button>
+                                    <button type="button" th:data-id="${position.id}" th:onclick="deletePosition([[${position.id}]])" class="btn btn-danger btn-sm">Delete</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="positionModal" tabindex="-1" role="dialog" aria-labelledby="positionModal" aria-hidden="true">
+    <form id="positionForm" action="" th:data-action-base-url="@{/position/}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="positionModalLabel">Create New Postion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="id">
+                    <div class="form-group">
+                        <label for="title" class="col-form-label">Title</label>
+                        <input type="text" name="title" class="form-control" id="title">
+                        <p class="error" id="error-title"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="details" class="col-form-label">Details</label>
+                        <textarea class="form-control" name="detail" id="details"></textarea>
+                        <p class="error" id="error-detail"></p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" id="btn-save-position" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" th:src="@{/js/hrm/position.js}"></script>
+</body>
+</html>

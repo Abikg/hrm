@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee</title>
+</head>
+<body layout:fragment="content">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-10">
+                <h1>Employee Form</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <form id="employeeForm" method="post" th:action="@{/employee/save}" th:object="${employee}" enctype="multipart/form-data">
+                    <div class="card-body">
+                            <div class="form-group">
+                                <label for="fullname" class="col-form-label">Fullname</label>
+                                <input type="text" th:field="*{fullname}" class="form-control" id="fullname">
+                                <p class="error" id="error-fullname"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="address" class="col-form-label">Address</label>
+                                <input type="text" th:field="*{address}" class="form-control" id="address">
+                                <p class="error" id="error-address"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-form-label">Email</label>
+                                <input type="email" th:field="*{email}" class="form-control" id="email">
+                                <p class="error" id="error-email"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" class="col-form-label">Phone</label>
+                                <input type="text" th:field="*{phone}" class="form-control" id="phone">
+                                <p class="error" id="error-phone"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="position" class="col-form-label">Select Position</label>
+                                <select class="form-control" id="position" name="positionIdList"  multiple>
+                                    <option th:each="position : ${positionList}" th:value="${position.id}" th:text="${position.title}">
+                                </select>
+                                <p class="error" id="error-position"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="department"  class="col-form-label">Select Department</label>
+                                <select class="form-control" id="department" name="departmentIdList"  multiple >
+                                    <option th:each="department : ${departmentList}" th:value="${department.id}" th:text="${department.title}">
+                                </select>
+                                <p class="error" id="error-department"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="empImg" class="form-label">Choose image</label>
+                                <input class="form-control form-control-sm" name="empImage" id="empImg" type="file">
+                                <p class="error" id="error-empImage"></p>
+                            </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" id="btn-save-employee" class="btn btn-primary">Save Changes</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,47 @@
+.nav-sidebar>.nav-item>.nav-link.active{
+    background-color: #fd7e14 !important;
+    color: #FFFFFF !important;
+}
+
+.nav-sidebar> .nav-item> .nav-treeview> .nav-item> .nav-link.active{
+    background-color: #e9f1fe !important;
+    color: #fd7e14 !important;
+}
+
+.nav-sidebar> .nav-item> .nav-treeview> .nav-item> .nav-link.active:hover{
+    background-color: #FFFFFF !important;
+    color: #fd7e14 !important;
+}
+
+.navbar-white {
+    background-color: #1479c4 !important;
+    color: #FFFFFF !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #e5eaf3 !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #FFFFFF !important;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #FFFFFF !important;
+}
+
+/*.sidebar-dark-primary a{
+    background-color: color(display-p3 0.076 0.304 0.505) !important;
+}*/
+
+.sidebar-dark-primary{
+    background-color: #1479c4 !important;
+}
+
+.sidebar-dark-primary a {
+    color: #e5eaf3 !important;
+}
+
+.sidebar-dark-primary a:hover {
+    color: #FFFFFF !important;
+}

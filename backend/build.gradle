@@ -1,0 +1,97 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'java'
+    id 'war'
+}
+
+dependencies {
+    //implementation(project(":base"))
+   // runtimeOnly(project(path:":frontend", configuration :"webjar"))
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.5.RELEASE'
+    implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.1.0'
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.liquibase:liquibase-core'
+    implementation("com.github.paulcwarren:spring-content-fs-boot-starter")
+    implementation("com.fasterxml.uuid:java-uuid-generator")
+    implementation("joda-time:joda-time")
+    implementation("commons-validator:commons-validator")
+    implementation("org.passay:passay")
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    testImplementation('org.testcontainers:postgresql:1.17.6')
+    runtimeOnly("org.postgresql:postgresql")
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.batch:spring-batch-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    compileOnly 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation("com.vladmihalcea:hibernate-types-55")
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+String imageAndRegistryName() {
+    String DOCKER_REGISTRY = ""
+    try {
+        DOCKER_REGISTRY = System.getenv("DOCKER_REGISTRY") ?: ""
+    } catch (Exception ignored) {
+
+    }
+
+    return "$DOCKER_REGISTRY/makalu/${rootProject.name}:latest".trim()
+}
+
+String[] getDockerCredentials(){
+    String DOCKER_REGISTRY_TOKEN = System.getenv("DOCKER_REGISTRY_TOKEN")?:"dGVzdDp0ZXN0"
+    String DOCKER_REGISTRY_USERNAME = System.getenv("DOCKER_REGISTRY_USERNAME")?:"dGVzdDp0ZXN0"
+    return  [DOCKER_REGISTRY_USERNAME, DOCKER_REGISTRY_TOKEN]
+}
+
+
+tasks {
+    tasks.register("dockerHubLogin", Exec){
+        String[] DOCKER_REGISTRY_TOKEN_ARRAY = getDockerCredentials()
+        commandLine 'sh', '-c', "docker login -u ${DOCKER_REGISTRY_TOKEN_ARRAY[0]} -p '${DOCKER_REGISTRY_TOKEN_ARRAY[1]}' ${System.getenv("DOCKER_REGISTRY") ?: ""}"
+    }
+
+    tasks.register("dockerHubPushImage", Exec){
+        dependsOn("bootBuildImage", "dockerHubLogin")
+        commandLine = List.of(
+                "docker", "push", "${imageAndRegistryName()}"
+        )
+    }
+
+    tasks.register("release"){
+        dependsOn("dockerHubPushImage")
+    }
+
+    bootBuildImage {
+        imageName = imageAndRegistryName()
+        String[] DOCKER_REGISTRY_TOKEN_ARRAY = getDockerCredentials()
+
+        docker {
+            publishRegistry {
+                url = "registry-intl.ap-south-1.aliyuncs.com"
+                username = DOCKER_REGISTRY_TOKEN_ARRAY[0]
+                password = DOCKER_REGISTRY_TOKEN_ARRAY[1]
+            }
+        }
+    }
+
+}

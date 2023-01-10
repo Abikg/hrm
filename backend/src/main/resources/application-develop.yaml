@@ -1,0 +1,6 @@
+spring:
+  banner:
+    location: classpath:/banners/dev.txt
+  devtools:
+    restart:
+      enabled: true

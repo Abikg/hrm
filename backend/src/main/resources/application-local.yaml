@@ -1,0 +1,14 @@
+spring:
+  content:
+    storage:
+      type:
+        default: fs
+
+local:
+  storage:
+    root: ${user.home}/Documents/smat_io/pub/token/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
