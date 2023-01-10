@@ -268,7 +268,6 @@ databaseChangeLog:
                         constraints:
                           nullable: true
 
-
                     - column:
                         name: punch_in_ip
                         type: varchar(36)
@@ -286,9 +285,10 @@ databaseChangeLog:
                           nullable: true
                     - column:
                         name: user_id_position
+                        type: varchar(36)
                         constraints:
                           nullable: false
-                          foreignKeyName: fk_user_id
+                          foreignKeyName: fk_attendance_user_id
                           references: position(id)
 
 
