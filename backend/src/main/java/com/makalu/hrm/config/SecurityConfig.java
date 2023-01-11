@@ -30,7 +30,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/img/**","/css/**", "/js/**", "/auth/**","/attendance/**")
+                .antMatchers("/img/**","/css/**", "/js/**", "/auth/**")
                 .permitAll()
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
