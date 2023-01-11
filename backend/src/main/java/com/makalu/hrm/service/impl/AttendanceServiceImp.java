@@ -54,7 +54,7 @@ public class AttendanceServiceImp implements AttendanceService {
                             attendanceRepository.saveAndFlush(attendanceConverter.convertToEntity(attendanceDto))
                     ));
         } catch (Exception e) {
-            log.error("Error while creating position", e);
+            log.error("Error while creating attendance", e);
             return RestResponseDto
                     .INSTANCE()
                     .internalServerError()

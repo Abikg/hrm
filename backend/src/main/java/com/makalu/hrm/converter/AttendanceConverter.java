@@ -19,8 +19,12 @@ public class AttendanceConverter extends Convertable<PersistentAttendanceEntity,
     private final UserRepository userRepository;
     @Override //for creating
     public PersistentAttendanceEntity convertToEntity(AttendanceDto dto) {
+
         // getting username of logged user from spring security
-        UserDetails userDetails=(UserDetails)AuthenticationUtils.getCurrentUser() ;
+        UserDetails userDetails=AuthenticationUtils.getCurrentUser();
+
+
+        // PersistentUserEntity user= userRepository.findByUsername("dhirajbadu50@gmail.com").get();
         PersistentUserEntity user=userRepository.findByUsername(userDetails.getUsername()).orElseThrow(()-> new RuntimeException("user not loggein"));
 
 
