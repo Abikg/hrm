@@ -249,22 +249,38 @@ databaseChangeLog:
 
 
       -  changeSet:
-           id: 2023-01-10 attendance_recreate_twice-table
+           id: 2023-01-10 attendance_recreate_eighteen-table
            author : keshab
            changes:
              -  createTable:
                   tableName: attendance
                   columns:
                     - column:
-                        name: attendance_id
+                        name: id
                         type: varchar(36)
                         constraints:
                          primaryKey: true
                          nullable: false
+                    - column:
+                        name: created_date
+                        type: timestamp
+                        constraints:
+                          defaultValue: true
 
                     - column:
+                        name: last_modified_date
+                        type: timestamp
+                        constraints:
+                          defaultValue: null
+
+                    - column:
+                        name: version
+                        type: int
+                        constraints:
+                          nullable: false
+                    - column:
                         name: punch_in_date
-                        type: date
+                        type: timestamp
                         constraints:
                           nullable: true
 
@@ -275,7 +291,7 @@ databaseChangeLog:
                           nullable: true
                     - column:
                         name: punch_out_date
-                        type: date
+                        type: timestamp
                         constraints:
                            nullable: true
                     - column:
@@ -284,12 +300,12 @@ databaseChangeLog:
                         constraints:
                           nullable: true
                     - column:
-                        name: user_id_position
+                        name: user_id
                         type: varchar(36)
                         constraints:
                           nullable: false
                           foreignKeyName: fk_attendance_user_id
-                          references: position(id)
+                          references: auth_user(id)
 
 
 

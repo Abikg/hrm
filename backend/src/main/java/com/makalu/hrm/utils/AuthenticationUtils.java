@@ -3,10 +3,12 @@ package com.makalu.hrm.utils;
 import com.makalu.hrm.config.CustomUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class AuthenticationUtils {
 
     public static CustomUserDetails getCurrentUser() {
