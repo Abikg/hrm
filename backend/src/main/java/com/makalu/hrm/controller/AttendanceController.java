@@ -14,13 +14,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Controller
+@RequestMapping("/attendance")
 @RequiredArgsConstructor
 
 public class AttendanceController {
@@ -29,7 +34,7 @@ public class AttendanceController {
     private final UserRepository userRepository;
 
 
-    @GetMapping("/attendance/punchin")
+    @GetMapping("/punchin")
 
     public ResponseEntity<RestResponseDto> punchIn(HttpServletRequest request) {
         AttendanceDto attendanceDto = new AttendanceDto();
@@ -51,7 +56,7 @@ public class AttendanceController {
 
 
 
-    @GetMapping("/attendance/punchout")
+    @GetMapping("/punchout")
     public ResponseEntity<RestResponseDto> punchout(HttpServletRequest request) {
 
         AttendanceDto attendanceDto = new AttendanceDto();
@@ -62,6 +67,24 @@ public class AttendanceController {
 
 
     }
+
+    @GetMapping("/list")
+    public String list(ModelMap modelMap){
+        modelMap.addAttribute( "attendanceDtoList",attendanceServiceImp.findAll());
+
+     return "attendance/list";
+    }
+
+//    @GetMapping
+//    public String getTodayAttendance(ModelMap modelMap){
+//
+//        List<AttendanceDto> attendanceDtoList=new ArrayList<>();
+//    //    AttendanceDto attendanceDto=
+//
+//        modelMap.addAttribute("")
+//
+//    }
+
 
 
 
