@@ -1,11 +1,11 @@
 package com.makalu.hrm.converter;
 
 
-import com.book.model.AttendanceDto;
 
 import com.makalu.hrm.converter.Convertable;
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
+import com.makalu.hrm.model.AttendanceDto;
 import com.makalu.hrm.repository.UserRepository;
 import com.makalu.hrm.utils.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +31,10 @@ public class AttendanceConverter extends Convertable<PersistentAttendanceEntity,
         //generate new Attendance
         PersistentAttendanceEntity entity=new PersistentAttendanceEntity();
         entity.setUser(user);
+        entity.setPunchInIp(dto.getPunchInIp());
 
 
-        return this.copyConvertToEntity(dto, entity);
+        return  entity;
     }
 
 
@@ -46,7 +47,7 @@ public class AttendanceConverter extends Convertable<PersistentAttendanceEntity,
 
 
        // entity.setPunchInDate(dto.getPunchInDate());
-        entity.setPunchInIp(dto.getPunchInIp());
+
         entity.setPunchOutDate(dto.getPunchOutDate());
         entity.setPunchOutIp(dto.getPunchOutIp());
 
@@ -61,10 +62,11 @@ public class AttendanceConverter extends Convertable<PersistentAttendanceEntity,
             return null;
 
         AttendanceDto dto = new AttendanceDto();
-        dto.setPunchInDate(dto.getPunchInDate());
-        dto.setPunchInIp(dto.getPunchInIp());
-        dto.setPunchOutDate(dto.getPunchOutDate());
-        dto.setPunchOutIp(dto.getPunchOutIp());
+        dto.setId(entity.getId());
+        dto.setPunchInDate(entity.getPunchInDate());
+        dto.setPunchInIp(entity.getPunchInIp());
+        dto.setPunchOutDate(entity.getPunchOutDate());
+        dto.setPunchOutIp(entity.getPunchOutIp());
         return dto;
     }
 

@@ -1,7 +1,7 @@
 package com.makalu.hrm.service;
 
 
-import com.book.model.AttendanceDto;
+import com.makalu.hrm.model.AttendanceDto;
 import com.makalu.hrm.model.RestResponseDto;
 
 
