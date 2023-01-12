@@ -249,7 +249,7 @@ databaseChangeLog:
 
 
       -  changeSet:
-           id: 2023-01-10 attendance_recreate_eighteen-table
+           id: 2023-01-10 attendance_table
            author : keshab
            changes:
              -  createTable:
@@ -263,13 +263,13 @@ databaseChangeLog:
                          nullable: false
                     - column:
                         name: created_date
-                        type: timestamp
+                        type: date
                         constraints:
                           defaultValue: true
 
                     - column:
                         name: last_modified_date
-                        type: timestamp
+                        type: date
                         constraints:
                           defaultValue: null
 
