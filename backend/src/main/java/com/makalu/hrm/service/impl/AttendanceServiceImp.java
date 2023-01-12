@@ -7,6 +7,7 @@ package com.makalu.hrm.service.impl;
 import com.makalu.hrm.converter.AttendanceConverter;
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.model.AttendanceDto;
+import com.makalu.hrm.model.DepartmentDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.repository.AttendanceRepository;
 import com.makalu.hrm.repository.UserRepository;
@@ -105,4 +106,13 @@ public class AttendanceServiceImp implements AttendanceService {
                         .detail(attendanceDto);
             }
     }
+
+
+
+  //  @Override
+//    public List<DepartmentDTO> list() {
+//        return departmentConverter.convertToDtoList(departmentRepository.findAll());
+//    }
+
+
 }

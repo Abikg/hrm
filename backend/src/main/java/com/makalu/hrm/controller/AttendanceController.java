@@ -24,56 +24,45 @@ import java.util.Date;
 @RequiredArgsConstructor
 
 public class AttendanceController {
-private final AttendanceServiceImp attendanceServiceImp;
-private  final AttendanceRepository attendanceRepository;
-private  final UserRepository userRepository;
-
-
-
-
-
-
+    private final AttendanceServiceImp attendanceServiceImp;
+    private final AttendanceRepository attendanceRepository;
+    private final UserRepository userRepository;
 
 
     @GetMapping("/attendance/punchin")
 
     public ResponseEntity<RestResponseDto> punchIn(HttpServletRequest request) {
-        AttendanceDto attendanceDto =new AttendanceDto();
+        AttendanceDto attendanceDto = new AttendanceDto();
 
-         //getting client ip
-         String clientIp=  IPUtils.getClientIp(request);
+        //getting client ip
+        String clientIp = IPUtils.getClientIp(request);
 
 
-        if( IPUtils.ismakaluNetwork(clientIp)){
-      attendanceDto.setPunchInIp(clientIp);
+        if (IPUtils.ismakaluNetwork(clientIp)) {
+            attendanceDto.setPunchInIp(clientIp);
             return ResponseEntity.ok().body(attendanceServiceImp.save(attendanceDto));
 
         }
-     return  ResponseEntity.ok().body(RestResponseDto.INSTANCE().message("yo cannot login outside of office"));
+        return ResponseEntity.ok().body(RestResponseDto.INSTANCE().message("yo cannot login outside of office"));
 
 
     }
 
-
-//PersistentAttendanceEntity entity=new PersistentAttendanceEntity();
-//entity.setPunchInIp("1.0.0.9");
-//entity.setUser(userRepository.findByUsername("dhirajbadu50@gmail.com").get());
-//
-//    return ResponseEntity.ok().body(attendanceRepository.save(entity));
 
 
 
     @GetMapping("/attendance/punchout")
-    public ResponseEntity<RestResponseDto> punchout(HttpServletRequest request){
+    public ResponseEntity<RestResponseDto> punchout(HttpServletRequest request) {
 
-AttendanceDto attendanceDto=new AttendanceDto();
-attendanceDto.setPunchOutDate(new Date());
-attendanceDto.setPunchOutIp(IPUtils.getClientIp(request));
+        AttendanceDto attendanceDto = new AttendanceDto();
+        attendanceDto.setPunchOutDate(new Date());
+        attendanceDto.setPunchOutIp(IPUtils.getClientIp(request));
 
-return ResponseEntity.ok().body(attendanceServiceImp.update(attendanceDto));
+        return ResponseEntity.ok().body(attendanceServiceImp.update(attendanceDto));
 
 
     }
+
 
 
 
