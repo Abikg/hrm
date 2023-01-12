@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <fullname>Attedance</fullname>
+</head>
+<body layout:fragment="content">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-8">
+                <h1>Attendance</h1>
+            </div>
+            <div class="col-sm-4">
+                <a th:href="@{/attendance/list}">
+                <button id="show-all-attndance"   class="btn btn-primary btn-sm pull-right">All Attendance</button>
+                </a>
+                <a th:href="@{/attendance/list}">
+                <button id="today attendance" class="btn btn-primary btn-sm mr-2">Today Attendance</button>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table" id="attendance-table">
+                            <thead>
+                            <tr>
+                                <th>punchin DateTime</th>
+                                <th></th>
+                                <th>Punchin Ip</th>
+                                <th>Punchout Datetime</th>
+                                <th>Punchout Ip</th>
+                                <!--                                <th>Position</th>-->
+                                <!--                                <th>Department</th>-->
+
+
+                            </tr>
+                            </thead>
+                            <tbody th:each="attendanceDto: ${attendanceDtoList}">
+                            <tr >
+                                <td th:text="${attendanceDto.punchInDate}" class="start-date"></td>
+                                <td th:text="${attendanceDto.punchInIp}" class="cm-number"></td>
+                                <td th:text="${attendanceDto.punchOutDate}" class="end-date"></td>
+                                <td th:text="${attendanceDto.punchOutIp}" class="cm-number"></td>
+
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+</body>
+</html>
