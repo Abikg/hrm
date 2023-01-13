@@ -4,17 +4,33 @@
     <meta charset="UTF-8">
     <title>Dashboard</title>
 </head>
-<body>
-<div layout:fragment="content">
-    <h1>Hello</h1>
-    <h3>Static content for prototyping purposes only</h3>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
-        Phasellus et placerat elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
-        Phasellus et placerat elit.
-    </p>
-</div>
+<body layout:fragment="content">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+
+                <div class="col-sm-4">
+
+                    <a th:href="@{/attendance/list}" id="punchin_atag">
+                        <button id="punchin"   class="btn btn-primary btn-sm mr-5 pull-right">Punchin</button>
+                    </a>
+
+
+                    <a th:href="@{/attendance/todayattendance}" id="punchout_atag">
+                        <button id="punchout" class="btn btn-primary btn-sm mr-2">Punchout</button>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+
+    </section>
+
+<script type="text/javascript" th:src="@{/js/hrm/attendance.js}"></script>
+
+
+
 </body>
 </html>
