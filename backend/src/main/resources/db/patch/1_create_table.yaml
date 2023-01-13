@@ -278,6 +278,7 @@ databaseChangeLog:
                         type: int
                         constraints:
                           nullable: false
+
                     - column:
                         name: punch_in_date
                         type: timestamp
@@ -306,6 +307,11 @@ databaseChangeLog:
                           nullable: false
                           foreignKeyName: fk_attendance_user_id
                           references: auth_user(id)
+                    - column:
+                        name: total_worked_hours
+                        type: int
+                        constraints:
+                          nullable: true
 
 
 

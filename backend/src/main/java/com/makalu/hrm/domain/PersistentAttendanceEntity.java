@@ -23,17 +23,13 @@ public class PersistentAttendanceEntity extends  AbstractEntity {
     private Date punchOutDate ;
 
     private String punchInIp;
+
     private String punchOutIp;
 
-//    @ManyToOne(cascade = CascadeType.PERSIST)
-//    @JoinColumn(name="position_id",referencedColumnName = "id")
-//    private PersistentPositionEntity persistentPositionEntity;
+    @Column(name = "total_worked_hours")
+    private int totalWorkedHours = 0;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-
     private PersistentUserEntity user;
-
-
-
 
 }
