@@ -11,6 +11,6 @@ public class AttendanceDto {
     private Date punchOutDate ;
     private String punchInIp;
     private String punchOutIp;
-    private int totalWorkedHours;
+    private Double totalWorkedHours;
     private UserDTO user;
 }

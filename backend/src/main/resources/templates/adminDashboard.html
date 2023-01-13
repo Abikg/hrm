@@ -11,13 +11,13 @@
 
                 <div class="col-sm-4">
 
-                    <a th:href="@{/attendance/list}" id="punchin_atag">
-                        <button id="punchin"   class="btn btn-primary btn-sm mr-5 pull-right">Punchin</button>
+                    <a th:if="${attendanceBtn.equals('PUNCHIN')}" th:href="@{/attendance/punchIn}">
+                        <button  class="btn btn-primary btn-sm mr-5 pull-right">PunchIn</button>
                     </a>
 
 
-                    <a th:href="@{/attendance/todayattendance}" id="punchout_atag">
-                        <button id="punchout" class="btn btn-primary btn-sm mr-2">Punchout</button>
+                    <a th:if="${attendanceBtn.equals('PUNCHOUT')}" th:href="@{/attendance/punchOut}">
+                        <button class="btn btn-danger btn-sm mr-2">PunchOut</button>
                     </a>
 
                 </div>
@@ -25,12 +25,7 @@
         </div>
     </section>
     <section class="content">
-
+<h1>Welcome to makalu HRM</h1>
     </section>
-
-<script type="text/javascript" th:src="@{/js/hrm/attendance.js}"></script>
-
-
-
 </body>
 </html>

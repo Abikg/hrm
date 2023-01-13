@@ -33,26 +33,22 @@
                         <table class="table" id="attendance-table">
                             <thead>
                             <tr>
-                                <th>punchin DateTime</th>
-                                <th></th>
-                                <th>Punchin Ip</th>
-                                <th>Punchout Datetime</th>
-                                <th>Punchout Ip</th>
-                                <!--                                <th>Position</th>-->
-                                <!--                                <th>Department</th>-->
-
-
+                                <th>User</th>
+                                <th>punchIn DateTime</th>
+                                <th>PunchIn Ip</th>
+                                <th>PunchOut Datetime</th>
+                                <th>PunchOut Ip</th>
+                                <th>Hours</th>
                             </tr>
                             </thead>
-                            <tbody th:each="attendanceDto: ${attendanceDtoList}">
+                            <tbody th:each="attendance: ${attendanceList}">
                             <tr >
-                                <td th:text="${attendanceDto.punchInDate}" class="start-date"></td>
-                                <td th:text="${attendanceDto.punchInIp}" class="cm-number"></td>
-                                <td th:text="${attendanceDto.punchOutDate}" class="end-date"></td>
-                                <td th:text="${attendanceDto.punchOutIp}" class="cm-number"></td>
-
-
-
+                                <td th:text="${attendance.user.username}" class="cm-number"></td>
+                                <td th:text="${attendance.punchInDate}" class="start-date"></td>
+                                <td th:text="${attendance.punchInIp}" class="cm-number"></td>
+                                <td th:text="${attendance.punchOutDate}" class="end-date"></td>
+                                <td th:text="${attendance.punchOutIp}" class="cm-number"></td>
+                                <td th:text="${attendance.totalWorkedHours}" class="cm-number"></td>
                             </tr>
                             </tbody>
                         </table>

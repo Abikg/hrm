@@ -309,7 +309,7 @@ databaseChangeLog:
                           references: auth_user(id)
                     - column:
                         name: total_worked_hours
-                        type: int
+                        type: double
                         constraints:
                           nullable: true
 

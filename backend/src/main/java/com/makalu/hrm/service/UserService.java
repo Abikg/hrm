@@ -1,22 +1,8 @@
-/*
-package com.book.service;
+package com.makalu.hrm.service;
 
-import com.book.model.*;
-
-import java.util.UUID;
+import com.makalu.hrm.domain.PersistentUserEntity;
 
 public interface UserService {
 
-    void registerEmployer(CreateUserRequest createUserRequest) throws Exception;
-
-    boolean verifyEmail(UUID token);
-
-    CurrentUserData whomiam();
-
-    UserProfileDTO createUpdateCurrentUserProfile(UserProfileRequestDTO userProfileRequestDTO);
-
-    UserProfileDTO getUserProfile() throws Exception;
-
-    void changePassword(PasswordChangeRequestDTO passwordChangeRequestDTO);
+    PersistentUserEntity getCurrentUserEntity();
 }
-*/

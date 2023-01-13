@@ -27,7 +27,7 @@ public class PersistentAttendanceEntity extends  AbstractEntity {
     private String punchOutIp;
 
     @Column(name = "total_worked_hours")
-    private int totalWorkedHours = 0;
+    private double totalWorkedHours = 0;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private PersistentUserEntity user;
