@@ -1,22 +1,15 @@
-/*
-package com.book.service;
 
-import com.book.model.*;
+package com.makalu.hrm.service;
 
-import java.util.UUID;
+
+import com.makalu.hrm.model.EmployeeDTO;
+import com.makalu.hrm.model.RestResponseDto;
+import com.makalu.hrm.model.UserDTO;
+
+import javax.validation.constraints.NotNull;
 
 public interface UserService {
 
-    void registerEmployer(CreateUserRequest createUserRequest) throws Exception;
-
-    boolean verifyEmail(UUID token);
-
-    CurrentUserData whomiam();
-
-    UserProfileDTO createUpdateCurrentUserProfile(UserProfileRequestDTO userProfileRequestDTO);
-
-    UserProfileDTO getUserProfile() throws Exception;
-
-    void changePassword(PasswordChangeRequestDTO passwordChangeRequestDTO);
+    RestResponseDto createEmployeeUser(@NotNull String email);
 }
-*/
+

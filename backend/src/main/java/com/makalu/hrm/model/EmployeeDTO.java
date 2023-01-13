@@ -32,4 +32,10 @@ public class EmployeeDTO {
 
     private UserDTO userDTO;
 
+    private EmployeeImageDTO employeeImageDTO;
+
+    private UUID userId;
+
+    private UUID employeeImageId;
+
 }

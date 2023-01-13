@@ -2,6 +2,10 @@ package com.makalu.hrm.converter;
 
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.model.EmployeeDTO;
+import com.makalu.hrm.repository.DepartmentRepository;
+import com.makalu.hrm.repository.EmployeeImageRepository;
+import com.makalu.hrm.repository.PositionRepository;
+import com.makalu.hrm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +13,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, EmployeeDTO>{
 
+    private final PositionRepository positionRepository;
+    private final DepartmentRepository departmentRepository;
+    private final EmployeeImageRepository employeeImageRepository;
     private final PositionConverter positionConverter;
     private final DepartmentConverter departmentConverter;
     private final UserConverter userConverter;
-
+    private final EmployeeImageConverter employeeImageConverter;
+    private final UserRepository userRepository;
     @Override
     public PersistentEmployeeEntity convertToEntity(EmployeeDTO dto) {
         return this.copyConvertToEntity(dto,new PersistentEmployeeEntity());
@@ -35,6 +43,7 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         dto.setPositionDTO(positionConverter.convertToDtoList(entity.getPosition()));
         dto.setDepartmentDTO(departmentConverter.convertToDtoList(entity.getDepartment()));
         dto.setUserDTO(userConverter.convertToDto(entity.getUser()));
+        dto.setEmployeeImageDTO(employeeImageConverter.convertToDto(entity.getImage()));
         return dto;
     }
 
@@ -48,9 +57,10 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         entity.setEmail(dto.getEmail());
         entity.setPhone(dto.getPhone());
         entity.setEmpImage(dto.getEmpImageName());
-        entity.setPosition(positionConverter.convertToEntityList(dto.getPositionDTO()));
-        entity.setDepartment(departmentConverter.convertToEntityList(dto.getDepartmentDTO()));
-        entity.setUser(userConverter.convertToEntity(dto.getUserDTO()));
+        entity.setPosition(positionRepository.findAllById(dto.getDepartmentIdList()));
+        entity.setDepartment(departmentRepository.findAllById(dto.getDepartmentIdList()));
+        entity.setImage(employeeImageRepository.getById(dto.getEmployeeImageId()));
+        entity.setUser(userRepository.getReferenceById(dto.getUserId().toString()));
         return entity;
     }
 }

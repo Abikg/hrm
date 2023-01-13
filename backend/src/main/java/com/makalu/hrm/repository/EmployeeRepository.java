@@ -8,8 +8,8 @@ import java.util.UUID;
 
 public interface EmployeeRepository extends JpaRepository<PersistentEmployeeEntity, UUID> {
 
-    @Query("from PersistentEmployeeEntity where phone = ?1 or email = ?2")
-    PersistentEmployeeEntity findByPhoneOrEmail(String phone, String email);
+    @Query("from PersistentEmployeeEntity where phone = ?1 or email =?2")
+    PersistentEmployeeEntity findByPhoneOrEmail(String phone,String email);
 
 
 }

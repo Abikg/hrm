@@ -58,7 +58,7 @@ public class EmployeeValidation {
 
     @Transactional
     boolean validateUnique(String phone, String email) {
-        PersistentEmployeeEntity employeeEntity = employeeRepository.findByPhoneOrEmail(phone, email);
+        PersistentEmployeeEntity employeeEntity = employeeRepository.findByPhoneOrEmail(phone,email);
 
         if (employeeEntity == null) {
             return true;
@@ -145,7 +145,7 @@ public class EmployeeValidation {
     }
 
     private boolean validatePosition(List<PositionDTO> dtos){
-        if(dtos == null){
+        if(dtos.isEmpty()){
             error.setPosition("Position is required");
             return false;
         }
@@ -153,7 +153,7 @@ public class EmployeeValidation {
     }
 
     private boolean validateDepartment(List<DepartmentDTO> dtos){
-        if(dtos == null){
+        if(dtos.isEmpty()){
             error.setDepartment("Department is required");
             return false;
         }

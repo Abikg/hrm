@@ -3,6 +3,7 @@ package com.makalu.hrm.enumconstant;
 public enum UserType {
     SUPER_ADMIN("Super Admin"),
     ADMIN("Admin"),
+    MANAGER("Manager"),
     EMPLOYEE("Employee");
 
     private final String value;

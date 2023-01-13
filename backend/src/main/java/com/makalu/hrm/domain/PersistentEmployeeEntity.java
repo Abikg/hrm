@@ -22,7 +22,7 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     private String empImage;
 
 
-    @ManyToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
     @JoinTable(
             name = "employee_position",
             joinColumns = { @JoinColumn(name = "employee_id") },
@@ -30,7 +30,7 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     )
     private List<PersistentPositionEntity> position;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST } , fetch = FetchType.LAZY)
+    @ManyToMany(cascade = { CascadeType.ALL } , fetch = FetchType.LAZY)
     @JoinTable(
             name = "employee_department",
             joinColumns = { @JoinColumn(name = "employee_id") },
@@ -41,4 +41,7 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     @OneToOne
     private PersistentUserEntity user;
 
+
+    @OneToOne
+    private PersistentEmployeeImageEntity image;
 }

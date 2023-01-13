@@ -9,7 +9,7 @@ databaseChangeLog:
 #             schemaName: public
 #
 #  - changeSet:
-#      id: 2022-12-23-positions_change-table-name-to-position
+#      id: 2022-12-23-positions_change-table-name-to-positionemployee_image
 #      author: suvam
 #      changes:
 #        - renameTable:
@@ -17,11 +17,46 @@ databaseChangeLog:
 #            oldTableName: positions
 #            schemaName: public
 
+#  - changeSet:
+#      id: 2022-12-23-employees_change-table-name-to-employee
+#      author: suvam
+#      changes:
+#        - renameTable:
+#            newTableName: employee
+#            oldTableName: employees
+#            schemaName: public
+
   - changeSet:
-      id: 2022-12-23-employees_change-table-name-to-employee
+      id: 2023-01-13-employee-add-column-employee_image_id
       author: suvam
       changes:
-        - renameTable:
-            newTableName: employee
-            oldTableName: employees
+        - addColumn:
+            tableName: employee
+            columns:
+              - column:
+                  name: image_id
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_image_id
+                    references: employee_image(id)
+
+  - changeSet:
+      id: 2022-01-13-employee_image-change-image-column-data-type
+      author: suvam
+      changes:
+        - modifyDataType:
+            columnName: image
+            newDataType: clob
             schemaName: public
+            tableName: employee_image
+
+  - changeSet:
+      id: 2022-01-13-employee_image-change-image-column-data-type-to-bytea
+      author: suvam
+      changes:
+        - modifyDataType:
+            columnName: image
+            newDataType: bytea
+            schemaName: public
+            tableName: employee_image
