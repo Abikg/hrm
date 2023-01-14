@@ -60,3 +60,20 @@ databaseChangeLog:
             newDataType: bytea
             schemaName: public
             tableName: employee_image
+
+  - changeSet:
+      id: 2022-01-13-employee-drop-emp_image-column
+      author: suvam
+      changes:
+        -  dropColumn:
+             tableName: employee
+             columnName: emp_image
+
+  - changeSet:
+      id: 2022-01-13-employee-drop-employee-table-image_id-nullable-constraint
+      author: suvam
+      changes:
+        -  dropNotNullConstraint:
+             columnName: image_id
+             schemaName: public
+             tableName:  employee

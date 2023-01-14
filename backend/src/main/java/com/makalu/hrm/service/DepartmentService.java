@@ -20,5 +20,4 @@ public interface DepartmentService {
 
     RestResponseDto delete(UUID departmentId);
 
-    List<DepartmentDTO> findAllDepartment(Iterable<UUID> uuids);
 }

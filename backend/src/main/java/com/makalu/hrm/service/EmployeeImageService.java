@@ -17,7 +17,7 @@ public interface EmployeeImageService {
 
     RestResponseDto getResponseById(@NotNull UUID employeeImageId);
 
-    RestResponseDto update(EmployeeImageDTO employeeImageDTO);
+    RestResponseDto update(@NotNull MultipartFile file,UUID imageId);
 
     RestResponseDto delete(UUID employeeImageId);
 

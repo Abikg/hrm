@@ -33,9 +33,6 @@
                                 <th>Address</th>
                                 <th>Phone</th>
                                 <th>Email</th>
-                                <th>Image</th>
-<!--                                <th>Position</th>-->
-<!--                                <th>Department</th>-->
                                 <th>Action</th>
 
                             </tr>
@@ -46,11 +43,10 @@
                                 <td th:text="${employee.address}" class="address"></td>
                                 <td th:text="${employee.phone}" class="phone"></td>
                                 <td th:text="${employee.email}" class="email"></td>
-                                <td th:text="${employee.empImageName}" class="empImageName"></td>
 
                                 <td>
-                                    <button type="button" th:data-id="${employee.id}" th:onclick="editEmployee([[${employee.id}]])" class="employee-edit btn btn-info btn-sm">Edit</button>
-                                    <button type="button" th:data-id="${employee.id}" th:onclick="deleteEmployee([[${employee.id}]])" class="btn btn-danger btn-sm">Delete</button>
+                                    <a th:href="@{'/employee/edit/'+${employee.id}}"><button type="button" class="employee-edit btn btn-info btn-sm">Edit</button></a>
+                                    <button type="button" class="btn btn-warning btn-sm">View Detail</button>
                                 </td>
                             </tr>
                             </tbody>

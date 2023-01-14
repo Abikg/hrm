@@ -6,6 +6,7 @@ import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.DepartmentService;
 import com.makalu.hrm.service.EmployeeService;
 import com.makalu.hrm.service.PositionService;
+import com.makalu.hrm.utils.ImageUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/employee")
@@ -52,7 +55,7 @@ public class EmployeeController {
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public String create(ModelMap map){
+    public String createEmployee(ModelMap map){
         EmployeeDTO employeeDTO = new EmployeeDTO();
         map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
         map.put(ParameterConstant.POSITION_LIST, positionService.list());
@@ -67,5 +70,26 @@ public class EmployeeController {
         map.put(ParameterConstant.EMPLOYEE,employeeDTO);
         map.put(ParameterConstant.RESPONSE,employeeService.save(employeeDTO));
         return "employee/create";
+    }
+
+    @GetMapping("/edit/{id}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public String editEmployee(@PathVariable("id") UUID employeeId ,ModelMap map){
+       RestResponseDto rdto = employeeService.getResponseById(employeeId);
+       map.put(ParameterConstant.POSITION_LIST,positionService.list());
+       map.put(ParameterConstant.DEPARTMENT_LIST,departmentService.list());
+       map.put("imageUtil", new ImageUtil());
+       map.put(ParameterConstant.EMPLOYEE,rdto.getDetail());
+        return "employee/edit";
+    }
+
+    @RequestMapping(path = "/update",method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public String update(EmployeeDTO employeeDTO,ModelMap map){
+        map.put(ParameterConstant.DEPARTMENT_LIST,departmentService.list());
+        map.put(ParameterConstant.POSITION_LIST,positionService.list());
+        map.put(ParameterConstant.EMPLOYEE,employeeDTO);
+        map.put(ParameterConstant.RESPONSE,employeeService.update(employeeDTO));
+        return "employee/edit";
     }
 }

@@ -11,15 +11,17 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=false)
 public class PersistentEmployeeEntity extends AbstractEntity {
 
+    @Column(nullable = false)
     private String fullname;
 
+    @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
     private String phone;
 
+    @Column(nullable = false)
     private String email;
-
-    private String empImage;
 
 
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)

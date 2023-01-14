@@ -113,9 +113,4 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
-    @Override
-    public List<DepartmentDTO> findAllDepartment(Iterable<UUID> uuids) {
-        List<DepartmentDTO> dtoList = departmentConverter.convertToDtoList(departmentRepository.findAllById(uuids));
-        return dtoList;
-    }
 }

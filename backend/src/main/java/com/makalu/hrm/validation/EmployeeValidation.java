@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,8 +37,8 @@ public class EmployeeValidation {
         isValid = isValid & validatePhone(dto.getPhone());
         isValid = isValid & validateAddress(dto.getAddress());
         isValid = isValid & validateImage(dto.getEmpImage());
-        isValid = isValid & validatePosition(dto.getPositionDTO());
-        isValid = isValid & validateDepartment(dto.getDepartmentDTO());
+        isValid = isValid & validatePosition(dto.getPositionIdList());
+        isValid = isValid & validateDepartment(dto.getDepartmentIdList());
         isValid = isValid && validateUnique(dto.getPhone().trim(), dto.getEmail().trim());
         error.setValid(isValid);
         return error;
@@ -49,9 +50,10 @@ public class EmployeeValidation {
         isValid = isValid & validateEmail(dto.getEmail());
         isValid = isValid & validatePhone(dto.getPhone());
         isValid = isValid & validateAddress(dto.getAddress());
-        isValid = isValid & validatePosition(dto.getPositionDTO());
-        isValid = isValid & validateDepartment(dto.getDepartmentDTO());
+        isValid = isValid & validatePosition(dto.getPositionIdList());
+        isValid = isValid & validateDepartment(dto.getDepartmentIdList());
         isValid = isValid & validateImage(dto.getEmpImage());
+        isValid = isValid && validateUniqueOnUpdate(dto);
         error.setValid(isValid);
         return error;
     }
@@ -75,6 +77,23 @@ public class EmployeeValidation {
         return false;
     }
 
+    @Transactional
+    boolean validateUniqueOnUpdate(EmployeeDTO employeeDTO){
+        PersistentEmployeeEntity employeeEntity1 = employeeRepository.findByPhone(employeeDTO.getPhone());
+        PersistentEmployeeEntity employeeEntity2 = employeeRepository.findByEmail(employeeDTO.getEmail());
+        if(employeeEntity1 != null && !employeeEntity1.getId().equals(employeeDTO.getId())){
+                error.setPhone("Phone number already used");
+                return false;
+        }
+        if( employeeEntity2 != null && !employeeEntity2.getId().equals(employeeDTO.getId())){
+            if(employeeEntity2.getId().compareTo(employeeDTO.getId()) != 0) {
+                error.setEmail("Email already used");
+                return false;
+            }
+        }
+
+        return true;
+    }
     private boolean validateFullName(String name) {
         if (name == null || name.trim().isEmpty()) {
             error.setFullname("Name is required");
@@ -144,16 +163,16 @@ public class EmployeeValidation {
         return true;
     }
 
-    private boolean validatePosition(List<PositionDTO> dtos){
-        if(dtos.isEmpty()){
+    private boolean validatePosition(List<UUID> positionIdList){
+        if(positionIdList.isEmpty()){
             error.setPosition("Position is required");
             return false;
         }
         return true;
     }
 
-    private boolean validateDepartment(List<DepartmentDTO> dtos){
-        if(dtos.isEmpty()){
+    private boolean validateDepartment(List<UUID> departmentIdList){
+        if(departmentIdList.isEmpty()){
             error.setDepartment("Department is required");
             return false;
         }

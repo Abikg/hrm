@@ -8,6 +8,6 @@ import java.util.UUID;
 
 public interface EmployeeImageRepository extends JpaRepository<PersistentEmployeeImageEntity, UUID> {
 
-    @Query("from PersistentEmployeeImageEntity where id = ?1")
-    PersistentEmployeeImageEntity getById(UUID id);
+//    @Query("from PersistentEmployeeImageEntity where id = ?1")
+//    PersistentEmployeeImageEntity getById(UUID id);
 }

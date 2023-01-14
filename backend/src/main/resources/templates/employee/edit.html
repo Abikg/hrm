@@ -20,7 +20,7 @@
     <div class="row mb-2  alertSuccess" th:if="${#ctx.containsVariable('response')} and ${response.status == 200}">
         <div class="col-sm-12">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Employee Created</strong>
+                <strong>Employee Updated</strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -33,9 +33,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form id="employeeForm" method="post" th:action="@{/employee/save}" th:object="${employee}" enctype="multipart/form-data">
+                    <form id="employeeForm" method="post" th:action="@{/employee/update}" th:object="${employee}" enctype="multipart/form-data">
                         <input type="hidden" th:field="*{id}">
-                    <div class="card-body">
+                        <div class="card-body">
                             <div class="form-group">
                                 <label for="fullname" class="col-form-label">Fullname</label>
                                 <input type="text" th:field="*{fullname}" class="form-control" id="fullname">
@@ -71,8 +71,7 @@
                             <div class="form-group">
                                 <label for="position" class="col-form-label">Select Position</label>
                                 <select class="form-control" id="position" th:field="*{positionIdList}" multiple>
-                                    <option  th:unless="*{positionIdList != null}" th:each="position : ${positionList}" th:value="${position.id}" th:text="${position.title}"></option>
-                                    <option th:if="*{positionIdList!= null}" th:each="position : ${positionList}" th:selected="${position.id == positionIdList}" th:value="${position.id}" th:text="${position.title}">
+                                    <option th:each="position : ${positionList}" th:selected="${position.id == positionIdList}" th:value="${position.id}" th:text="${position.title}">
                                     </option>
                                 </select>
                                 <div th:if="${#ctx.containsVariable('response')}">
@@ -83,8 +82,7 @@
                             <div class="form-group">
                                 <label for="department"  class="col-form-label">Select Department</label>
                                 <select class="form-control" id="department" th:field="*{departmentIdList}"  multiple >
-                                    <option  th:unless="*{departmentIdList != null}" th:each="department : ${departmentList}" th:value="${department.id}" th:text="${department.title}"></option>
-                                    <option th:if="*{departmentIdList!= null}" th:each="department : ${departmentList}" th:selected="${department.id == departmentIdList}" th:value="${department.id}" th:text="${department.title}">
+                                    <option th:each="department : ${departmentList}" th:selected="${department.id == departmentIdList}" th:value="${department.id}" th:text="${department.title}">
                                     </option>
                                 </select>
                                 <div th:if="${#ctx.containsVariable('response')}">
@@ -99,11 +97,14 @@
                                     <p th:if="${response.status == 400  and response.detail.get('error').empImage != null}"
                                        class="error"  th:text="${response.detail.get('error').empImage}"></p>
                                 </div>
+                                <div class="card imageCard mt-2" style="width: 18rem;" th:if="*{employeeImage != null}" th:with="imageData=*{employeeImage.image}">
+                                    <img class="card-img-top" th:src="'data:'+*{employeeImage.type}+';base64,' + ${imageUtil.getImageData(imageData)}" alt="image">
+                                </div>
                             </div>
-                    </div>
-                    <div class="card-footer">
-                        <button type="submit" id="btn-save-employee" class="btn btn-primary">Save Changes</button>
-                    </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" id="btn-save-employee" class="btn btn-primary">Save Changes</button>
+                        </div>
                     </form>
                 </div>
             </div>

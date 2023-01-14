@@ -120,9 +120,4 @@ public class PositionServiceImpl implements PositionService {
 
     }
 
-    @Override
-    public List<PositionDTO> findAllPosition(Iterable<UUID> uuids) {
-        List<PositionDTO> dtoList = positionConverter.convertToDtoList(positionRepository.findAllById(uuids));
-        return dtoList;
-    }
 }

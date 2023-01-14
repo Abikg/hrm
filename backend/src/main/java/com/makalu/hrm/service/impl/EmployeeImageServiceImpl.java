@@ -38,13 +38,13 @@ public class EmployeeImageServiceImpl implements EmployeeImageService {
             String fileType = file.getContentType();
             byte[] data = file.getBytes();
 
-            PersistentEmployeeImageEntity imageEntityEntity = new PersistentEmployeeImageEntity();
-            imageEntityEntity.setName(fileName);
-            imageEntityEntity.setType(fileType);
-            imageEntityEntity.setImage(data);
+            PersistentEmployeeImageEntity imageEntity = new PersistentEmployeeImageEntity();
+            imageEntity.setName(fileName);
+            imageEntity.setType(fileType);
+            imageEntity.setImage(data);
 
             return RestResponseDto.INSTANCE()
-                    .success().detail(employeeImageConverter.convertToDto(employeeImageRepository.saveAndFlush(imageEntityEntity)));
+                    .success().detail(employeeImageConverter.convertToDto(employeeImageRepository.saveAndFlush(imageEntity)));
 
         }catch (Exception ex){
             return RestResponseDto
@@ -60,8 +60,30 @@ public class EmployeeImageServiceImpl implements EmployeeImageService {
     }
 
     @Override
-    public RestResponseDto update(EmployeeImageDTO employeeImageDTO) {
-        return null;
+    @Transactional
+    public RestResponseDto update(@NotNull MultipartFile file,UUID imageId) {
+        PersistentEmployeeImageEntity imageEntity = employeeImageRepository.findById(imageId).orElse(null);
+        if(imageEntity == null){
+            RestResponseDto.INSTANCE().notFound().message("Image not found");
+        }
+        try{
+            String fileName = file.getOriginalFilename();
+            String fileType = file.getContentType();
+            byte[] data = file.getBytes();
+
+            imageEntity.setName(fileName);
+            imageEntity.setType(fileType);
+            imageEntity.setImage(data);
+
+            return RestResponseDto.INSTANCE()
+                    .success().detail(employeeImageConverter.convertToDto(employeeImageRepository.saveAndFlush(imageEntity)));
+
+        }catch (Exception ex){
+            return RestResponseDto
+                    .INSTANCE()
+                    .internalServerError()
+                    .detail(employeeImageConverter.convertToDto(imageEntity));
+        }
     }
 
     @Override

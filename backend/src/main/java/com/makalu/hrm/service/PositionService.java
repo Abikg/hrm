@@ -19,5 +19,4 @@ public interface PositionService {
 
     RestResponseDto delete(UUID positionId);
 
-    List<PositionDTO> findAllPosition(Iterable<UUID> uuids);
 }
