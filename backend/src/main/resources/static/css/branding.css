@@ -45,3 +45,11 @@
 .sidebar-dark-primary a:hover {
     color: #FFFFFF !important;
 }
+
+.brand-text{
+    color: #fd7e14 !important;
+}
+
+.brand-text:hover{
+    color: #1479c4 !important;
+}
