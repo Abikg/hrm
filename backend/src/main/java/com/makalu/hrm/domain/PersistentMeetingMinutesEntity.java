@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,10 @@ public class PersistentMeetingMinutesEntity extends AbstractEntity{
 
     @Column(name = "title", length = 200, nullable = false)
     private String title;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "meeting_date")
+    private Date meetingDate;
 
     @Column(name = "minutes", columnDefinition = "text" )
     private String minutes;
