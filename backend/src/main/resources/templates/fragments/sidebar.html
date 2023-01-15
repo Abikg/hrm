@@ -30,7 +30,25 @@
           </a>
         </li>
 
-        <li class="nav-item " sec:authorize="hasRole('SUPER_ADMIN')">
+        <li class="nav-item">
+          <a th:href="@{/employee/list}" class="nav-link">
+            <i class="nav-icon fas fa-phone-square"></i>
+            <p>
+              Employee
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a th:href="@{/attendance/list}" class="nav-link">
+            <i class="nav-icon fas fa-calendar-day"></i>
+            <p>
+              Attendance
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item " >
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-cog"></i>
             <p>
@@ -53,12 +71,7 @@
                 <p>Position</p>
               </a>
             </li>
-            <li class="nav-item">
-              <a th:href="@{/employee/list}" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Employee</p>
-              </a>
-            </li>
+
           </ul>
         </li>
 

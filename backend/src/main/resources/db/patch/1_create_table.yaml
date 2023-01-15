@@ -248,118 +248,70 @@ databaseChangeLog:
                           references: position(id)
 
 
-#      -  changeSet:
-#           id: 2023-01-10 attendance_recreate_twice-table
-#           author : keshab
-#           changes:
-#             -  createTable:
-#                  tableName: attendance
-#                  columns:
-#                    - column:
-#                        name: attendance_id
-#                        type: varchar(36)
-#                        constraints:
-#                         primaryKey: true
-#                         nullable: false
-#
-#                    - column:
-#                        name: punch_in_date
-#                        type: date
-#                        constraints:
-#                          nullable: true
-#
-#                    - column:
-#                        name: punch_in_ip
-#                        type: varchar(36)
-#                        constraints:
-#                          nullable: true
-#                    - column:
-#                        name: punch_out_date
-#                        type: date
-#                        constraints:
-#                           nullable: true
-#                    - column:
-#                        name: punch_out_ip
-#                        type: varchar(36)
-#                        constraints:
-#                          nullable: true
-#                    - column:
-#                        name: user_id_position
-#                        type: varchar(36)
-#                        constraints:
-#                          nullable: false
-#                          foreignKeyName: fk_attendance_user_id
-#                          references: position(id)
-#
+      -  changeSet:
+           id: 2023-01-10 attendance_table
+           author : keshab
+           changes:
+             -  createTable:
+                  tableName: attendance
+                  columns:
+                    - column:
+                        name: id
+                        type: varchar(36)
+                        constraints:
+                         primaryKey: true
+                         nullable: false
+                    - column:
+                        name: created_date
+                        type: date
+                        constraints:
+                          defaultValue: true
+
+                    - column:
+                        name: last_modified_date
+                        type: date
+                        constraints:
+                          defaultValue: null
+
+                    - column:
+                        name: version
+                        type: int
+                        constraints:
+                          nullable: false
+
+                    - column:
+                        name: punch_in_date
+                        type: timestamp
+                        constraints:
+                          nullable: true
+
+                    - column:
+                        name: punch_in_ip
+                        type: varchar(36)
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: punch_out_date
+                        type: timestamp
+                        constraints:
+                           nullable: true
+                    - column:
+                        name: punch_out_ip
+                        type: varchar(36)
+                        constraints:
+                          nullable: true
+                    - column:
+                        name: user_id
+                        type: varchar(36)
+                        constraints:
+                          nullable: false
+                          foreignKeyName: fk_attendance_user_id
+                          references: auth_user(id)
+                    - column:
+                        name: total_worked_hours
+                        type: double
+                        constraints:
+                          nullable: true
 
 
 
-
-#      - changeSet:
-#              id: 2022-12-29-employee_department_create-table
-#              author: suvam
-#              changes:
-#                - createTable:
-#                    tableName: employee_department
-#                    columns:
-#                      - column:
-#                          name: employee_id
-#                          type: varchar(36)
-#                          constraints:
-#                            nullable: false
-#                            foreignKeyName: fk_employee_dep_id
-#                            references: employee(id)
-#                      - column:
-#                          name: department_id
-#                          type: varchar(36)
-#                          constraints:
-#                            nullable: false
-#                            foreignKeyName: fk_department_id
-#                            references: department(id)
-      - changeSet:
-          id: 2023-01-13-employee_image-create-table
-          author: suvam
-          changes:
-            - createTable:
-                tableName: employee_image
-                columns:
-                  - column:
-                      name: id
-                      type: varchar(36)
-                      constraints:
-                        primaryKey: true
-                        nullable: false
-                  - column:
-                      name: created_date
-                      type: date
-                      constraints:
-                        nullable: false
-                        defaultValue: null
-                  - column:
-                      name: last_modified_date
-                      type: date
-                      constraints:
-                        defaultValue: null
-                  - column:
-                      name: version
-                      type: int
-                      constraints:
-                        nullable: false
-                        defaultValue: 0
-                  - column:
-                      name: name
-                      type: varchar(255)
-                      constraints:
-                        nullable: false
-                        unique: true
-                  - column:
-                      name: type
-                      type: varchar(255)
-                      constraints:
-                        nullable: false
-                  - column:
-                      name: image
-                      type: blob
-                      constraints:
-                        nullable: false
-                        defaultValue: false

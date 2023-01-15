@@ -1,11 +1,13 @@
 package com.makalu.hrm.model;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 
 @Data
+
 public class RestResponseDto {
 
     private int status;
@@ -19,6 +21,8 @@ public class RestResponseDto {
     public static RestResponseDto INSTANCE(){
         return new RestResponseDto();
     }
+
+
 
     public RestResponseDto success(){
         this.status = HttpStatus.OK.value();

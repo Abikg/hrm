@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <fullname>Attedance</fullname>
+</head>
+<body layout:fragment="content">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-8">
+                <h1>Attendance</h1>
+            </div>
+            <div class="col-sm-4">
+                <a th:href="@{/attendance/list}">
+                <button id="show-all-attndance"   class="btn btn-primary btn-sm pull-right">All Attendance</button>
+                </a>
+                <a th:href="@{/attendance/list}">
+                <button id="today attendance" class="btn btn-primary btn-sm mr-2">Today Attendance</button>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table" id="attendance-table">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>punchIn DateTime</th>
+                                <th>PunchIn Ip</th>
+                                <th>PunchOut Datetime</th>
+                                <th>PunchOut Ip</th>
+                                <th>Hours</th>
+                            </tr>
+                            </thead>
+                            <tbody th:each="attendance: ${attendanceList}">
+                            <tr >
+                                <td th:text="${attendance.user.username}" class="cm-number"></td>
+                                <td th:text="${attendance.punchInDate}" class="start-date"></td>
+                                <td th:text="${attendance.punchInIp}" class="cm-number"></td>
+                                <td th:text="${attendance.punchOutDate}" class="end-date"></td>
+                                <td th:text="${attendance.punchOutIp}" class="cm-number"></td>
+                                <td th:text="${attendance.totalWorkedHours}" class="cm-number"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+</body>
+</html>

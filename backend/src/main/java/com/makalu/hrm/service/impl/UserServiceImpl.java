@@ -1,14 +1,13 @@
 package com.makalu.hrm.service.impl;
 
-import com.makalu.hrm.converter.UserConverter;
 import com.makalu.hrm.domain.PersistentUserEntity;
-import com.makalu.hrm.enumconstant.UserType;
-import com.makalu.hrm.model.MailDTO;
-import com.makalu.hrm.model.RestResponseDto;
-import com.makalu.hrm.model.UserDTO;
 import com.makalu.hrm.repository.UserRepository;
-import com.makalu.hrm.service.MailService;
 import com.makalu.hrm.service.UserService;
+import com.makalu.hrm.utils.AuthenticationUtils;
+import com.makalu.hrm.converter.UserConverter;
+import com.makalu.hrm.enumconstant.UserType;
+import com.makalu.hrm.model.RestResponseDto;
+import com.makalu.hrm.service.MailService;
 import com.makalu.hrm.utils.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-@Slf4j
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserConverter userConverter;
@@ -63,20 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public RestResponseDto updateEmployeeUser(String email, UUID userId) {
-        try{
-            PersistentUserEntity user = userRepository.findById(userId).orElse(null);
-            if(user == null){
-                return RestResponseDto.INSTANCE().notFound().message("User not found");
-            }
-            user.setUsername(email);
-            return RestResponseDto.INSTANCE()
-                    .success().detail(userConverter.convertToDto(userRepository.saveAndFlush(user)));
-        }catch (Exception ex){
-            log.error("Error while updating user",ex);
-            return  RestResponseDto.INSTANCE().internalServerError();
-        }
-
+    public PersistentUserEntity getCurrentUserEntity() {
+        return userRepository.findById(AuthenticationUtils.getCurrentUser().getUserId()).orElse(null);
     }
 }
