@@ -113,7 +113,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employeeDTO.setEmployeeImageId(employeeEntity.getImage().getId());
             }
             if(!employeeEntity.getEmail().equals(employeeDTO.getEmail())){
-                 userService.updateEmployeeUser(employeeDTO.getEmail(), employeeDTO.getUserId());
+                //employee update garda email update garna mildaina hai so user ni update garna bhayana
+                 //userService.updateEmployeeUser(employeeDTO.getEmail(), employeeDTO.getUserId());
             }
             if(!employeeDTO.getEmpImage().isEmpty()){
                 if (employeeEntity.getImage() != null) {
