@@ -31,6 +31,9 @@ public class PersistentMeetingMinutesEntity extends AbstractEntity{
     @ManyToMany(fetch = FetchType.EAGER)
     private List<PersistentUserEntity> attendedBy;
 
+    @ManyToOne
+    private PersistentUserEntity createdBy;
+
     /*
     Logic:
     Meeting type BOD should only be accessible for super admin
