@@ -1,6 +1,7 @@
 package com.makalu.hrm.utils;
 
 import com.makalu.hrm.model.PageInfo;
+import lombok.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -33,4 +34,7 @@ public class CommonUtils {
 
         return new PageInfo().pageNumber(page).limit(limit);
     }
+
+
+
 }
