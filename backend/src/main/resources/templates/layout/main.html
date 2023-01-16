@@ -22,15 +22,16 @@
     <link rel="stylesheet" th:href="@{/lte/dist/css/adminlte.min.css}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" th:href="@{/lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
-    <!-- Daterange picker -->
-    <link rel="stylesheet" th:href="@{/lte/plugins/daterangepicker/daterangepicker.css}">
+
     <!-- summernote -->
     <link rel="stylesheet" th:href="@{/lte/plugins/summernote/summernote-bs4.min.css}">
     <link rel="stylesheet" th:href="@{/css/hrm.css}">
     <link rel="stylesheet" th:href="@{/css/branding.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap-datepicker/css/bootstrap-datepicker.css}">
     <script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
     <!-- jQuery UI 1.11.4 -->
     <script type="text/javascript" th:src="@{/lte/plugins/jquery-ui/jquery-ui.min.js}"></script>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -63,7 +64,6 @@
 
     <!-- daterangepicker -->
     <script type="text/javascript" th:src="@{/lte/plugins/moment/moment.min.js}"></script>
-    <script type="text/javascript" th:src="@{/lte/plugins/daterangepicker/daterangepicker.js}"></script>
     <!-- Tempusdominus Bootstrap 4 -->
     <script type="text/javascript" th:src="@{/lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
     <!-- Summernote -->
@@ -77,7 +77,9 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script type="text/javascript" th:src="@{/lte/dist/js/pages/dashboard.js}"></script>
 
-    <%--for sidebar active--%>
+    <script type="text/javascript" th:src="@{/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+
+
     <script>
         /** add active class and stay opened when selected */
         var url = window.location;
@@ -95,6 +97,12 @@
                 $(this).addClass("active")
                 $(this).parent().parent().parent().children("a").addClass('active');
             }
+        });
+
+        $(".mydatepicker").datepicker({
+            format: "yyyy/mm/dd",
+            autoclose: true,
+            todayHighlight: true
         });
     </script>
 

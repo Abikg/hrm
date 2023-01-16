@@ -29,6 +29,9 @@ public class PersistentMeetingMinutesEntity extends AbstractEntity{
     private MeetingType meetingType;
 
     @ManyToMany(fetch = FetchType.EAGER)
+ @JoinTable(name="meeting_minutes_user",joinColumns = @JoinColumn(name="meeting_id")
+         ,inverseJoinColumns = @JoinColumn(name="user_id"))
+
     private List<PersistentUserEntity> attendedBy;
 
     @ManyToOne

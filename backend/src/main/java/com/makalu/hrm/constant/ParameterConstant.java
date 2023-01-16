@@ -12,4 +12,5 @@ public class ParameterConstant {
     public static final String EMPLOYEE_LIST = "employeeList";
     public static final String ATTENDANCE_LIST = "attendanceList";
     public static final String ATTENDANCE_BUTTON= "attendanceBtn";
+    public static final String MEETING_TYPE= "meetingType";
 }

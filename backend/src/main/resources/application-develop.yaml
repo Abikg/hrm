@@ -11,7 +11,3 @@ makalu:
 
 
 
-your:
-  path:
-    yml:
-      string: hello
