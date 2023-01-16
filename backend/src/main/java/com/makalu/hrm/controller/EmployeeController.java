@@ -92,4 +92,14 @@ public class EmployeeController {
         map.put(ParameterConstant.RESPONSE,employeeService.update(employeeDTO));
         return "employee/edit";
     }
+
+    @GetMapping("/view/{id}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public String viewEmployee(@PathVariable("id") UUID employeeId, ModelMap map){
+        RestResponseDto rdto = employeeService.getResponseById(employeeId);
+        map.put("imageUtil", new ImageUtil());
+        map.put(ParameterConstant.EMPLOYEE,rdto.getDetail());
+        return "employee/view";
+    }
+
 }

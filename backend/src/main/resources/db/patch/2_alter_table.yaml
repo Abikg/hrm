@@ -77,3 +77,11 @@ databaseChangeLog:
              columnName: image_id
              schemaName: public
              tableName:  employee
+
+  - changeSet:
+      id: 2022-01-16-contact_detail-drop-marital_status-column
+      author: suvam
+      changes:
+        -  dropColumn:
+             tableName: contact_detail
+             columnName: marital_status

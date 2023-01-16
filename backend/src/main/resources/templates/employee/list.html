@@ -2,7 +2,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
 <head>
     <meta charset="UTF-8">
-    <fullname>Position</fullname>
+    <title>Employee</title>
 </head>
 <body layout:fragment="content">
 <section class="content-header">
@@ -46,7 +46,8 @@
 
                                 <td>
                                     <a th:href="@{'/employee/edit/'+${employee.id}}"><button type="button" class="employee-edit btn btn-info btn-sm">Edit</button></a>
-                                    <button type="button" class="btn btn-warning btn-sm">View Detail</button>
+                                    <a th:href="@{'/employee/view/'+${employee.id}}">
+                                        <button type="button" class="btn btn-warning btn-sm">View Detail</button></a>
                                 </td>
                             </tr>
                             </tbody>

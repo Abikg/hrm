@@ -46,4 +46,18 @@ public class PersistentEmployeeEntity extends AbstractEntity {
 
     @OneToOne
     private PersistentEmployeeImageEntity image;
+
+    @OneToOne
+    private PersistentContactDetailEntity contactDetail;
+
+    @OneToOne
+    private PersistentPersonalDetailEntity personalDetail;
+
+    @ManyToMany
+    @JoinTable(
+            name = "employee_work_experience",
+            joinColumns = { @JoinColumn(name = "employee_id") },
+            inverseJoinColumns = { @JoinColumn(name = "work_experience_id") }
+    )
+    private List<PersistentWorkExperienceEntity> workExperience;
 }

@@ -296,26 +296,26 @@ databaseChangeLog:
 
 
 #      - changeSet:
-#              id: 2022-12-29-employee_department_create-table
-#              author: suvam
-#              changes:
-#                - createTable:
-#                    tableName: employee_department
-#                    columns:
-#                      - column:
-#                          name: employee_id
-#                          type: varchar(36)
-#                          constraints:
-#                            nullable: false
-#                            foreignKeyName: fk_employee_dep_id
-#                            references: employee(id)
-#                      - column:
-#                          name: department_id
-#                          type: varchar(36)
-#                          constraints:
-#                            nullable: false
-#                            foreignKeyName: fk_department_id
-#                            references: department(id)
+#          id: 2022-12-29-employee_department_create-table
+#          author: suvam
+#          changes:
+#            - createTable:
+#                tableName: employee_department
+#                columns:
+#                  - column:
+#                      name: employee_id
+#                      type: varchar(36)
+#                      constraints:
+#                        nullable: false
+#                        foreignKeyName: fk_employee_dep_id
+#                        references: employee(id)
+#                  - column:
+#                      name: department_id
+#                      type: varchar(36)
+#                      constraints:
+#                        nullable: false
+#                        foreignKeyName: fk_department_id
+#                        references: department(id)
       - changeSet:
           id: 2023-01-13-employee_image-create-table
           author: suvam
@@ -363,3 +363,182 @@ databaseChangeLog:
                       constraints:
                         nullable: false
                         defaultValue: false
+      - changeSet:
+          id: 2023-01-16-personal_detail-create-table
+          author: suvam
+          changes:
+            - createTable:
+                tableName: personal_detail
+                columns:
+                  - column:
+                      name: id
+                      type: varchar(36)
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: created_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: null
+                  - column:
+                      name: last_modified_date
+                      type: date
+                      constraints:
+                        defaultValue: null
+                  - column:
+                      name: version
+                      type: int
+                      constraints:
+                        nullable: false
+                        defaultValue: 0
+                  - column:
+                      name: dob
+                      type: date
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: age
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: gender
+                      type: varchar(20)
+                      constraints:
+                        nullable: false
+                        defaultValue: false
+                  - column:
+                      name: marital_status
+                      type: varchar(20)
+                      constraints:
+                        nullable: false
+                        defaultValue: false
+      - changeSet:
+          id: 2023-01-16-contact_detail-create-table
+          author: suvam
+          changes:
+            - createTable:
+                tableName: contact_detail
+                columns:
+                  - column:
+                      name: id
+                      type: varchar(36)
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: created_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: null
+                  - column:
+                      name: last_modified_date
+                      type: date
+                      constraints:
+                        defaultValue: null
+                  - column:
+                      name: version
+                      type: int
+                      constraints:
+                        nullable: false
+                        defaultValue: 0
+                  - column:
+                      name: phone
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: email
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: address
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                        defaultValue: false
+                  - column:
+                      name: marital_status
+                      type: varchar(20)
+                      constraints:
+                        nullable: false
+                        defaultValue: false
+
+      - changeSet:
+          id: 2023-01-16-work_experience-create-table
+          author: suvam
+          changes:
+            - createTable:
+                tableName: work_experience
+                columns:
+                  - column:
+                      name: id
+                      type: varchar(36)
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: created_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: null
+                  - column:
+                      name: last_modified_date
+                      type: date
+                      constraints:
+                        defaultValue: null
+                  - column:
+                      name: version
+                      type: int
+                      constraints:
+                        nullable: false
+                        defaultValue: 0
+                  - column:
+                      name: previous_company
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: job_title
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: start_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: false
+                  - column:
+                      name: exit_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: false
+
+      - changeSet:
+          id: 2022-12-29-employee_work_experience-table
+          author: suvam
+          changes:
+            - createTable:
+                tableName: employee_work_experience
+                columns:
+                  - column:
+                      name: employee_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: false
+                        foreignKeyName: fk_employee_dep_id
+                        references: employee(id)
+                  - column:
+                      name: work_experience_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: false
+                        foreignKeyName: fk_work_experience_id
+                        references: work_experience(id)
