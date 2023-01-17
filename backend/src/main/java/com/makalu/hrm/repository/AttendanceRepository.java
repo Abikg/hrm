@@ -16,5 +16,6 @@ public interface AttendanceRepository extends JpaRepository<PersistentAttendance
     Optional<PersistentAttendanceEntity> findByCreatedDateAndUser(Date date, PersistentUserEntity user);
 
     List<PersistentAttendanceEntity> findAllByUser_Id(UUID userId, Pageable pageable);
+    List<PersistentAttendanceEntity> findAllByCreatedDate(Date date);
 
 }

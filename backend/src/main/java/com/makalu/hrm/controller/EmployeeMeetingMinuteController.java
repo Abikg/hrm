@@ -2,45 +2,82 @@ package com.makalu.hrm.controller;
 
 import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.enumconstant.MeetingType;
-import com.makalu.hrm.model.MeetingDto;
+import com.makalu.hrm.model.MeetingMinutesDto;
+import com.makalu.hrm.model.RestResponseDto;
+import com.makalu.hrm.service.MeetingMinuteService;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
+
 
 @RequestMapping("/meetingMinutes")
 @Controller
+@RequiredArgsConstructor
 public class EmployeeMeetingMinuteController {
+private final MeetingMinuteService meetingMinuteMinuteService;
 
-    @GetMapping("/list")
-    public String showmeeting(ModelMap map){
-List<String> list=new ArrayList<>();
-list.add("hellow");
-map.addAttribute("Testlist",list);
-map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.EMPLOYEE.name().toUpperCase());
 
+@GetMapping("/employeeForm/{meetingtype}")
+        public String showform(@PathVariable MeetingType meetingtype,ModelMap map){
+    if(MeetingType.EMPLOYEE.name().equals(meetingtype.name())){
+    map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(),meetingtype.name().toUpperCase());
+    }else if(MeetingType.BOD.name().equals(meetingtype.name())){
+        map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(),meetingtype.name().toUpperCase());
+    }
+
+   return "meetingMinute/meetingForm";
+}
+
+    @GetMapping("/employees/list")
+    public String showEmployeesMeeting(ModelMap map){
+
+   map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.EMPLOYEE.name().toUpperCase());
+   map.addAttribute(ParameterConstant.MEETING_LIST,meetingMinuteMinuteService.findAll(MeetingType.EMPLOYEE));
         return "meetingMinute/list";
     }
 
 
-//    public String list(ModelMap map){
-//        //all meeting minute list where type == employee
-//        return "meetingMinute/list";
-//    }
-//
+
+
+    @GetMapping("/bod/list")
+    public String List(ModelMap map){
+        map.addAttribute(ParameterConstant.MEETING_LIST,meetingMinuteMinuteService.findAll(MeetingType.BOD));
+        map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.BOD.name().toUpperCase());
+        return "meetingMinute/list";
+    }
+
+
+    public String list(ModelMap map){
+        //all meeting minute list where type == employee
+        return "meetingMinute/list";
+    }
+
+
+
+
+
+
+
 
     @PostMapping("/save")
     @ResponseBody
-    public ResponseEntity<MeetingDto> create(MeetingDto meetingDto){
-        return ResponseEntity.ok(meetingDto);
+   public ResponseEntity<RestResponseDto> create(MeetingMinutesDto meetingDto){
+
+        return ResponseEntity.ok(meetingMinuteMinuteService.save(meetingDto));
     }
-//
-//    public String show(@PathVariable("id") UUID id, ModelMap map){
-//        //all meeting minute  where type == employee and id = id
-//        return "meetingMinute/create";
-//    }
+
+
+    @GetMapping("/showMinute/{id}")
+    public String show(@PathVariable UUID id,ModelMap map){
+
+    map.addAttribute("Minute",meetingMinuteMinuteService.findById(id).getDetail());
+
+    return "meetingMinute/minute";
+    }
 }
+

@@ -317,7 +317,7 @@ databaseChangeLog:
 
 
       - changeSet:
-          id: 2023-01-16-meetingType-create-table1
+          id: 2023-01-16-meetingType-recreate3-table
           author: keshab
           changes:
             - createTable:
@@ -325,30 +325,27 @@ databaseChangeLog:
                 columns:
                   - column:
                       name: id
-                      type: varchar(26)
+                      type: varchar(36)
                       constraints:
                         primaryKey: true
                         nullable: false
-
-
                   - column:
                       name: created_date
                       type: date
                       constraints:
-                        defaultValue: true
-
+                        nullable: false
+                        defaultValue: null
                   - column:
                       name: last_modified_date
                       type: date
                       constraints:
                         defaultValue: null
-
                   - column:
                       name: version
                       type: int
                       constraints:
                         nullable: false
-
+                        defaultValue: 0
                   - column:
                       name: title
                       type: varchar(200)
@@ -384,7 +381,7 @@ databaseChangeLog:
 
 
       - changeSet:
-          id: 2022-12-29-meeting_minute_user_create-table1
+          id: 2022-12-29-meeting_minute_user_create-table2
           author: keshab
           changes:
             - createTable:

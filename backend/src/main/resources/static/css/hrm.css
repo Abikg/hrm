@@ -1,3 +1,6 @@
 .error{
     color: red;
 }
+.main-header{
+    z-index: 1;
+}
