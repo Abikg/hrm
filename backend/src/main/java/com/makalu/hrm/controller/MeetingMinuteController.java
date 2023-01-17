@@ -15,8 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.UUID;
 
 
@@ -57,16 +56,6 @@ private final MeetingMinuteService meetingMinuteMinuteService;
     }
 
 
-    public String list(ModelMap map){
-        //all meeting minute list where type == employee
-        return "meetingMinute/list";
-    }
-
-
-
-
-
-
 
 
     @PostMapping("/save")
@@ -90,13 +79,6 @@ private final MeetingMinuteService meetingMinuteMinuteService;
      return "meetingMinute/minute";
     }
 
-    @GetMapping("/getAuthorities")
-    public ResponseEntity<UserType> showAuthorities(){
 
-        List<String> stringList=new ArrayList<>();
-       // stringList=
-        UserType u=AuthenticationUtils.getCurrentUser().getUserType();
-        return ResponseEntity.ok().body(u);
-    }
 }
 
