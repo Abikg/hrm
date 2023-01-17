@@ -62,7 +62,7 @@ private final MeetingMinuteService meetingMinuteMinuteService;
     @ResponseBody
    public ResponseEntity<RestResponseDto> create(MeetingMinutesDto meetingDto) {
         if (meetingDto.getMeetingType().name().toUpperCase().equals(MeetingType.BOD.name().toUpperCase())) {
-            if (AuthenticationUtils.getCurrentUser().getUserType().equals(UserType.SUPER_ADMIN.name())) {
+            if (AuthenticationUtils.getCurrentUser().getUserType().equals(UserType.SUPER_ADMIN)) {
                 return ResponseEntity.ok(meetingMinuteMinuteService.save(meetingDto));
             }
         }
