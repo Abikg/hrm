@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Meeting</title>
+</head>
+<body layout:fragment="content">
+
+<section class="content">
+    <div class="container">
+        <h1>Meeting Detail</h1>
+        <div class="row">
+            <div class="col-md-12">
+
+
+                <div class="card">
+                    <div class="card-body">
+                        <label for="title"></label>
+                        <p class="card-text" id="title" th:text="${Minute.title}"></p>
+
+                     <label for="minute"></label>
+                        <p class="card-text" id="minute" th:utext="${Minute.minutes}"></p>
+                        <p class="card-text" id="minute3" th:utext="${Minute.meetingType}"></p>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section></section>
+
+
+
+
+
+<!--<script type="text/javascript" th:src="@{/js/hrm/meeting.js}"></script>-->
+
+<script>
+    CKEDITOR.replace('minutes');
+</script>
+</body>
+</html>

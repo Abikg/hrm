@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Meeting</title>
+</head>
+<body layout:fragment="content">
+
+<section class="content">
+    <div class="container-fluid">
+        <h>Meeting</h>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+
+                    <form id="employeeForm" method="post" th:action="@{/meetingMinutes/save}"  enctype="multipart/form-data">
+                        <div class="card-body">
+
+                            <input type="hidden" th:value="${MEETINGTYPE}" name="meetingType" id="meetingType">
+                            <div class="form-group">
+                                <label for="title" class="col-form-label">Title</label>
+                                <input type="text"  class="form-control" id="title" name="title">
+                                <p class="error" id="error-fullname"></p>
+                            </div>
+
+
+                            <div class="form-group">
+                              <input type="text" class="form-control mydatepicker" id="date" name="meetingDate" data-date-format="yyyy/mm/dd">
+                                    <div class="input-group-addon">
+                                        <span class="fas fa-calendar"></span>
+                                   </div>
+                                </div>
+
+                                  <div class="form-group">
+                                <label  class="col-form-label">Minutes</label>
+                                <textarea class="form-control" id="minutes" name="minutes" ></textarea>
+                                <p class="error" id="error-detail"></p>
+                            </div>
+                        </div>
+
+                            <div class="card-footer">
+                            <button type="submit" id="btn-save-employee" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<script type="text/javascript" th:src="@{/js/ckeditor/ckeditor.js}"></script>
+
+<script>
+    CKEDITOR.replace('minutes');
+</script>
+</body>
+</html>
