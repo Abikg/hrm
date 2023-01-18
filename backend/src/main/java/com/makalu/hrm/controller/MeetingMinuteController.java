@@ -75,7 +75,7 @@ private final MeetingMinuteService meetingMinuteMinuteService;
     @GetMapping("/showMinute/{id}")
     public String show(@PathVariable UUID id,ModelMap map){
 
-    map.addAttribute("Minute",meetingMinuteMinuteService.findById(id).getDetail());
+    map.addAttribute(ParameterConstant.MINUTE,meetingMinuteMinuteService.findById(id).getDetail());
      return "meetingMinute/minute";
     }
 

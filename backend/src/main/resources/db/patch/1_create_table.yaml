@@ -360,7 +360,7 @@ databaseChangeLog:
 
                   - column:
                       name: minutes
-                      type: varchar(500)
+                      type: text
                       constraints:
                         nullable: false
 
