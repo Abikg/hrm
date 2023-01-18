@@ -31,7 +31,7 @@ public class TestUserDetailsImpl implements UserDetailsService {
         UUID userId = UUID.randomUUID();
         if (Objects.equals(username, API_SYSTEM))
             roleList.add(new SimpleGrantedAuthority("ROLE_SYSTEM"));
-            roleList.add(new SimpleGrantedAuthority("SUPER_ADMIN"));
+            roleList.add(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN"));
         if (Objects.equals(username, API_WORKER)) {
             roleList.add(new SimpleGrantedAuthority("ROLE_WORKER"));
             userId = UUID.randomUUID();
