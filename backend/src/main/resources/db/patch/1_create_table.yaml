@@ -1,6 +1,6 @@
 databaseChangeLog:
       - changeSet:
-          id: 2022-12-29-user-create-table
+          id: 2022-12-29-user-recreate2-table
           author: suvam
           changes:
             - createTable:

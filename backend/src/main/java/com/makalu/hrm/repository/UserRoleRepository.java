@@ -3,6 +3,7 @@ package com.makalu.hrm.repository;
 import com.makalu.hrm.domain.PersistentRoleEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.domain.PersistentUserRoleEntity;
+import com.makalu.hrm.enumconstant.UserType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,5 +22,9 @@ public interface UserRoleRepository extends JpaRepository<PersistentUserRoleEnti
 
     @Query("select ur.role from PersistentUserRoleEntity ur where ur.user.id=?1")
     List<PersistentRoleEntity> findAllRoleByUser_Id(String userId);
+
+
+
+
 
 }

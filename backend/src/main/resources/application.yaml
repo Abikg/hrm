@@ -10,6 +10,9 @@ spring:
   jpa:
     properties:
       hibernate:
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
         order_updates: true
         order_inserts: true
         jdbc:
@@ -19,6 +22,9 @@ spring:
 
 logging:
   level:
+    org:
+      hibernate:
+        type: trace
     ROOT: INFO
 management:
   endpoints:
@@ -28,3 +34,6 @@ management:
       base-path: /manage
       cors:
         allowed-origins: '*'
+
+
+

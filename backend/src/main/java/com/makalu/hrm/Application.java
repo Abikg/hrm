@@ -40,6 +40,11 @@ public class Application {
 		void createDefaultUsers(){
 			if (userRepository.findByUsername("dhirajbadu50@gmail.com").isEmpty()){
 				userRepository.saveAndFlush(new PersistentUserEntity("dhirajbadu50@gmail.com", passwordEncoder.encode("dhirajbadu50@gmail.com"), true, false, false, false, UserType.SUPER_ADMIN));
+				userRepository.saveAndFlush(new PersistentUserEntity("keshabjoshi998@gmail.com", passwordEncoder.encode("keshabjoshi998.com"), true, false, false, false, UserType.EMPLOYEE));
+				userRepository.saveAndFlush(new PersistentUserEntity("shubham@gmail.com", passwordEncoder.encode("dhirajbadu50@gmail.com"), true, false, false, false, UserType.EMPLOYEE));
+				userRepository.saveAndFlush(new PersistentUserEntity("preetam50@gmail.com", passwordEncoder.encode("dhirajbadu50@gmail.com"), true, false, false, false, UserType.SUPER_ADMIN));
+
+
 			}
 		}
 

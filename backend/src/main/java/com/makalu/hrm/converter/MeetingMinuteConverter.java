@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -26,35 +27,21 @@ public class MeetingMinuteConverter   extends Convertable<PersistentMeetingMinut
     private  final AttendanceRepository attendanceRepository;
     private  final UserRepository userRepository;
 
-    @Override
-    public PersistentMeetingMinutesEntity convertToEntity(MeetingMinutesDto dto) {
+
+    public PersistentMeetingMinutesEntity convertToEntity(MeetingMinutesDto dto,List<UUID> attendedById) {
       PersistentMeetingMinutesEntity entity=new PersistentMeetingMinutesEntity();
       entity.setTitle(dto.getTitle());
       entity.setMeetingDate(dto.getMeetingDate());
       entity.setMinutes(dto.getMinutes());
       entity.setMeetingType(dto.getMeetingType());
-      //getting employees who are present today
+      entity.setAttendedBy(userRepository.findAllById(attendedById));
+      List<PersistentUserEntity> list=userRepository.findAllById(attendedById);
+       entity.setAttendedBy(list);
 
-        List<PersistentUserEntity> PresentList=new ArrayList<>();
+      entity.setCreatedBy(userRepository.findByUsername(AuthenticationUtils.getCurrentUser().getUsername()).get());
 
-        List<PersistentAttendanceEntity> attendanceToday=attendanceRepository.findAllByCreatedDate(new Date());
 
-        if(dto.getMeetingType().name().toUpperCase().equals(MeetingType.EMPLOYEE.name().toUpperCase()))
-
-            for(PersistentAttendanceEntity attendance:attendanceToday) {
-                if (attendance.getUser().getUserType().equals(UserType.EMPLOYEE)) {
-                    PresentList.add(attendance.getUser());
-                }
-            }
-        else if (dto.getMeetingType().name().toUpperCase().equals(MeetingType.BOD.name().toUpperCase())) {
-            for(PersistentAttendanceEntity attendance:attendanceToday){
-              if(attendance.getUser().getUserType().equals(UserType.SUPER_ADMIN)){
-                    PresentList.add(attendance.getUser());
-                }}}
-
-           entity.setAttendedBy(PresentList);
-        entity.setCreatedBy(userRepository.findByUsername(AuthenticationUtils.getCurrentUser().getUsername()).get());
-         return  entity;
+      return  entity;
     }
 
 
