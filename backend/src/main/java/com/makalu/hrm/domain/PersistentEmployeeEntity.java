@@ -1,7 +1,11 @@
 package com.makalu.hrm.domain;
 
+import com.makalu.hrm.model.ContactDetailDTO;
+import com.makalu.hrm.model.PersonalDetailDTO;
+import com.makalu.hrm.model.WorkExperienceDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,22 +27,23 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     @Column(nullable = false)
     private String email;
 
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb",name = "contact_detail")
+    private ContactDetailDTO contactDetail;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "employee_position",
-            joinColumns = { @JoinColumn(name = "employee_id") },
-            inverseJoinColumns = { @JoinColumn(name = "position_id") }
-    )
-    private List<PersistentPositionEntity> position;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb",name = "personal_detail")
+    private PersonalDetailDTO personalDetail;
 
-    @ManyToMany(cascade = { CascadeType.ALL } , fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "employee_department",
-            joinColumns = { @JoinColumn(name = "employee_id") },
-            inverseJoinColumns = { @JoinColumn(name = "department_id") }
-    )
-    private List<PersistentDepartmentEntity> department;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb",name = "work_experience")
+    private List<WorkExperienceDTO> workExperience;
+
+    @OneToOne
+    private PersistentPositionEntity position;
+
+    @OneToOne
+    private PersistentDepartmentEntity department;
 
     @OneToOne
     private PersistentUserEntity user;
@@ -47,17 +52,6 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     @OneToOne
     private PersistentEmployeeImageEntity image;
 
-    @OneToOne
-    private PersistentContactDetailEntity contactDetail;
 
-    @OneToOne
-    private PersistentPersonalDetailEntity personalDetail;
 
-    @ManyToMany
-    @JoinTable(
-            name = "employee_work_experience",
-            joinColumns = { @JoinColumn(name = "employee_id") },
-            inverseJoinColumns = { @JoinColumn(name = "work_experience_id") }
-    )
-    private List<PersistentWorkExperienceEntity> workExperience;
 }

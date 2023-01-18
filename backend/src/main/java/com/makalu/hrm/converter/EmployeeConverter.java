@@ -40,10 +40,19 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         dto.setAddress(entity.getAddress());
         dto.setEmail(entity.getEmail());
         dto.setPhone(entity.getPhone());
-        dto.setPositionIdList(entity.getPosition().stream().map(PersistentPositionEntity::getId).collect(Collectors.toList()));
-        dto.setDepartmentIdList(entity.getDepartment().stream().map(PersistentDepartmentEntity::getId).collect(Collectors.toList()));
+        dto.setPositionId(entity.getPosition().getId());
+        dto.setDepartmentId(entity.getDepartment().getId());
         dto.setEmployeeImage(employeeImageConverter.convertToDto(entity.getImage()));
         dto.setUser(userConverter.convertToDto(entity.getUser()));
+        if(entity.getContactDetail() != null){
+            dto.setContactDetailDTO(entity.getContactDetail());
+        }
+        if(entity.getPersonalDetail() != null){
+            dto.setPersonalDetailDTO(entity.getPersonalDetail());
+        }
+        if(entity.getWorkExperience() != null){
+            dto.setWorkExperienceDTO(entity.getWorkExperience());
+        }
         return dto;
     }
 
@@ -56,12 +65,15 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         entity.setAddress(dto.getAddress());
         entity.setEmail(dto.getEmail());
         entity.setPhone(dto.getPhone());
-        entity.setPosition(positionRepository.findAllById(dto.getPositionIdList()));
-        entity.setDepartment(departmentRepository.findAllById(dto.getDepartmentIdList()));
+        entity.setPosition(positionRepository.findById(dto.getPositionId()).orElse(null));
+        entity.setDepartment(departmentRepository.findById(dto.getDepartmentId()).orElse(null));
         if(dto.getEmployeeImageId() != null) {
             entity.setImage(employeeImageRepository.getReferenceById(dto.getEmployeeImageId()));
         }
         entity.setUser(userRepository.getReferenceById(dto.getUserId()));
+        entity.setContactDetail(dto.getContactDetailDTO());
+        entity.setPersonalDetail(dto.getPersonalDetailDTO());
+        entity.setWorkExperience(dto.getWorkExperienceDTO());
         return entity;
     }
 }

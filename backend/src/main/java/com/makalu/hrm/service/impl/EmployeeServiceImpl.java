@@ -42,6 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public RestResponseDto save(@NotNull EmployeeDTO employeeDTO) {
         try {
+
             EmployeeError error = employeeValidation.validateOnSave(employeeDTO);
 
             if (!error.isValid()) {
@@ -62,12 +63,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                     employeeDTO.setEmployeeImageId(employeeImageDTO.getId());
                 }
             }
+            if(employeeDTO.isCreateUser() == true) {
+                RestResponseDto userResponseDto = userService.createEmployeeUser(employeeDTO.getEmail());
 
-            RestResponseDto userResponseDto = userService.createEmployeeUser(employeeDTO.getEmail());
-
-            if(userResponseDto.getStatus() == 200){
-                UserDTO userDTO = (UserDTO) userResponseDto.getDetail();
-                employeeDTO.setUserId(userDTO.getId());
+                if (userResponseDto.getStatus() == 200) {
+                    UserDTO userDTO = (UserDTO) userResponseDto.getDetail();
+                    employeeDTO.setUserId(userDTO.getId());
+                }
             }
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeConverter.convertToDto(

@@ -11,11 +11,11 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Data
-@RequiredArgsConstructor
 public class EmployeeDTO {
 
 
@@ -31,20 +31,27 @@ public class EmployeeDTO {
 
     private MultipartFile empImage;
 
-    List<PositionDTO> position;
+    private boolean createUser = false;
 
-    List<DepartmentDTO> department;
+    private UserDTO user;
 
-    UserDTO user;
+    private EmployeeImageDTO employeeImage;
 
-    EmployeeImageDTO employeeImage;
+    private UUID positionId;
 
-    private List<UUID> positionIdList;
-
-    private List<UUID> departmentIdList;
+    private UUID departmentId;
 
     private UUID userId;
 
     private UUID employeeImageId;
 
+    private ContactDetailDTO contactDetailDTO = new ContactDetailDTO();
+
+    private PersonalDetailDTO personalDetailDTO = new PersonalDetailDTO();
+
+    private List<WorkExperienceDTO> workExperienceDTO = new ArrayList<>();
+
+    public EmployeeDTO() {
+        this.workExperienceDTO.add(new WorkExperienceDTO());
+    }
 }
