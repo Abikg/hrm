@@ -2,6 +2,7 @@ package com.makalu.hrm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.makalu.hrm.Application;
+import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = Application.class)
 @ContextConfiguration
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles({"test"})
@@ -28,6 +29,8 @@ public class MvcBaseTest {
 
     @Autowired
     protected MockMvc mvc;
+
+    protected EasyRandom rand = new EasyRandom();
 
     @BeforeEach
     public void setup(){
