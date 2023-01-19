@@ -12,10 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PositionValidation {
     private final PositionRepository positionRepository;
-    private final PositionError positionError = new PositionError();
+    private static PositionError positionError;
 
 
     public PositionError validateOnSave(PositionDTO positionDTO){
+        positionError = new PositionError();
         boolean isValid = validateTitle(positionDTO.getTitle());
         isValid = isValid & validateDetails(positionDTO.getDetail());
         isValid = isValid && validateUnique(positionDTO.getTitle());

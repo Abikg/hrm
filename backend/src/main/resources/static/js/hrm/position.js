@@ -106,9 +106,10 @@ function saveData(data, url){
     positionReq  = $.ajax(url,
         {
             method:"POST",
-            dataType: 'json',
+            dataType : "json",
+            contentType: "application/json; charset=utf-8",
             timeout: 500,
-            data:data,
+            data:JSON.stringify(data),
             beforeSend: function(){
                 if (positionReq !== undefined && positionReq != null){
                     positionReq.abort();
