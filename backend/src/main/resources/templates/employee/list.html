@@ -27,30 +27,6 @@
                 <div class="card">
                     <div class="card-body">
                         <table class="table" id="employee-table">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Action</th>
-
-                            </tr>
-                            </thead>
-                            <tbody th:each="employee: ${employeeList}">
-                            <tr th:id="${employee.id}">
-                                <td th:text="${employee.fullname}" class="fullname"></td>
-                                <td th:text="${employee.address}" class="address"></td>
-                                <td th:text="${employee.phone}" class="phone"></td>
-                                <td th:text="${employee.email}" class="email"></td>
-
-                                <td>
-                                    <a th:href="@{'/employee/edit/'+${employee.id}}"><button type="button" class="employee-edit btn btn-info btn-sm">Edit</button></a>
-                                    <a th:href="@{'/employee/view/'+${employee.id}}">
-                                        <button type="button" class="btn btn-warning btn-sm">View Detail</button></a>
-                                </td>
-                            </tr>
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -58,5 +34,6 @@
         </div>
     </div>
 </section>
+<script type="text/javascript" th:src="@{/js/hrm/employee.js}"></script>
 </body>
 </html>

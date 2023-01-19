@@ -147,7 +147,7 @@ databaseChangeLog:
                       type: varchar(255)
                       constraints:
                         nullable: false
-                        unique: true
+                        unique: false
                   - column:
                       name: address
                       type: varchar(255)
@@ -165,19 +165,50 @@ databaseChangeLog:
                       constraints:
                         nullable: false
                   - column:
-                      name: emp_image
-                      type: varchar(255)
+                      name: personal_detail
+                      type: jsonb
                       constraints:
-                        nullable: false
+                        notNull: true
+                  - column:
+                      name: contact_detail
+                      type: jsonb
+                      constraints:
+                        notNull: true
+                  - column:
+                      name: work_experience
+                      type: jsonb
+                      constraints:
+                        notNull: false
                   - column:
                       name: user_id
                       type: varchar(36)
                       constraints:
-                        nullable: false
+                        nullable: true
                         foreignKeyName: fk_user_id
                         references: auth_user(id)
+                  - column:
+                      name: image_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: true
+                        foreignKeyName: fk_image_id
+                        references: employee_image(id)
+                  - column:
+                      name: department_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: true
+                        foreignKeyName: fk_department_id
+                        references: department(id)
+                  - column:
+                      name: position_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: true
+                        foreignKeyName: fk_position_id
+                        references: position(id)
 
-#      - changeSet:
+  #      - changeSet:
 #          id: 2022-12-29-department-create-table
 #          author: suvam
 #          changes:
@@ -246,75 +277,6 @@ databaseChangeLog:
                           nullable: false
                           foreignKeyName: fk_position_id
                           references: position(id)
-
-
-      -  changeSet:
-           id: 2023-01-10 attendance_table
-           author : keshab
-           changes:
-             -  createTable:
-                  tableName: attendance
-                  columns:
-                    - column:
-                        name: id
-                        type: varchar(36)
-                        constraints:
-                         primaryKey: true
-                         nullable: false
-                    - column:
-                        name: created_date
-                        type: date
-                        constraints:
-                          defaultValue: true
-
-                    - column:
-                        name: last_modified_date
-                        type: date
-                        constraints:
-                          defaultValue: null
-
-                    - column:
-                        name: version
-                        type: int
-                        constraints:
-                          nullable: false
-
-                    - column:
-                        name: punch_in_date
-                        type: timestamp
-                        constraints:
-                          nullable: true
-
-                    - column:
-                        name: punch_in_ip
-                        type: varchar(36)
-                        constraints:
-                          nullable: true
-                    - column:
-                        name: punch_out_date
-                        type: timestamp
-                        constraints:
-                           nullable: true
-                    - column:
-                        name: punch_out_ip
-                        type: varchar(36)
-                        constraints:
-                          nullable: true
-                    - column:
-                        name: user_id
-                        type: varchar(36)
-                        constraints:
-                          nullable: false
-                          foreignKeyName: fk_attendance_user_id
-                          references: auth_user(id)
-                    - column:
-                        name: total_worked_hours
-                        type: double
-                        constraints:
-                          nullable: true
-
-
-
 
       - changeSet:
           id: 2023-01-16-work_experience-create-table

@@ -6,6 +6,7 @@ import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.DepartmentService;
 import com.makalu.hrm.service.EmployeeService;
 import com.makalu.hrm.service.PositionService;
+import com.makalu.hrm.utils.FieldService;
 import com.makalu.hrm.utils.ImageUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final DepartmentService departmentService;
     private final PositionService positionService;
+    private final FieldService fieldService;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
@@ -50,7 +52,7 @@ public class EmployeeController {
     @PreAuthorize("hasRole('AUTHENTICATED')")
     @ResponseBody
     public ResponseEntity<RestResponseDto> list(){
-        return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(employeeService.list()));
+        return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(employeeService.list()).column(fieldService.getEmployeeFields()));
     }
 
     @GetMapping("/create")

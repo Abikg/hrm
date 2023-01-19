@@ -17,7 +17,5 @@ public interface EmployeeService {
 
     RestResponseDto update(EmployeeDTO employeeDTO);
 
-    RestResponseDto delete(UUID employeeId);
 
-    RestResponseDto getPositionAndDepartmentList();
 }

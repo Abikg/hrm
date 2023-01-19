@@ -3,6 +3,11 @@ $("#add-new-position").click(function (){
     $('#positionModal').modal('toggle');
 })
 
+window.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed');
+    listData("position","api/list", "position-table")
+
+});
 
 function editPosition(id){
     setupForEditForm()
@@ -18,8 +23,8 @@ function populateDataInForm(data){
 
 let positionReq= null;
 
-function deletePosition(id){
-    const url = $("#base-url").val() +"position/delete/"+id;
+function deletePosition(id,module){
+    const url = window.location.origin + "/" + module + "/delete/" + id;
     positionReq  = $.ajax(url,
         {
             method:"DELETE",
@@ -33,7 +38,7 @@ function deletePosition(id){
             success: function (data,status,xhr) {
                 console.log("saved");
                 if (data.status === 200){
-                    $("#"+id).remove();
+                    listData("position","api/list", "position-table");
                 }
 
             },
@@ -94,7 +99,6 @@ function setupForEditForm(){
 
 $("#positionForm").submit(function (event){
     event.preventDefault();
-    debugger
     const data = new FormData(event.target);
     const jsonData = Object.fromEntries(data.entries());
     const url = event.target.action;
@@ -118,11 +122,7 @@ function saveData(data, url){
             success: function (data,status,xhr) {
                 console.log("saved");
                 if (data.status === 200){
-                    if (url.indexOf("save")>0){
-                        appendNewRowInTable(data.detail);
-                    }else{
-                        updateRowInTable(data.detail)
-                    }
+                    listData("position","api/list", "position-table");
                     $('#positionModal').modal('toggle');
                 }else if (data.status === 400){
                     showFormError(data.detail.error)

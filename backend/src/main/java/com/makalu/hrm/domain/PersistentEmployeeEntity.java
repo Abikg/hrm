@@ -3,9 +3,11 @@ package com.makalu.hrm.domain;
 import com.makalu.hrm.model.ContactDetailDTO;
 import com.makalu.hrm.model.PersonalDetailDTO;
 import com.makalu.hrm.model.WorkExperienceDTO;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 @Data
 @Table(name = "employee")
 @EqualsAndHashCode(callSuper=false)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class PersistentEmployeeEntity extends AbstractEntity {
 
     @Column(nullable = false)

@@ -53,15 +53,15 @@ public class EmployeeValidation {
         }
         isValid = isValid & validateGender(dto.getPersonalDetailDTO().getGender());
         isValid = isValid & validateMaritalStatus(dto.getPersonalDetailDTO().getMaritalStatus());
-        if(dto.getWorkExperienceDTO() != null) {
-            isValid = isValid & validatePreviousCompany(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getPreviousCompany).collect(Collectors.toList()));
-            isValid = isValid & validateJoinDate(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getJoinDate).collect(Collectors.toList()));
-            isValid = isValid & validateLeftDate(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getLeftDate).collect(Collectors.toList()));
-            isValid = isValid & validateJobTitle(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getJobTitle).collect(Collectors.toList()));
-            isValid = isValid & validateJobDesc(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getJobDesc).collect(Collectors.toList()));
-
-        }
-        isValid = isValid && validateUnique(dto.getPhone().trim(), dto.getEmail().trim());
+//        if(dto.getWorkExperienceDTO() != null) {
+//            isValid = isValid & validatePreviousCompany(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getPreviousCompany).collect(Collectors.toList()));
+//            isValid = isValid & validateJoinDate(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getJoinDate).collect(Collectors.toList()));
+//            isValid = isValid & validateLeftDate(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getLeftDate).collect(Collectors.toList()));
+//            isValid = isValid & validateJobTitle(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getJobTitle).collect(Collectors.toList()));
+//            isValid = isValid & validateJobDesc(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getJobDesc).collect(Collectors.toList()));
+//
+//        }
+        isValid = isValid && validateUnique(dto.getPhone(),dto.getEmail());
         error.setValid(isValid);
         return error;
     }
@@ -75,6 +75,16 @@ public class EmployeeValidation {
         isValid = isValid & validatePosition(dto.getPositionId());
         isValid = isValid & validateDepartment(dto.getDepartmentId());
         isValid = isValid & validateImage(dto.getEmpImage());
+        isValid = isValid & validateContactPhone(dto.getContactDetailDTO().getContactPhone());
+        isValid = isValid & validateContactEmail(dto.getContactDetailDTO().getContactEmail());
+        isValid = isValid & validateContactAddress(dto.getContactDetailDTO().getContactAddress());
+        try {
+            isValid = isValid & validateDob(dto.getPersonalDetailDTO().getDob());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        isValid = isValid & validateGender(dto.getPersonalDetailDTO().getGender());
+        isValid = isValid & validateMaritalStatus(dto.getPersonalDetailDTO().getMaritalStatus());
         isValid = isValid && validateUniqueOnUpdate(dto);
         error.setValid(isValid);
         return error;
@@ -108,10 +118,8 @@ public class EmployeeValidation {
                 return false;
         }
         if( employeeEntity2 != null && !employeeEntity2.getId().equals(employeeDTO.getId())){
-            if(employeeEntity2.getId().compareTo(employeeDTO.getId()) != 0) {
                 error.setEmail("Email already used");
                 return false;
-            }
         }
 
         return true;
@@ -283,57 +291,57 @@ public class EmployeeValidation {
         return true;
     }
 
-    private boolean validatePreviousCompany(List<String> previousCompany){
-        if(previousCompany == null || previousCompany.stream().anyMatch(s->s.trim().isEmpty())){
-            error.setPreviousCompany("Previous company is required");
-            return false;
-        }
-        if(previousCompany.stream().anyMatch(s->s.length()>30)){
-            error.setPreviousCompany("Previous company is name must be less than 30 characters");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateJobTitle(List<String> jobTitle){
-        if(jobTitle == null || jobTitle.stream().anyMatch(s->s.trim().isEmpty())){
-            error.setJobTitle("Job title is required");
-            return false;
-        }
-        if(jobTitle.stream().anyMatch(s->s.length() >20)){
-            error.setJobTitle("Job title must be less than 20 characters");
-            return false;
-        }
-        return true;
-    }
-
-
-    private boolean validateJobDesc(List<String> jobDesc){
-        if(jobDesc == null || jobDesc.stream().anyMatch(s->s.trim().isEmpty())){
-            error.setJobDesc("Job description is required");
-            return false;
-        }
-        if(jobDesc.stream().anyMatch(s->s.length()>100)){
-            error.setJobDesc("Job description must be less than 100 characters");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateJoinDate(List<String> joinDate){
-        if(joinDate == null  || joinDate.stream().anyMatch(s->s.trim().isEmpty())){
-            error.setJoinDate("Joined date is required");
-            return false;
-        }
-        return true;
-    }
-
-
-    private boolean validateLeftDate(List<String> leftDate){
-        if(leftDate == null  || leftDate.stream().anyMatch(s->s.trim().isEmpty())){
-            error.setLeftDate("Left date is required");
-            return false;
-        }
-        return true;
-    }
+//    private boolean validatePreviousCompany(List<String> previousCompany){
+//        if(previousCompany == null || previousCompany.stream().anyMatch(s->s.trim().isEmpty())){
+//            error.setPreviousCompany("Previous company is required");
+//            return false;
+//        }
+//        if(previousCompany.stream().anyMatch(s->s.length()>30)){
+//            error.setPreviousCompany("Previous company is name must be less than 30 characters");
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    private boolean validateJobTitle(List<String> jobTitle){
+//        if(jobTitle == null || jobTitle.stream().anyMatch(s->s.trim().isEmpty())){
+//            error.setJobTitle("Job title is required");
+//            return false;
+//        }
+//        if(jobTitle.stream().anyMatch(s->s.length() >20)){
+//            error.setJobTitle("Job title must be less than 20 characters");
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//
+//    private boolean validateJobDesc(List<String> jobDesc){
+//        if(jobDesc == null || jobDesc.stream().anyMatch(s->s.trim().isEmpty())){
+//            error.setJobDesc("Job description is required");
+//            return false;
+//        }
+//        if(jobDesc.stream().anyMatch(s->s.length()>100)){
+//            error.setJobDesc("Job description must be less than 100 characters");
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    private boolean validateJoinDate(List<String> joinDate){
+//        if(joinDate == null  || joinDate.stream().anyMatch(s->s.trim().isEmpty())){
+//            error.setJoinDate("Joined date is required");
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//
+//    private boolean validateLeftDate(List<String> leftDate){
+//        if(leftDate == null  || leftDate.stream().anyMatch(s->s.trim().isEmpty())){
+//            error.setLeftDate("Left date is required");
+//            return false;
+//        }
+//        return true;
+//    }
 }

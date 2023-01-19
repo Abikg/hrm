@@ -23,9 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeServiceImpl implements EmployeeService {
-
-    private final PositionService positionService;
-    private final DepartmentService departmentService;
+    ;
     private final EmployeeConverter employeeConverter;
     private final EmployeeRepository employeeRepository;
     private final EmployeeValidation employeeValidation;
@@ -63,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     employeeDTO.setEmployeeImageId(employeeImageDTO.getId());
                 }
             }
-            if(employeeDTO.isCreateUser() == true) {
+            if(employeeDTO.isCreateUser()) {
                 RestResponseDto userResponseDto = userService.createEmployeeUser(employeeDTO.getEmail());
 
                 if (userResponseDto.getStatus() == 200) {
@@ -110,7 +108,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             if(employeeEntity == null){
                 return RestResponseDto.INSTANCE().notFound().message("Employee not found");
             }
-            employeeDTO.setUserId(employeeEntity.getUser().getId());
+            if(employeeEntity.getUser() != null) {
+                employeeDTO.setUserId(employeeEntity.getUser().getId());
+            }
             if(employeeEntity.getImage() != null){
                 employeeDTO.setEmployeeImageId(employeeEntity.getImage().getId());
             }
@@ -137,26 +137,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    @Override
-    public RestResponseDto delete(UUID employeeId) {
-        return null;
-    }
 
-    @Override
-    public RestResponseDto getPositionAndDepartmentList() {
-        try {
-            List<PositionDTO> positionDTOList = positionService.list();
-            List<DepartmentDTO> departmentDTOList = departmentService.list();
-
-
-            return RestResponseDto.INSTANCE()
-                    .success().detail(Map.of("positionList",positionDTOList,"departmentList",departmentDTOList));
-        }catch (Exception ex){
-            log.error("Error while creating department", ex);
-            return RestResponseDto
-                    .INSTANCE()
-                    .internalServerError();
-
-        }
-    }
 }

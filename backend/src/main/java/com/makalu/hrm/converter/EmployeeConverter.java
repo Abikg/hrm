@@ -43,16 +43,13 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         dto.setPositionId(entity.getPosition().getId());
         dto.setDepartmentId(entity.getDepartment().getId());
         dto.setEmployeeImage(employeeImageConverter.convertToDto(entity.getImage()));
-        dto.setUser(userConverter.convertToDto(entity.getUser()));
-        if(entity.getContactDetail() != null){
-            dto.setContactDetailDTO(entity.getContactDetail());
+        if(entity.getUser() != null) {
+            dto.setUser(userConverter.convertToDto(entity.getUser()));
         }
-        if(entity.getPersonalDetail() != null){
-            dto.setPersonalDetailDTO(entity.getPersonalDetail());
-        }
-        if(entity.getWorkExperience() != null){
-            dto.setWorkExperienceDTO(entity.getWorkExperience());
-        }
+        dto.setContactDetailDTO(entity.getContactDetail());
+        dto.setPersonalDetailDTO(entity.getPersonalDetail());
+        dto.setWorkExperienceDTO(entity.getWorkExperience());
+
         return dto;
     }
 
@@ -68,9 +65,11 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         entity.setPosition(positionRepository.findById(dto.getPositionId()).orElse(null));
         entity.setDepartment(departmentRepository.findById(dto.getDepartmentId()).orElse(null));
         if(dto.getEmployeeImageId() != null) {
-            entity.setImage(employeeImageRepository.getReferenceById(dto.getEmployeeImageId()));
+            entity.setImage(employeeImageRepository.findById(dto.getEmployeeImageId()).orElse(null));
         }
-        entity.setUser(userRepository.getReferenceById(dto.getUserId()));
+        if(dto.getUserId() != null) {
+            entity.setUser(userRepository.findById(dto.getUserId()).orElse(null));
+        }
         entity.setContactDetail(dto.getContactDetailDTO());
         entity.setPersonalDetail(dto.getPersonalDetailDTO());
         entity.setWorkExperience(dto.getWorkExperienceDTO());
