@@ -25,25 +25,6 @@
                 <div class="card">
                     <div class="card-body">
                         <table class="table" id="department-table">
-                            <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Code</th>
-                                <th>Details</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody th:each="department: ${departmentList}">
-                            <tr th:id="${department.id}">
-                                <td th:text="${department.title}" class="title"></td>
-                                <td th:text="${department.departmentCode}" class="departmentCode"></td>
-                                <td th:text="${department.detail}" class="detail"></td>
-                                <td>
-                                    <button type="button" th:data-id="${department.id}" th:onclick="editDepartment([[${department.id}]])" class="department-edit btn btn-info btn-sm">Edit</button>
-                                    <button type="button" th:data-id="${department.id}" th:onclick="deleteDepartment([[${department.id}]])" class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            </tbody>
                         </table>
                     </div>
                 </div>

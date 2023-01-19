@@ -10,8 +10,11 @@ import com.makalu.hrm.validation.DepartmentValidation;
 import com.makalu.hrm.validation.error.DepartmentError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.ServletContext;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
@@ -25,6 +28,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentConverter departmentConverter;
 
     private final DepartmentValidation departmentValidation;
+
+    private final ServletContext context;
 
     @Override
     public List<DepartmentDTO> list() {

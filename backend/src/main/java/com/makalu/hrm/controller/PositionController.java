@@ -51,7 +51,7 @@ public class PositionController {
     @PostMapping("/save")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> save(PositionDTO positionDto){
+    public ResponseEntity<RestResponseDto> save(@RequestBody PositionDTO positionDto){
         return ResponseEntity.ok(positionService.save(positionDto));
     }
 
@@ -65,7 +65,7 @@ public class PositionController {
     @PostMapping("/update")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> update(PositionDTO positionDto, RedirectAttributes redirectAttributes){
+    public ResponseEntity<RestResponseDto> update(@RequestBody PositionDTO positionDto, RedirectAttributes redirectAttributes){
         return ResponseEntity.ok(positionService.update(positionDto));
     }
 

@@ -1,40 +1,45 @@
-$("#add-new-department").click(function (){
+$("#add-new-department").click(function () {
     setupForCreateForm();
     $('#departmentModal').modal('toggle');
 })
 
+window.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed');
+    listData("department","api/list", "department-table")
 
-function editDepartment(id){
+});
+function editDepartment(id, module) {
     setupForEditForm()
     getDepartmentData(id);
     $('#departmentModal').modal('toggle');
 }
 
-function populateDataInForm(data){
+function populateDataInForm(data) {
     $('#departmentModal').find("#id").val(data.id);
     $('#departmentModal').find("#title").val(data.title);
     $('#departmentModal').find("#code").val(data.departmentCode);
     $('#departmentModal').find("#details").text(data.detail);
 }
 
-let departmentReq= null;
+let departmentReq = null;
 
-function deleteDepartment(id){
-    const url = $("#base-url").val() +"department/delete/"+id;
-    departmentReq  = $.ajax(url,
+function deleteDepartment(id, module) {
+    const url = window.location.origin + "/" + module + "/delete/" + id;
+    departmentReq = $.ajax(url,
         {
-            method:"DELETE",
+            method: "DELETE",
             dataType: 'json',
             timeout: 500,
-            beforeSend: function(){
-                if (departmentReq !== undefined && departmentReq != null){
+            beforeSend: function () {
+                if (departmentReq !== undefined && departmentReq != null) {
                     departmentReq.abort();
                 }
             },
-            success: function (data,status,xhr) {
+            success: function (data, status, xhr) {
                 console.log("saved");
-                if (data.status === 200){
-                    $("#"+id).remove();
+                if (data.status === 200) {
+                    listData("department","api/list", "department-table")
+                    // $("#" + id).remove();
                 }
 
             },
@@ -47,21 +52,21 @@ function deleteDepartment(id){
 }
 
 
-function getDepartmentData(id){
-    const url = $("#base-url").val() +"department/get/"+id;
-    departmentReq  = $.ajax(url,
+function getDepartmentData(id) {
+    const url = $("#base-url").val() + "department/get/" + id;
+    departmentReq = $.ajax(url,
         {
-            method:"GET",
+            method: "GET",
             dataType: 'json',
             timeout: 500,
-            beforeSend: function(){
-                if (departmentReq !== undefined && departmentReq != null){
+            beforeSend: function () {
+                if (departmentReq !== undefined && departmentReq != null) {
                     departmentReq.abort();
                 }
             },
-            success: function (data,status,xhr) {
+            success: function (data, status, xhr) {
                 console.log("saved");
-                if (data.status === 200){
+                if (data.status === 200) {
                     populateDataInForm(data.detail);
                     $('#departmentModal').modal('toggle');
                 }
@@ -76,55 +81,50 @@ function getDepartmentData(id){
 }
 
 
-
-function setupForCreateForm(){
+function setupForCreateForm() {
     $("#departmentForm")[0].reset();
     $("#departmentModalLabel").text("Create New Department");
     const formBaseUrl = $("#departmentForm").data("action-base-url");
-    $("#departmentForm").attr("action", formBaseUrl+"save");
+    $("#departmentForm").attr("action", formBaseUrl + "save");
     resetFormError();
 }
 
-function setupForEditForm(){
+function setupForEditForm() {
     $("#departmentForm")[0].reset();
     $("#departmentModalLabel").text("Update Department");
     const formBaseUrl = $("#departmentForm").data("action-base-url");
-    $("#departmentForm").attr("action", formBaseUrl+"update");
+    $("#departmentForm").attr("action", formBaseUrl + "update");
     resetFormError();
 }
 
-$("#departmentForm").submit(function (event){
+$("#departmentForm").submit(function (event) {
     event.preventDefault();
     debugger
     const data = new FormData(event.target);
     const jsonData = Object.fromEntries(data.entries());
     const url = event.target.action;
-    saveData(jsonData,url)
+    saveData(jsonData, url)
 })
 
 
-function saveData(data, url){
-    departmentReq  = $.ajax(url,
+function saveData(data, url) {
+    departmentReq = $.ajax(url,
         {
-            method:"POST",
-            dataType: 'json',
-            timeout: 500,
-            data:data,
-            beforeSend: function(){
-                if (departmentReq !== undefined && departmentReq != null){
+            method: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            beforeSend: function () {
+                if (departmentReq !== undefined && departmentReq != null) {
                     departmentReq.abort();
                 }
             },
-            success: function (data,status,xhr) {
+            success: function (data) {
                 console.log("saved");
-                if (data.status === 200){
-                    if (url.indexOf("save")>0){
-                        appendNewRowInTable(data.detail);
-                    }else{
-                        updateRowInTable(data.detail)
-                    }
+                if (data.status === 200) {
+                    listData("department","api/list", "department-table")
                     $('#departmentModal').modal('toggle');
-                }else if (data.status === 400){
+                } else if (data.status === 400) {
                     resetFormError();
                     showFormError(data.detail.error)
                 }
@@ -132,28 +132,28 @@ function saveData(data, url){
 
             },
             error: function (jqXhr, textStatus, errorMessage) {
-               console.log("error")
-               console.log(textStatus)
-               console.log(errorMessage)
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
             }
         });
 }
 
-function showFormError(error){
+function showFormError(error) {
     $("#error-title").text(error.title)
     $("#error-departmentCode").text(error.departmentCode)
     $("#error-detail").text(error.detail)
 }
 
-function resetFormError(){
+function resetFormError() {
     $("#error-title").text("")
     $("#error-departmentCode").text("")
     $("#error-detail").text("")
 }
 
-function appendNewRowInTable(data){
-    const id = "'"+data.id+"'"
-    let row = "<tr id="+data.id+">"
+function appendNewRowInTable(data) {
+    const id = "'" + data.id + "'"
+    let row = "<tr id=" + data.id + ">"
     row += "<td class='title'>"
     row += data.title
     row += "</td>"
@@ -164,15 +164,91 @@ function appendNewRowInTable(data){
     row += data.detail
     row += "</td>"
     row += "<td>"
-    row += '<button type="button" data-id="'+data.id+'" onclick="editDepartment('+id+')" class="department-edit btn btn-info btn-sm">Edit</button>'
-    row += '<button type="button" data-id="'+data.id+'" onclick="deleteDepartment('+id+')" class="btn btn-danger btn-sm">Delete</button>'
+    row += '<button type="button" data-id="' + data.id + '" onclick="editDepartment(' + id + ')" class="department-edit btn btn-info btn-sm">Edit</button>'
+    row += '<button type="button" data-id="' + data.id + '" onclick="deleteDepartment(' + id + ')" class="btn btn-danger btn-sm">Delete</button>'
     row += "</td>"
     row += "</tr>"
     $("#department-table").append(row)
 }
 
-function updateRowInTable(data){
-    $("#"+data.id +" .title").text(data.title)
-    $("#"+data.id +" .departmentCode").text(data.departmentCode)
-    $("#"+data.id +" .detail").text(data.detail)
+function updateRowInTable(data) {
+    $("#" + data.id + " .title").text(data.title)
+    $("#" + data.id + " .departmentCode").text(data.departmentCode)
+    $("#" + data.id + " .detail").text(data.detail)
+}
+
+function listData(module, listApi, tableId) {
+    var base_url = window.location.origin + "/" + module + "/" + listApi;
+    $.ajax(base_url,
+        {
+            method: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.status === 200) {
+                    createTable(data, module, tableId)
+                }
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
+            }
+        });
+}
+var dataTable = ''
+function createTable(data, module, tableId) {
+    var tableColumns = [],
+        actualData = []
+    actualData = data.detail
+    $.each(actualData, function (k, v) {
+        var actionDataElement = '<div class="actionElements">' +
+            '<a href="#" onclick="editDepartment(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm">' +
+            '<i class="fa fa-edit" style="margin-left:10px;font-size:14px;color:white"></i>' +
+            '</a>' +
+            '<a href="#" onclick="deleteDepartment(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-danger btn-sm ml-1">' +
+            '<i class="fa fa-trash" style="margin-left:10px;font-size:14px;color:white"></i>' +
+            '</a>' +
+            '</div>';
+        v["action"] = actionDataElement.replaceAll("elementId",v.id).replaceAll("module",module);
+
+    })
+    var columns = [{name: 'title', displayName: "Title", orderable: true},
+        {name: 'departmentCode', displayName: "Code", orderable: true},
+        {name: 'detail', displayName: "Details", orderable: true},
+        {name: "action", displayName: "Action", orderable: false,width:'120px'}]
+    $.each(columns, function (key, val) {
+        if (val.width) {
+            tableColumns[key] = {
+                "data": val.name,
+                "title": val.displayName + "<span></span>",
+                orderable: val.orderable,
+                width: val.width
+            }
+        } else {
+            tableColumns[key] = {"data": val.name, "title": val.displayName + "<span></span>", orderable: val.orderable}
+        }
+    });
+    dataTable = $('#' + tableId).DataTable({
+        pageLength: 10,
+        scrollX: true,
+        destroy: true,
+        data: actualData,
+        // width: '100%',
+        bAutoWidth: false,
+        columns: tableColumns,
+        searching: true,
+        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+            $(nRow).click(function () {
+                // currentSelectedId = aData.id;
+                console.log("row selected"+ aData.id)
+            })
+            return nRow;
+        }
+    });
+    $('#' + tableId).find("tbody").find("tr").find("td").css("white-space", "nowrap");
+    $('.dataTables_scrollHeadInner').find(".dataTable ").find("thead").find("th").css("white-space", "nowrap");
+    $('.dataTables_scrollHeadInner').css("background-color","#1479c4");
+    $('.dataTables_scrollHeadInner table').find("thead").css("color", "white")
+    dataTable.columns.adjust().draw();
 }

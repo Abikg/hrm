@@ -50,8 +50,8 @@ public class DepartmentController {
     @PostMapping("/save")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> save(DepartmentDTO departmentDTO){
-        return ResponseEntity.ok(departmentService.save(departmentDTO));
+    public ResponseEntity<RestResponseDto> save(@RequestBody DepartmentDTO departmentDTO){
+        return ResponseEntity.ok().body(departmentService.save(departmentDTO));
     }
 
     @GetMapping("/get/{id}")
@@ -64,7 +64,7 @@ public class DepartmentController {
     @PostMapping("/update")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> update(DepartmentDTO departmentDTO, RedirectAttributes redirectAttributes){
+    public ResponseEntity<RestResponseDto> update(@RequestBody DepartmentDTO departmentDTO, RedirectAttributes redirectAttributes){
         return ResponseEntity.ok(departmentService.update(departmentDTO));
     }
 
