@@ -13,4 +13,5 @@ public interface MeetingMinuteService {
     public RestResponseDto save(MeetingMinutesDto meetingDto,List<UUID> attendedById);
     public List<MeetingMinutesDto> findAll(MeetingType meetingType) ;
     public RestResponseDto findById(UUID id);
+
 }

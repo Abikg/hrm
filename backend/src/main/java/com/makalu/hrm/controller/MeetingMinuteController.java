@@ -8,7 +8,7 @@ import com.makalu.hrm.model.MeetingMinutesDto;
 import com.makalu.hrm.service.MeetingMinuteService;
 
 import com.makalu.hrm.service.UserService;
-import com.makalu.hrm.utils.AuthenticationUtils;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,15 +59,15 @@ private  final UserService userService;
         if(MeetingType.EMPLOYEE.name().equals(meetingtype.name())){
 
             map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(),meetingtype.name().toUpperCase());
-            map.addAttribute("attendedBy",userService.findAllByUserType(UserType.EMPLOYEE));
-            map.addAttribute("MEETINGTYPEURL","/meetingMinutes/employee/save");
+            map.addAttribute(ParameterConstant.ATTENDEDBY,userService.findALl());
+            map.addAttribute(ParameterConstant.MEETIINGTYPEURL,"/meetingMinutes/employee/save");
 
         }else if(MeetingType.BOD.name().equals(meetingtype.name())){
 
 
             map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(),meetingtype.name().toUpperCase());
-            map.addAttribute("attendedBy",userService.findAllByUserType(UserType.SUPER_ADMIN));
-            map.addAttribute("MEETINGTYPEURL","/meetingMinutes/bod/save");
+            map.addAttribute(ParameterConstant.ATTENDEDBY,userService.findAllByUserType(UserType.SUPER_ADMIN));
+            map.addAttribute(ParameterConstant.MEETIINGTYPEURL,"/meetingMinutes/bod/save");
         }
 
         return "meetingMinute/meetingForm";
@@ -79,10 +79,10 @@ private  final UserService userService;
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/bod/save")
 
-    public String save(MeetingMinutesDto meetingDto, @RequestParam("attendedByy") List<UUID> attendById, ModelMap map) {
+    public String saveBod(MeetingMinutesDto meetingDto, @RequestParam("attendedByy") List<UUID> attendById, ModelMap map) {
 
 
-           map.addAttribute(ParameterConstant.RESPONSE,meetingMinuteMinuteService.save(meetingDto,attendById));
+        map.addAttribute(ParameterConstant.RESPONSE,meetingMinuteMinuteService.save(meetingDto,attendById));
 
 
                 return "meetingMinute/meetingForm";
@@ -97,7 +97,7 @@ private  final UserService userService;
 
 
     @PostMapping("/employee/save")
-    public String create(MeetingMinutesDto meetingDto, @RequestParam("attendedByy") List<UUID> attendById, ModelMap map) {
+    public String saveEmployees(MeetingMinutesDto meetingDto, @RequestParam("attendedByy") List<UUID> attendById, ModelMap map) {
 
         map.addAttribute(ParameterConstant.RESPONSE,meetingMinuteMinuteService.save(meetingDto,attendById));
 

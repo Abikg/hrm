@@ -27,4 +27,10 @@ public class UserServiceImpl implements UserService {
     public List<PersistentUserEntity> findAllByUserType(UserType userType) {
         return userRepository.findByUserType(userType);
     }
+
+    @Override
+    public List<PersistentUserEntity> findALl(){
+        return userRepository.findAll();
+
+    }
 }

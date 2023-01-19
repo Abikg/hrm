@@ -9,4 +9,6 @@ public interface UserService {
 
     PersistentUserEntity getCurrentUserEntity();
     List<PersistentUserEntity> findAllByUserType(UserType userType);
+
+    List<PersistentUserEntity> findALl();
 }
