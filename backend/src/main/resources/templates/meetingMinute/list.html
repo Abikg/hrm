@@ -13,7 +13,7 @@
             </div>
             <div class="col-sm-2">
                 <a th:href="@{/meetingMinutes/employeeForm/{meetingtype} (meetingtype= ${MEETINGTYPE})}">
-                <button id="add-new-department" class="btn btn-primary btn-sm pull-right">Add New Meeting</button>
+                    <button id="add-new-meeting" class="btn btn-primary btn-sm pull-right">Add New Meeting</button>
                 </a>
             </div>
         </div>
@@ -26,7 +26,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table" id="department-table">
+                        <table class="table" id="meeting-table">
                             <thead>
                             <tr>
                                 <th>Title</th>
@@ -38,20 +38,13 @@
                             <tbody th:each="meeting: ${meetingList}">
                             <input type="hidden" th:value="${MEETINGTYPE}">
                             <tr th:id="${meeting.id} ">
-                                <td class="title"><a th:href="@{/meetingMinutes/showMinute/{id}(id=${meeting.id})}" th:text="${meeting.title}"></a></td>
-                                <td th:text="${meeting.meetingDate}" class="departmentCode"></td>
+                                <td class="title"><a th:href="@{/meetingMinutes/showMinute/{id}(id=${meeting.id})}"
+                                                     th:text="${meeting.title}"></a></td>
+                                <td th:text="${meeting.meetingDate}" class="minuteDate"></td>
                                 <td th:utext="${meeting.createdBy.username}" class="departmentCode"></td>
-
-                                <td>
-<!--                                <td>-->
-<!--                                    <button type="button" th:data-id="" th:onclick="" class="department-edit btn btn-info btn-sm">Edit</button>-->
-<!--                                    <button type="button" th:data-id="" th:onclick="" class="btn btn-danger btn-sm">Delete</button>-->
-<!--                                </td>-->
                             </tr>
                             </tbody>
                         </table>
-
-
 
 
                     </div>
@@ -61,12 +54,8 @@
 
     </div>
 
-
-
-
 </section>
 
-<!--<script type="text/javascript" th:src="@{/js/hrm/meeting.js}"></script>-->
 <script type="text/javascript" th:src="@{/js/ckeditor/ckeditor.js}"></script>
 <script>
     CKEDITOR.replace('minute');

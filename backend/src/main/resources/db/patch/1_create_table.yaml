@@ -249,7 +249,7 @@ databaseChangeLog:
 
 
       -  changeSet:
-           id: 2023-01-10 attendance_table1
+           id: 2023-01-10 attendance_table
            author : keshab
            changes:
              -  createTable:
@@ -317,7 +317,7 @@ databaseChangeLog:
 
 
       - changeSet:
-          id: 2023-01-16-meetingType-recreate3-table
+          id: 2023-01-16-meetingType-recreate-table
           author: keshab
           changes:
             - createTable:
@@ -381,7 +381,7 @@ databaseChangeLog:
 
 
       - changeSet:
-          id: 2022-12-29-meeting_minute_user_create-table2
+          id: 2022-12-29-meeting_minute_user_create-table
           author: keshab
           changes:
             - createTable:
