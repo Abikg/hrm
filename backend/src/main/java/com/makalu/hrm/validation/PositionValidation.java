@@ -26,6 +26,7 @@ public class PositionValidation {
     }
 
     public PositionError validateOnUpdate(PositionDTO positionDTO){
+        positionError = new PositionError();
         boolean isValid  = validateTitle(positionDTO.getTitle());
         isValid = isValid & validateDetails(positionDTO.getDetail());
 
