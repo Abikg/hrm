@@ -4,11 +4,14 @@ import com.makalu.hrm.converter.AttendanceConverter;
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.exceptions.AttendanceException;
 import com.makalu.hrm.model.AttendanceDto;
+import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.repository.AttendanceRepository;
 import com.makalu.hrm.service.AttendanceService;
 import com.makalu.hrm.service.UserService;
 import com.makalu.hrm.utils.AuthenticationUtils;
 import com.makalu.hrm.utils.DateUtils;
+import com.makalu.hrm.validation.AttendanceValidation;
+import com.makalu.hrm.validation.error.AttendanceError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -28,6 +32,7 @@ public class AttendanceServiceImp implements AttendanceService {
     private final AttendanceConverter attendanceConverter;
     private final AttendanceRepository attendanceRepository;
     private final UserService userService;
+    private final AttendanceValidation attendanceValidation;
 
 
     @Override
@@ -35,17 +40,35 @@ public class AttendanceServiceImp implements AttendanceService {
         return attendanceConverter.convertToDtoList(attendanceRepository.findAll());
     }
 
+    @Override
+    public RestResponseDto findAllByUser(UUID userid) {
+        return RestResponseDto.INSTANCE().success().detail(Map.of("data", attendanceConverter.convertToDtoList(attendanceRepository.findAllByUser_Id(userid, PageRequest.of(0, 2)))));
+    }
+
+    @Override
+    public RestResponseDto filterByDate(AttendanceDto attendanceDto) {
+        try {
+            AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
+            if (!error.isValid()) {
+                return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
+            }
+            return RestResponseDto.INSTANCE().success().detail(Map.of("data", attendanceConverter.convertToDtoList(attendanceRepository
+                    .findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndUser_Id(
+                            attendanceDto.getFromDate(), attendanceDto.getToDate(),
+                            AuthenticationUtils.getCurrentUser().getUserId()))));
+        } catch (Exception ex) {
+            return RestResponseDto.INSTANCE().internalServerError().detail(Map.of("data", attendanceDto));
+        }}
+
     @Transactional
     @Override
     public void punchIn(String ip) {
-       if (!isValidToPunchIn(AuthenticationUtils.getCurrentUser().getUserId())){
-           throw new AttendanceException("This user is no valid for punch in" + AuthenticationUtils.getCurrentUser().getUsername());
-       }
+        if (!isValidToPunchIn(AuthenticationUtils.getCurrentUser().getUserId())) {
+            throw new AttendanceException("This user is no valid for punch in" + AuthenticationUtils.getCurrentUser().getUsername());
+        }
         PersistentAttendanceEntity entity = new PersistentAttendanceEntity();
-
         entity.setPunchInIp(ip);
         entity.setUser(userService.getCurrentUserEntity());
-
         attendanceRepository.saveAndFlush(entity);
 
     }
@@ -54,29 +77,27 @@ public class AttendanceServiceImp implements AttendanceService {
     @Override
     public void punchOut(String ip) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
-
         previousAttendance.setPunchOutIp(ip);
         previousAttendance.setPunchOutDate(new Date());
         previousAttendance.setTotalWorkedHours(DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate()));
-
         attendanceRepository.saveAndFlush(previousAttendance);
     }
 
-    private PersistentAttendanceEntity getLastAttendanceOfUser(UUID userId){
+    private PersistentAttendanceEntity getLastAttendanceOfUser(UUID userId) {
         List<PersistentAttendanceEntity> attendanceEntityList = attendanceRepository.findAllByUser_Id(userId, PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "punchInDate")));
-        if (attendanceEntityList == null || attendanceEntityList.isEmpty()){
+        if (attendanceEntityList == null || attendanceEntityList.isEmpty()) {
             return null;
         }
         return attendanceEntityList.get(0);
     }
 
-    private PersistentAttendanceEntity getEntityForPunchOut(UUID userId){
-        PersistentAttendanceEntity previousAttendance = getLastAttendanceOfUser(AuthenticationUtils.getCurrentUser().  getUserId());
-        if (previousAttendance == null){
+    private PersistentAttendanceEntity getEntityForPunchOut(UUID userId) {
+        PersistentAttendanceEntity previousAttendance = getLastAttendanceOfUser(AuthenticationUtils.getCurrentUser().getUserId());
+        if (previousAttendance == null) {
             throw new AttendanceException("There is no previous punch in record for this user " + AuthenticationUtils.getCurrentUser().getUsername());
         }
 
-        if (previousAttendance.getPunchOutDate() == null || DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date())){
+        if (previousAttendance.getPunchOutDate() == null || DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date())) {
             return previousAttendance;
 
         }
@@ -85,27 +106,25 @@ public class AttendanceServiceImp implements AttendanceService {
     }
 
     @Override
-    public boolean isValidToPunchIn(UUID userId){
+    public boolean isValidToPunchIn(UUID userId) {
         PersistentAttendanceEntity previousAttendance = getLastAttendanceOfUser(AuthenticationUtils.getCurrentUser().getUserId());
-        if (previousAttendance == null){
+        if (previousAttendance == null) {
             return true;
         }
 
-        if (previousAttendance.getPunchOutDate() != null && !DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date())){
+        if (previousAttendance.getPunchOutDate() != null && !DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date())) {
             return true;
         }
 
-       return false;
+        return false;
     }
 
     @Override
-    public boolean isValidToPunchOut(UUID userId){
+    public boolean isValidToPunchOut(UUID userId) {
         try {
             getEntityForPunchOut(userId);
-        }catch (AttendanceException ex){
+        } catch (AttendanceException ex) {
             return false;
         }
         return true;
-    }
-
-}
+    }}
