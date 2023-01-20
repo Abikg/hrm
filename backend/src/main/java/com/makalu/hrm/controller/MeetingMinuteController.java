@@ -29,7 +29,6 @@ public class MeetingMinuteController {
         map.addAttribute(ParameterConstant.MEETING_LIST, meetingMinuteMinuteService.findAll(MeetingType.EMPLOYEE));
         return "meetingMinute/list";
     }
-
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/bod/list")
     public String List(ModelMap map) {
@@ -37,7 +36,6 @@ public class MeetingMinuteController {
         map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.BOD.name().toUpperCase());
         return "meetingMinute/list";
     }
-
     @GetMapping("/employeeForm/{meetingtype}")
     public String showform(@PathVariable MeetingType meetingtype, ModelMap map) {
         if (MeetingType.EMPLOYEE.name().equals(meetingtype.name())) {
@@ -57,21 +55,18 @@ public class MeetingMinuteController {
         return "meetingMinute/meetingForm";
     }
 
-
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/bod/save")
     public String saveBod(MeetingMinutesDto meetingDto, ModelMap map) {
         map.addAttribute(ParameterConstant.RESPONSE, meetingMinuteMinuteService.save(meetingDto));
         return "meetingMinute/meetingForm";
     }
-
     @PostMapping("/employee/save")
     public String saveEmployees(MeetingMinutesDto meetingDto, ModelMap map) {
-        //  map.addAttribute(ParameterConstant.RESPONSE, meetingMinuteMinuteService.save(meetingDto, attendById));
+        map.addAttribute(ParameterConstant.RESPONSE, meetingMinuteMinuteService.save(meetingDto));
         return "meetingMinute/meetingForm";
 
     }
-
     @GetMapping("/showMinute/{id}")
     public String show(@PathVariable UUID id, ModelMap map) {
         map.addAttribute(ParameterConstant.MINUTE, meetingMinuteMinuteService.findById(id).getDetail());

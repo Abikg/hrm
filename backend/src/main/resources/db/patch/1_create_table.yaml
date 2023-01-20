@@ -317,7 +317,7 @@ databaseChangeLog:
 
 
       - changeSet:
-          id: 2023-01-16-meetingType-recreate-table
+          id: 2023-01-16-meetingType-create-table
           author: keshab
           changes:
             - createTable:

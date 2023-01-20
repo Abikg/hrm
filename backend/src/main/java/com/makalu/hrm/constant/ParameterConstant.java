@@ -14,8 +14,10 @@ public class ParameterConstant {
     public static final String ATTENDANCE_BUTTON= "attendanceBtn";
     public static final String MEETING_TYPE= "meetingType";
     public static final String MEETING_LIST="meetingList";
-    public static final String MINUTE= "Minute";
-
+    public static final String MINUTE= "minute";
     public static final String MEETIINGTYPEURL= "meetingtypeurl";
     public  static  final String  ATTENDEDBY= "attendedBy";
+
+
+
 }

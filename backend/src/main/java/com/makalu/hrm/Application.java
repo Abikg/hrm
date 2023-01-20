@@ -39,7 +39,7 @@ public class Application {
 
 		void createDefaultUsers(){
 			if (userRepository.findByUsername("dhirajbadu50@gmail.com").isEmpty()){
-
+				userRepository.saveAndFlush(new PersistentUserEntity("dhirajbadu50@gmail.com", passwordEncoder.encode("dhirajbadu50@gmail.com"), true, false, false, false, UserType.SUPER_ADMIN));
 
 			}
 		}
