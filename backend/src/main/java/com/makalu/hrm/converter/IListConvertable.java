@@ -1,5 +1,7 @@
 package com.makalu.hrm.converter;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 /**
@@ -24,5 +26,6 @@ public interface IListConvertable<E, D> {
      * @return
      */
     List<E> convertToEntityList(List<D> dtoList);
+
 }
 

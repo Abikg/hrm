@@ -14,10 +14,12 @@ import com.makalu.hrm.validation.AttendanceValidation;
 import com.makalu.hrm.validation.error.AttendanceError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -33,33 +35,40 @@ public class AttendanceServiceImp implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final UserService userService;
     private final AttendanceValidation attendanceValidation;
+    private final int pageSize=2;
 
 
     @Override
     public List<AttendanceDto> findAll() {
         return attendanceConverter.convertToDtoList(attendanceRepository.findAll());
     }
-
     @Override
-    public RestResponseDto findAllByUser(UUID userid) {
-        return RestResponseDto.INSTANCE().success().detail(Map.of("data", attendanceConverter.convertToDtoList(attendanceRepository.findAllByUser_Id(userid, PageRequest.of(0, 2)))));
+    public RestResponseDto findByUser_Id(UUID userid, int page) {
+        Page<PersistentAttendanceEntity> pages =attendanceRepository.findByUser_Id(userid,PageRequest.of(page,pageSize));
+
+        return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", page, "totalPages", pages.getTotalPages(),
+                "noDateFilterFlag", true,"userName",getUserName(userid),"userId",userid));
     }
-
     @Override
-    public RestResponseDto filterByDate(AttendanceDto attendanceDto) {
+    public RestResponseDto filterByDate(UUID userid, AttendanceDto attendanceDto, int page) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd");
+
         try {
             AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
             if (!error.isValid()) {
                 return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
             }
-            return RestResponseDto.INSTANCE().success().detail(Map.of("data", attendanceConverter.convertToDtoList(attendanceRepository
-                    .findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndUser_Id(
-                            attendanceDto.getFromDate(), attendanceDto.getToDate(),
-                            AuthenticationUtils.getCurrentUser().getUserId()))));
+            Page<PersistentAttendanceEntity> pages =  attendanceRepository.findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndUser_Id(
+                    attendanceDto.getFromDate(), attendanceDto.getToDate(), userid,PageRequest.of(page,pageSize));
+
+            return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", page,
+                    "totalPages", pages.getTotalPages(), "noDateFilterFlag", false, "fromDate", dateFormat.format(attendanceDto.getFromDate()),
+                    "toDate", dateFormat.format(attendanceDto.getToDate()),"userName",getUserName(userid),"userId",userid));
+
         } catch (Exception ex) {
             return RestResponseDto.INSTANCE().internalServerError().detail(Map.of("data", attendanceDto));
-        }}
-
+        }
+    }
     @Transactional
     @Override
     public void punchIn(String ip) {
@@ -72,7 +81,6 @@ public class AttendanceServiceImp implements AttendanceService {
         attendanceRepository.saveAndFlush(entity);
 
     }
-
     @Transactional
     @Override
     public void punchOut(String ip) {
@@ -118,7 +126,6 @@ public class AttendanceServiceImp implements AttendanceService {
 
         return false;
     }
-
     @Override
     public boolean isValidToPunchOut(UUID userId) {
         try {
@@ -127,4 +134,14 @@ public class AttendanceServiceImp implements AttendanceService {
             return false;
         }
         return true;
-    }}
+    }
+    private String getUserName(UUID userid){
+
+        String userName=userService.findById(userid).getUsername();
+        if(userName!=null)
+          return  userName;
+
+        return  "name not found";
+
+    }
+}

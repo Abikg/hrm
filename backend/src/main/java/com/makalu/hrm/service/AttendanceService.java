@@ -10,8 +10,9 @@ import java.util.UUID;
 public interface AttendanceService {
 
     List<AttendanceDto> findAll();
-    RestResponseDto findAllByUser(UUID userid);
-    RestResponseDto filterByDate(AttendanceDto attendanceDto);
+
+    RestResponseDto findByUser_Id(UUID uuid,int page);
+    RestResponseDto filterByDate(UUID userid,AttendanceDto attendanceDto,int page);
 
     void punchIn(String ip);
 

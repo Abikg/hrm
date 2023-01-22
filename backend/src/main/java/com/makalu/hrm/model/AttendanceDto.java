@@ -15,5 +15,6 @@ public class AttendanceDto {
     private UserDTO user;
     private Date fromDate;
     private Date toDate;
+    private int page;
 
 }
