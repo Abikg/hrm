@@ -3,8 +3,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
     listData("employee","api/list", "employee-table")
 });
 function viewEmployee(id, module){
-    alert(module+"/"+id);
+    window.location.href = "/"+module+"/view/" + id;
 }
 function editEmployee(id,module) {
     window.location.href = "/"+module+"/edit/" + id;
 }
+$(document).ready(function(){
+
+    $("#joinDate").text(moment($("#joinDate").text()).format("yyyy/MM/DD"));
+})

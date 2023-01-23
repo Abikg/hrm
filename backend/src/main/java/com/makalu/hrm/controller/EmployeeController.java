@@ -40,11 +40,6 @@ public class EmployeeController {
     @GetMapping("/list")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public String list(ModelMap map){
-        try {
-            map.put(ParameterConstant.EMPLOYEE_LIST, employeeService.list());
-        }catch (Exception ex){
-            log.error("Error occurred in get employee", ex);
-        }
         return "employee/list";
     }
 

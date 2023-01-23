@@ -27,10 +27,14 @@ public class FieldService {
 
     public List<Object> getEmployeeFields(){
         List<Object> fields =new ArrayList<>();
+
+        fields.add(Map.of("name", "employeeId","displayName","Employee ID","orderable",true));
         fields.add(Map.of("name", "fullname","displayName","Name","orderable",true));
-        fields.add(Map.of("name" ,"address","displayName", "Address","orderable", true));
-        fields.add(Map.of("name" ,"phone","displayName", "Phone","orderable", true));
+        fields.add(Map.of("name" ,"departmentName","displayName", "Department","orderable", true));
+        fields.add(Map.of("name" ,"positionName","displayName", "Position","orderable", true));
+        fields.add(Map.of("name" ,"contactDetailDTO.contactPhone","displayName", "Phone","orderable", true));
         fields.add(Map.of("name" ,"email","displayName", "email","orderable", true));
+        fields.add(Map.of("name" ,"employeeStatus","displayName", "Status","orderable", true));
         fields.add(Map.of("name" ,"action","displayName", "Action","orderable", false,"width","120px"));
         return fields;
     }

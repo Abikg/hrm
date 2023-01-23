@@ -143,42 +143,48 @@ databaseChangeLog:
                         nullable: false
                         defaultValue: 0
                   - column:
+                      name: employee_id
+                      type: bigint
+                      constraints:
+                        nullable: false
+                        unique: false
+                  - column:
+                      name: employee_status
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                        defaultValue: 'ACTIVE'
+                  - column:
                       name: fullname
                       type: varchar(255)
                       constraints:
                         nullable: false
                         unique: false
                   - column:
-                      name: address
-                      type: varchar(255)
-                      constraints:
-                        nullable: false
-                  - column:
-                      name: phone
-                      type: varchar(255)
-                      constraints:
-                        nullable: false
-                        defaultValue: false
-                  - column:
                       name: email
                       type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: join_date
+                      type: date
                       constraints:
                         nullable: false
                   - column:
                       name: personal_detail
                       type: jsonb
                       constraints:
-                        notNull: true
+                        nullable: false
                   - column:
                       name: contact_detail
                       type: jsonb
                       constraints:
-                        notNull: true
+                        nullable: false
                   - column:
                       name: work_experience
                       type: jsonb
                       constraints:
-                        notNull: false
+                        nullable: true
                   - column:
                       name: user_id
                       type: varchar(36)
@@ -197,16 +203,38 @@ databaseChangeLog:
                       name: department_id
                       type: varchar(36)
                       constraints:
-                        nullable: true
+                        nullable: false
                         foreignKeyName: fk_department_id
                         references: department(id)
                   - column:
                       name: position_id
                       type: varchar(36)
                       constraints:
-                        nullable: true
+                        nullable: false
                         foreignKeyName: fk_position_id
                         references: position(id)
+                  - column:
+                      name: resignation_reason
+                      type: varchar(255)
+                      constraints:
+                        nullable: true
+                  - column:
+                      name: resignation_date
+                      type: date
+                      constraints:
+                        nullable: true
+                  - column:
+                      name: exit_date
+                      type: date
+                      constraints:
+                        nullable: true
+                  - column:
+                      name: approved_by_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: true
+                        foreignKeyName: fk_approved_by_user_id
+                        references: auth_user(id)
 
   #      - changeSet:
 #          id: 2022-12-29-department-create-table

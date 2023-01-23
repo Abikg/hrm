@@ -2,10 +2,13 @@ package com.makalu.hrm.service.impl;
 
 import com.makalu.hrm.converter.EmployeeConverter;
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
+import com.makalu.hrm.enumconstant.EmployeeStatus;
 import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.*;
+import com.makalu.hrm.repository.DepartmentRepository;
 import com.makalu.hrm.repository.EmployeeImageRepository;
 import com.makalu.hrm.repository.EmployeeRepository;
+import com.makalu.hrm.repository.PositionRepository;
 import com.makalu.hrm.service.*;
 import com.makalu.hrm.validation.EmployeeValidation;
 import com.makalu.hrm.validation.error.EmployeeError;
@@ -16,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,7 +29,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeServiceImpl implements EmployeeService {
-    ;
+
     private final EmployeeConverter employeeConverter;
     private final EmployeeRepository employeeRepository;
     private final EmployeeValidation employeeValidation;
@@ -40,8 +46,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public RestResponseDto save(@NotNull EmployeeDTO employeeDTO) {
         try {
+                long entityCount;
 
-            EmployeeError error = employeeValidation.validateOnSave(employeeDTO);
+                EmployeeError error = employeeValidation.validateOnSave(employeeDTO);
 
             if (!error.isValid()) {
                 return RestResponseDto.INSTANCE()
@@ -69,6 +76,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                     employeeDTO.setUserId(userDTO.getId());
                 }
             }
+            entityCount = employeeRepository.count();
+            employeeDTO.setEntityEmployeeId(entityCount+1);
+            employeeDTO.setEmployeeStatus(EmployeeStatus.ACTIVE);
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeConverter.convertToDto(
                             employeeRepository.saveAndFlush(employeeConverter.convertToEntity(employeeDTO))));
@@ -98,7 +108,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public RestResponseDto update(EmployeeDTO employeeDTO) {
         try{
-        EmployeeError error = employeeValidation.validateOnUpdate(employeeDTO);
+            EmployeeError error = employeeValidation.validateOnUpdate(employeeDTO);
             if(!error.isValid()){
                 return RestResponseDto.INSTANCE().
                         validationError().
@@ -127,7 +137,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                     employeeDTO.setEmployeeImageId(employeeImageDTO.getId());
                 }
             }
-
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(
                             employeeConverter.copyConvertToEntity(employeeDTO,employeeEntity))));

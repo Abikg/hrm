@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -20,8 +21,9 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
     private final DepartmentRepository departmentRepository;
     private final EmployeeImageRepository employeeImageRepository;
     private final UserRepository userRepository;
-    private final UserConverter userConverter;
     private final EmployeeImageConverter employeeImageConverter;
+    private final EmployeeRepository employeeRepository;
+
     @Override
     public PersistentEmployeeEntity convertToEntity(EmployeeDTO dto) {
         return this.copyConvertToEntity(dto,new PersistentEmployeeEntity());
@@ -36,19 +38,29 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         EmployeeDTO dto = new EmployeeDTO();
 
         dto.setId(entity.getId());
+        dto.setEmployeeId(entity.getEmployeeId());
+        dto.setEntityEmployeeId(employeeRepository.findAll().indexOf(entity)+1);
+        dto.setEmployeeStatus(entity.getEmployeeStatus());
         dto.setFullname(entity.getFullname());
-        dto.setAddress(entity.getAddress());
         dto.setEmail(entity.getEmail());
-        dto.setPhone(entity.getPhone());
+        dto.setJoinDate(entity.getJoinDate());
         dto.setPositionId(entity.getPosition().getId());
         dto.setDepartmentId(entity.getDepartment().getId());
+        dto.setPositionName(entity.getPosition().getTitle());
+        dto.setDepartmentName(entity.getDepartment().getTitle());
         dto.setEmployeeImage(employeeImageConverter.convertToDto(entity.getImage()));
-        if(entity.getUser() != null) {
-            dto.setUser(userConverter.convertToDto(entity.getUser()));
-        }
         dto.setContactDetailDTO(entity.getContactDetail());
         dto.setPersonalDetailDTO(entity.getPersonalDetail());
         dto.setWorkExperienceDTO(entity.getWorkExperience());
+        if(entity.getResignationDate() !=null){
+            dto.setResignationDate(entity.getResignationDate());
+        }
+        if(entity.getExitDate() !=null){
+            dto.setExitDate(entity.getExitDate());
+        }
+        if(entity.getApprovedBy() != null){
+            dto.setApprovedById(entity.getApprovedBy().getId());
+        }
 
         return dto;
     }
@@ -58,10 +70,12 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         if(dto == null || entity == null){
             return entity;
         }
+
+        entity.setEmployeeId(dto.getEntityEmployeeId());
+        entity.setEmployeeStatus(dto.getEmployeeStatus());
         entity.setFullname(dto.getFullname());
-        entity.setAddress(dto.getAddress());
         entity.setEmail(dto.getEmail());
-        entity.setPhone(dto.getPhone());
+        entity.setJoinDate(dto.getJoinDate());
         entity.setPosition(positionRepository.findById(dto.getPositionId()).orElse(null));
         entity.setDepartment(departmentRepository.findById(dto.getDepartmentId()).orElse(null));
         if(dto.getEmployeeImageId() != null) {
@@ -73,6 +87,18 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         entity.setContactDetail(dto.getContactDetailDTO());
         entity.setPersonalDetail(dto.getPersonalDetailDTO());
         entity.setWorkExperience(dto.getWorkExperienceDTO());
+        if(dto.getResignationReason() !=null){
+            entity.setResignationReason(dto.getResignationReason());
+        }
+        if(dto.getResignationDate() !=null){
+            entity.setResignationDate(dto.getResignationDate());
+        }
+        if(dto.getExitDate() !=null){
+            entity.setExitDate(dto.getExitDate());
+        }
+        if(dto.getApprovedById() != null){
+            entity.setApprovedBy(userRepository.findById(dto.getApprovedById()).orElse(null));
+        }
         return entity;
     }
 }

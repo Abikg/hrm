@@ -45,14 +45,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="address" class="col-form-label">Address</label>
-                                <input type="text" th:field="*{address}" class="form-control" id="address">
-                                <div th:if="${#ctx.containsVariable('response')}">
-                                    <p th:if="${response.status == 400  and response.detail.get('error').address != null}"
-                                       class="error" id="error-address" th:text="${response.detail.get('error').address}"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label for="email" class="col-form-label">Email</label>
                                 <input type="email" th:field="*{email}" class="form-control" id="email">
                                 <div th:if="${#ctx.containsVariable('response')}">
@@ -64,16 +56,9 @@
                                 <label class="checkbox-inline"><input class="checkUser mr-2" type="checkbox" th:field="*{createUser}" th:checked="*{createUser}" th:value="false">Create User</label>
                             </div>
                             <div class="form-group">
-                                <label for="phone" class="col-form-label">Phone</label>
-                                <input type="text" th:field="*{phone}" class="form-control" id="phone">
-                                <div th:if="${#ctx.containsVariable('response')}">
-                                    <p th:if="${response.status == 400  and response.detail.get('error').phone != null}"
-                                       class="error"  th:text="${response.detail.get('error').phone}"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label for="department"  class="col-form-label">Select Department</label>
-                                <select class="form-control" id="department" th:field="*{departmentId}" >
+                                <select class="form-control" id="department" th:field="*{departmentId}">
+                                    <option value="">Select Department</option>
                                     <option  th:unless="*{departmentId != null}" th:each="department : ${departmentList}" th:value="${department.id}" th:text="${department.title}"></option>
                                     <option th:if="*{departmentId!= null}" th:each="department : ${departmentList}" th:selected="${department.id == departmentId}" th:value="${department.id}" th:text="${department.title}">
                                     </option>
@@ -86,6 +71,7 @@
                             <div class="form-group">
                                 <label for="position" class="col-form-label">Select Position</label>
                                 <select class="form-control" id="position" th:field="*{positionId}">
+                                    <option value="">Select Position</option>
                                     <option  th:unless="*{positionId != null}" th:each="position : ${positionList}" th:value="${position.id}" th:text="${position.title}"></option>
                                     <option th:if="*{positionId!= null}" th:each="position : ${positionList}" th:selected="${position.id == positionId}" th:value="${position.id}" th:text="${position.title}">
                                     </option>
@@ -93,6 +79,19 @@
                                 <div th:if="${#ctx.containsVariable('response')}">
                                     <p th:if="${response.status == 400  and response.detail.get('error').position != null}"
                                        class="error"  th:text="${response.detail.get('error').position}"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Join Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-transparent" id="icon"><i class="fas fa-calendar"></i></span>
+                                    </div>
+                                    <input class="form-control mydatepicker" th:field="*{joinDate}" data-date-format="yyyy/mm/dd">
+                                </div>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').joinDate != null}"
+                                       class="error"  th:text="${response.detail.get('error').joinDate}"></p>
                                 </div>
                             </div>
                             <div class="form-group">

@@ -7,11 +7,13 @@ import com.makalu.hrm.domain.PersistentDepartmentEntity;
 import com.makalu.hrm.domain.PersistentEmployeeImageEntity;
 import com.makalu.hrm.domain.PersistentPositionEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
+import com.makalu.hrm.enumconstant.EmployeeStatus;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,19 +23,29 @@ public class EmployeeDTO {
 
     private UUID id;
 
+    private String employeeId;
+
+    private long entityEmployeeId;
+
+    private EmployeeStatus employeeStatus;
+
     private String fullname;
 
-    private String address;
-
-    private String phone;
-
     private String email;
+
+    private Date joinDate;
+
+    private String resignationReason;
+
+    private Date resignationDate;
+
+    private Date exitDate;
 
     private MultipartFile empImage;
 
     private boolean createUser = false;
 
-    private UserDTO user;
+    private UUID approvedById;
 
     private EmployeeImageDTO employeeImage;
 
@@ -45,6 +57,10 @@ public class EmployeeDTO {
 
     private UUID employeeImageId;
 
+    private String positionName;
+
+    private String departmentName;
+
     private ContactDetailDTO contactDetailDTO = new ContactDetailDTO();
 
     private PersonalDetailDTO personalDetailDTO = new PersonalDetailDTO();
@@ -54,4 +70,5 @@ public class EmployeeDTO {
     public EmployeeDTO() {
         this.workExperienceDTO.add(new WorkExperienceDTO());
     }
+
 }

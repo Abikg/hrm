@@ -1,7 +1,6 @@
-
 $(document).ready(function(){
 
-                if($(".alertSuccess").length){
+        if($(".alertSuccess").length){
 
                 $('#employeeForm input').attr('readonly', 'readonly');
                 $('#position').attr("disabled",true);
@@ -26,7 +25,14 @@ $(document).ready(function(){
                 "min-width": "100%",
                 "min-height": "100%"});
         }
+    if($("#joinDate").val()){
+        $("#joinDate").val(moment($("#joinDate").val()).format("yyyy/MM/DD"));
+    }
+});
 
+$("#joinDate").change(function() {
+    let date = moment($(this).val(), 'yyyy/mm/dd').toDate();
+    $(this).val(date);
 });
 
 $(".inputDate").change(function() {

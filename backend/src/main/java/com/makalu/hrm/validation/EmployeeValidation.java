@@ -33,16 +33,16 @@ public class EmployeeValidation {
 
 
     private final EmployeeRepository employeeRepository;
-    private final EmployeeError error = new EmployeeError();
+    private  static EmployeeError error;
 
     public EmployeeError validateOnSave(EmployeeDTO dto) {
+        error = new EmployeeError();
         boolean isValid = validateFullName(dto.getFullname());
         isValid = isValid & validateEmail(dto.getEmail());
-        isValid = isValid & validatePhone(dto.getPhone());
-        isValid = isValid & validateAddress(dto.getAddress());
         isValid = isValid & validateImage(dto.getEmpImage());
         isValid = isValid & validatePosition(dto.getPositionId());
         isValid = isValid & validateDepartment(dto.getDepartmentId());
+        isValid = isValid & validateJoinDate(dto.getJoinDate().toString());
         isValid = isValid & validateContactPhone(dto.getContactDetailDTO().getContactPhone());
         isValid = isValid & validateContactEmail(dto.getContactDetailDTO().getContactEmail());
         isValid = isValid & validateContactAddress(dto.getContactDetailDTO().getContactAddress());
@@ -53,27 +53,19 @@ public class EmployeeValidation {
         }
         isValid = isValid & validateGender(dto.getPersonalDetailDTO().getGender());
         isValid = isValid & validateMaritalStatus(dto.getPersonalDetailDTO().getMaritalStatus());
-//        if(dto.getWorkExperienceDTO() != null) {
-//            isValid = isValid & validatePreviousCompany(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getPreviousCompany).collect(Collectors.toList()));
-//            isValid = isValid & validateJoinDate(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getJoinDate).collect(Collectors.toList()));
-//            isValid = isValid & validateLeftDate(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getLeftDate).collect(Collectors.toList()));
-//            isValid = isValid & validateJobTitle(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getJobTitle).collect(Collectors.toList()));
-//            isValid = isValid & validateJobDesc(dto.getWorkExperienceDTO().stream().map(WorkExperienceDTO::getJobDesc).collect(Collectors.toList()));
-//
-//        }
-        isValid = isValid && validateUnique(dto.getPhone(),dto.getEmail());
+        isValid = isValid && validateUniqueEmail(dto.getEmail());
         error.setValid(isValid);
         return error;
     }
 
 
     public EmployeeError validateOnUpdate(EmployeeDTO dto) {
+        error = new EmployeeError();
         boolean isValid = validateFullName(dto.getFullname());
         isValid = isValid & validateEmail(dto.getEmail());
-        isValid = isValid & validatePhone(dto.getPhone());
-        isValid = isValid & validateAddress(dto.getAddress());
         isValid = isValid & validatePosition(dto.getPositionId());
         isValid = isValid & validateDepartment(dto.getDepartmentId());
+        isValid = isValid & validateJoinDate(dto.getJoinDate().toString());
         isValid = isValid & validateImage(dto.getEmpImage());
         isValid = isValid & validateContactPhone(dto.getContactDetailDTO().getContactPhone());
         isValid = isValid & validateContactEmail(dto.getContactDetailDTO().getContactEmail());
@@ -91,15 +83,11 @@ public class EmployeeValidation {
     }
 
     @Transactional
-    boolean validateUnique(String phone, String email) {
-        PersistentEmployeeEntity employeeEntity = employeeRepository.findByPhoneOrEmail(phone,email);
+    boolean validateUniqueEmail(String email) {
+        PersistentEmployeeEntity employeeEntity = employeeRepository.findByEmail(email);
 
         if (employeeEntity == null) {
             return true;
-        }
-
-        if (employeeEntity.getPhone().equals(phone)) {
-            error.setPhone("Please provide a unique phone number");
         }
 
         if (employeeEntity.getEmail().equals(email)) {
@@ -111,17 +99,11 @@ public class EmployeeValidation {
 
     @Transactional
     boolean validateUniqueOnUpdate(EmployeeDTO employeeDTO){
-        PersistentEmployeeEntity employeeEntity1 = employeeRepository.findByPhone(employeeDTO.getPhone());
-        PersistentEmployeeEntity employeeEntity2 = employeeRepository.findByEmail(employeeDTO.getEmail());
-        if(employeeEntity1 != null && !employeeEntity1.getId().equals(employeeDTO.getId())){
-                error.setPhone("Phone number already used");
-                return false;
-        }
-        if( employeeEntity2 != null && !employeeEntity2.getId().equals(employeeDTO.getId())){
+        PersistentEmployeeEntity employeeEntity = employeeRepository.findByEmail(employeeDTO.getEmail());
+        if( employeeEntity != null && !employeeEntity.getId().equals(employeeDTO.getId())){
                 error.setEmail("Email already used");
                 return false;
         }
-
         return true;
     }
     private boolean validateFullName(String name) {
@@ -152,33 +134,6 @@ public class EmployeeValidation {
         return true;
     }
 
-    private boolean validatePhone(String phone) {
-        if (phone == null || phone.trim().isEmpty()) {
-            error.setPhone("Phone number is required");
-            return false;
-        }
-        if(!phone.chars().allMatch(Character::isDigit)){
-            error.setPhone("Phone number can only have numerical value");
-            return false;
-        }
-        if (phone.length() != 10) {
-            error.setPhone("Phone number must have 10 digit");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateAddress(String address) {
-        if (address == null || address.trim().isEmpty()) {
-            error.setAddress("Address is required");
-            return false;
-        }
-        if (address.length() > 50) {
-            error.setAddress("Address can't have more than 50 characters");
-            return false;
-        }
-        return true;
-    }
 
     private boolean validateImage(MultipartFile file) {
         if (file != null && !file.isEmpty()) {
@@ -291,57 +246,14 @@ public class EmployeeValidation {
         return true;
     }
 
-//    private boolean validatePreviousCompany(List<String> previousCompany){
-//        if(previousCompany == null || previousCompany.stream().anyMatch(s->s.trim().isEmpty())){
-//            error.setPreviousCompany("Previous company is required");
-//            return false;
-//        }
-//        if(previousCompany.stream().anyMatch(s->s.length()>30)){
-//            error.setPreviousCompany("Previous company is name must be less than 30 characters");
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    private boolean validateJobTitle(List<String> jobTitle){
-//        if(jobTitle == null || jobTitle.stream().anyMatch(s->s.trim().isEmpty())){
-//            error.setJobTitle("Job title is required");
-//            return false;
-//        }
-//        if(jobTitle.stream().anyMatch(s->s.length() >20)){
-//            error.setJobTitle("Job title must be less than 20 characters");
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//
-//    private boolean validateJobDesc(List<String> jobDesc){
-//        if(jobDesc == null || jobDesc.stream().anyMatch(s->s.trim().isEmpty())){
-//            error.setJobDesc("Job description is required");
-//            return false;
-//        }
-//        if(jobDesc.stream().anyMatch(s->s.length()>100)){
-//            error.setJobDesc("Job description must be less than 100 characters");
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    private boolean validateJoinDate(List<String> joinDate){
-//        if(joinDate == null  || joinDate.stream().anyMatch(s->s.trim().isEmpty())){
-//            error.setJoinDate("Joined date is required");
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//
-//    private boolean validateLeftDate(List<String> leftDate){
-//        if(leftDate == null  || leftDate.stream().anyMatch(s->s.trim().isEmpty())){
-//            error.setLeftDate("Left date is required");
-//            return false;
-//        }
-//        return true;
-//    }
+    private boolean validateJoinDate(String joinDate){
+        if(joinDate == null  || joinDate.trim().isEmpty()){
+            error.setJoinDate("Join date is required");
+            return false;
+        }
+        return true;
+    }
+
+
+
 }
