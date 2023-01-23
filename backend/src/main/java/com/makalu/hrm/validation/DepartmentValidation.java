@@ -13,9 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class DepartmentValidation {
 
     private final DepartmentRepository departmentRepository;
-    private final DepartmentError error = new DepartmentError();
+    private static DepartmentError error;
 
     public DepartmentError validateOnSave(DepartmentDTO dto){
+        error = new DepartmentError();
         boolean isValid = validateTitle(dto.getTitle());
         isValid = isValid & validateCode(dto.getDepartmentCode());
         isValid = isValid & validateDetails(dto.getDetail());
@@ -26,6 +27,7 @@ public class DepartmentValidation {
     }
 
     public DepartmentError validateOnUpdate(DepartmentDTO dto){
+        error = new DepartmentError();
         boolean isValid = validateTitle(dto.getTitle());
         isValid = isValid & validateCode(dto.getDepartmentCode());
         isValid = isValid & validateDetails(dto.getDetail());
