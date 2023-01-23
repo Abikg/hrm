@@ -1,5 +1,6 @@
 package com.makalu.hrm.service.impl;
 
+import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.repository.UserRepository;
 import com.makalu.hrm.service.UserService;
@@ -14,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -59,5 +62,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public PersistentUserEntity getCurrentUserEntity() {
         return userRepository.findById(AuthenticationUtils.getCurrentUser().getUserId()).orElse(null);
+    }
+
+    @Override
+    public RestResponseDto getResponseById(UUID employeeId) {
+        PersistentUserEntity userEntity = userRepository.findById(employeeId).orElse(null);
+        if(userEntity == null){
+            return RestResponseDto.INSTANCE().notFound().message("Employee not found");
+        }
+
+        return RestResponseDto.INSTANCE()
+                .success()
+                .detail(userConverter.convertToDto(userEntity));
     }
 }

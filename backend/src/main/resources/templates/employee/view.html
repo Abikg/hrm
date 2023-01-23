@@ -39,6 +39,8 @@
                             </div>
                             <div class="col-sm-9">
                                 <p class="text-muted mb-0" th:text="${employee.fullname}"></p>
+                                <span  th:if="${employee.employeeStatus == 'active'}" th:text="${employee.employeeStatus}" class="badge badge-success"></span>
+                                <span  th:unless="${employee.employeeStatus == 'active'}" th:text="${employee.employeeStatus}" class="badge badge-warning"></span>
                             </div>
                         </div>
                         <hr>
@@ -231,8 +233,101 @@
                         <p class="text-muted mb-4" th:text="${employee.contactDetailDTO.contactAddress}"></p>
                     </div>
                 </div>
+                <div class="card" th:if="${employee.resignationReason == null}">
+                        <button id="add-new-employee-resignation" th:onclick="createResignation([[${employee.id}]])"
+                                class="btn btn-primary btn-sm w-100">Create Resignation</button>
+                </div>
+                <div class="card" th:unless="${employee.resignationReason == null }">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mt-2">
+                                <p class="mb-0">Resignation Details</p>
+                            </div>
+                            <div class="col-sm-12 mt-2">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0">Reason</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted mb-0"  th:text="${employee.resignationReason}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0">Resignation Date</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted mb-0" id="resDate" th:text="${employee.resignationDate}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0">Exit Date</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted mb-0" id="resExitDate" th:text="${employee.exitDate}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <button th:if="${employee.employeeStatus == 'active'}" id="edit-employee-resignation" th:onclick="editResignation([[${employee.id}]])"
+                                        class="btn btn-secondary btn-sm w-100">Edit Resignation</button>
+                                <p th:unless="${employee.employeeStatus == 'active'}" class="text-success">Resignation Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" th:if="${employee.approvedById == null and employee.resignationReason != null }" id="approve-resignation" th:onclick="approveResignation([[${employee.id}]])"
+                        class="btn btn-warning btn-sm w-100">Approve Resignation</button>
+                <button type="button" th:if="${employee.approvedById != null and employee.employeeStatus == 'active'}" id="exit-resignation" th:onclick="exitResignation([[${employee.id}]])"
+                        class="btn btn-warning btn-sm w-100">Exit Resignation</button>
             </div>
         </div>
+    </div>
+    <div class="modal fade" id="employeeResignationModal" tabindex="-1" role="dialog" aria-labelledby="employeeResignationModal" aria-hidden="true">
+        <form id="employeeResignationForm" action="" th:data-action-base-url="@{/employee/}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="employeeResignationModalLabel">Create Resignation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="employeeResId">
+                        <div class="form-group">
+                            <label for="resignationReason" class="col-form-label">Resignation Reason</label>
+                            <textarea name="resignationReason" class="form-control" id="resignationReason" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Resignation Date</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-transparent" id="icon"><i class="fas fa-calendar"></i></span>
+                                </div>
+                                <input class="form-control mydatepicker rawDate" name="resignationDate" id="resignationDate" data-date-format="yyyy/mm/dd" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Exit Date</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-transparent" id="icon"><i class="fas fa-calendar"></i></span>
+                                </div>
+                                <input class="form-control mydatepicker rawDate" name="exitDate" id="exitDate" data-date-format="yyyy/mm/dd" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" id="btn-save-employee-resignation" class="btn btn-primary">Save Resignation</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </section>
 <script type="text/javascript" th:src="@{/js/hrm/employee.js}"></script>

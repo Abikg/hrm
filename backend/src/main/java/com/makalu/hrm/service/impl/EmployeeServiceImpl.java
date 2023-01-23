@@ -2,14 +2,13 @@ package com.makalu.hrm.service.impl;
 
 import com.makalu.hrm.converter.EmployeeConverter;
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
+import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.enumconstant.EmployeeStatus;
 import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.*;
-import com.makalu.hrm.repository.DepartmentRepository;
-import com.makalu.hrm.repository.EmployeeImageRepository;
-import com.makalu.hrm.repository.EmployeeRepository;
-import com.makalu.hrm.repository.PositionRepository;
+import com.makalu.hrm.repository.*;
 import com.makalu.hrm.service.*;
+import com.makalu.hrm.utils.AuthenticationUtils;
 import com.makalu.hrm.validation.EmployeeValidation;
 import com.makalu.hrm.validation.error.EmployeeError;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +34,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeValidation employeeValidation;
     private final EmployeeImageService employeeImageService;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public List<EmployeeDTO> list() {
@@ -146,5 +146,66 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    @Override
+    @Transactional
+    public RestResponseDto employeeResignationOperation(EmployeeDTO employeeDTO) {
+        try {
+            PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeDTO.getId()).orElse(null);
+            if (employeeEntity == null) {
+                return RestResponseDto.INSTANCE().notFound();
+            }
+            employeeEntity.setResignationReason(employeeDTO.getResignationReason());
+            employeeEntity.setResignationDate(employeeDTO.getResignationDate());
+            employeeEntity.setExitDate(employeeDTO.getExitDate());
 
+            return RestResponseDto.INSTANCE().success()
+                    .detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(employeeEntity)));
+        }catch (Exception e){
+            log.error("Error while creating resignation",e);
+            return RestResponseDto.INSTANCE().internalServerError();
+        }
+    }
+
+    @Override
+    @Transactional
+    public RestResponseDto employeeApproveResignation(UUID employeeId) {
+        try {
+            PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElse(null);
+            if (employeeEntity == null) {
+                return RestResponseDto.INSTANCE().notFound();
+            }
+            PersistentUserEntity userEntity = userService.getCurrentUserEntity();
+            employeeEntity.setApprovedBy(userEntity);
+            return RestResponseDto.INSTANCE().success()
+                    .detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(employeeEntity)));
+        }catch (Exception e){
+        log.error("Error while approving resignation",e);
+        return RestResponseDto.INSTANCE().internalServerError();
+        }
+    }
+
+    @Override
+    @Transactional
+    public RestResponseDto employeeExitResignation(UUID employeeId) {
+        try {
+            PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElse(null);
+            if (employeeEntity == null) {
+                return RestResponseDto.INSTANCE().notFound();
+            }
+            if(employeeEntity.getUser() != null) {
+                PersistentUserEntity userEntity = userRepository.findById(employeeEntity.getUser().getId()).orElse(null);
+                userEntity.setEnabled(false);
+                PersistentUserEntity savedEntity = userRepository.saveAndFlush(userEntity);
+                if(savedEntity == null){
+                    return RestResponseDto.INSTANCE().internalServerError();
+                }
+            }
+            employeeEntity.setEmployeeStatus(EmployeeStatus.RESIGNED);
+            return RestResponseDto.INSTANCE().success()
+                    .detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(employeeEntity)));
+        }catch (Exception e){
+            log.error("Error while approving resignation",e);
+            return RestResponseDto.INSTANCE().internalServerError();
+        }
+    }
 }

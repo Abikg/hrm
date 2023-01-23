@@ -52,6 +52,9 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         dto.setContactDetailDTO(entity.getContactDetail());
         dto.setPersonalDetailDTO(entity.getPersonalDetail());
         dto.setWorkExperienceDTO(entity.getWorkExperience());
+        if(entity.getResignationReason() != null){
+            dto.setResignationReason(entity.getResignationReason());
+        }
         if(entity.getResignationDate() !=null){
             dto.setResignationDate(entity.getResignationDate());
         }

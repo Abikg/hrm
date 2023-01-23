@@ -99,7 +99,6 @@ function setupForEditForm() {
 
 $("#departmentForm").submit(function (event) {
     event.preventDefault();
-    debugger
     const data = new FormData(event.target);
     const jsonData = Object.fromEntries(data.entries());
     const url = event.target.action;

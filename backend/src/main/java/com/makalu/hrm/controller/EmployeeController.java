@@ -90,6 +90,12 @@ public class EmployeeController {
         return "employee/edit";
     }
 
+    @GetMapping("/get/{id}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> getById(@PathVariable("id") UUID employeeId){
+        return ResponseEntity.ok(employeeService.getResponseById(employeeId));
+    }
     @GetMapping("/view/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public String viewEmployee(@PathVariable("id") UUID employeeId, ModelMap map){
@@ -99,4 +105,24 @@ public class EmployeeController {
         return "employee/view";
     }
 
+    @PostMapping(path = "/employeeResignation")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> employeeResignation(EmployeeDTO employeeDTO){
+        return ResponseEntity.ok(employeeService.employeeResignationOperation(employeeDTO));
+    }
+
+    @PostMapping(path = "/approveResignation/{id}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> approveResignation(@PathVariable("id") UUID employeId){
+        return ResponseEntity.ok(employeeService.employeeApproveResignation(employeId));
+    }
+
+    @PostMapping(path = "/exitResignation/{id}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> exitResignation(@PathVariable("id") UUID employeId){
+        return ResponseEntity.ok(employeeService.employeeExitResignation(employeId));
+    }
 }
