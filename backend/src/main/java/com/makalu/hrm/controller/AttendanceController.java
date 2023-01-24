@@ -51,10 +51,10 @@ public class AttendanceController {
 
         if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
             map.addAttribute(ParameterConstant.USER_LIST, userService.findALl());
-            map.addAttribute("adminFlag", true);
+            map.addAttribute(ParameterConstant.ADMIN_FLAG, true);
             return "attendance/attendance_main";
         } else {
-            map.addAttribute("adminFlag", false);
+            map.addAttribute(ParameterConstant.ADMIN_FLAG, false);
             return "attendance/attendance_main";
         }
     }
