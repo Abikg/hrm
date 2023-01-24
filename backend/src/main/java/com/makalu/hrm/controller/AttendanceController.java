@@ -13,10 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 
 @Controller
@@ -47,42 +45,52 @@ public class AttendanceController {
         }
         return "redirect:/";
     }
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+
     @GetMapping("/userList")
-    public String userList(ModelMap map) {
-        map.addAttribute(ParameterConstant.USER_LIST, userService.findALl());
-        return "attendance/userList";
+    public String userList(AttendanceDto attendanceDto, ModelMap map) {
+
+        if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
+            map.addAttribute(ParameterConstant.USER_LIST, userService.findALl());
+            map.addAttribute("adminFlag", true);
+            return "attendance/attendance_main";
+        } else {
+            map.addAttribute("adminFlag", false);
+            return "attendance/attendance_main";
+        }
     }
+
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @GetMapping("/allUserAttendance")
+    public String getAllUserAttendance(AttendanceDto attendanceDto, ModelMap map) {
+        map.addAttribute(ParameterConstant.RESPONSE, attendanceService.findAllUserAttendance(attendanceDto.getPage()));
+        return "attendance/allUsersAttendance";
+
+    }
+
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @GetMapping("/allUserAttendanceByDate")
+    public String getAllUserAttendanceByDate(AttendanceDto attendanceDto, ModelMap map) {
+        map.addAttribute(ParameterConstant.RESPONSE, attendanceService.findAllUserAttendanceFilteredByDate(attendanceDto));
+        return "attendance/allUsersAttendance";
+
+    }
+
     @GetMapping("/attendancelist")
     public String loginedUserAttendanceList(AttendanceDto attendanceDto, ModelMap map) {
-        if (attendanceDto.getId() == null)
-            attendanceDto.setId(AuthenticationUtils.getCurrentUser().getUserId());
         if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
             map.addAttribute(ParameterConstant.RESPONSE, attendanceService.findByUser_Id(attendanceDto.getId(), attendanceDto.getPage()));
         } else
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.findByUser_Id(attendanceDto.getId(), attendanceDto.getPage()));
-        return "attendance/list";
+            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.findByUser_Id(AuthenticationUtils.getCurrentUser().getUserId(), attendanceDto.getPage()));
+        return "attendance/UserAttendancelist";
     }
-    @GetMapping("/dateFilter")
-    public String filterByDate(AttendanceDto attendanceDto, @RequestParam int page, ModelMap map) {
+
+    @GetMapping("/dateFilterForUser")
+    public String filterByDate(AttendanceDto attendanceDto, ModelMap map) {
         if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.filterByDate(attendanceDto.getId(), attendanceDto, page));
+            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.filterByDate(attendanceDto.getId(), attendanceDto));
         } else
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.filterByDate(AuthenticationUtils.getCurrentUser().getUserId(), attendanceDto, page));
-        return "attendance/list";
+            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.filterByDate(AuthenticationUtils.getCurrentUser().getUserId(), attendanceDto));
+        return "attendance/UserAttendancelist";
     }
-    @GetMapping("/dateFilter2")//filter 2  with RequestParam with StringDate paramater  was necessary for pagination
-    public String filterByDateInString(AttendanceDto attendanceDto, @RequestParam String fromDateString, String toDateString, ModelMap map) throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd");
-        attendanceDto.setFromDate(dateFormat.parse(fromDateString));
-        attendanceDto.setToDate(dateFormat.parse(toDateString));
-        if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.filterByDate(attendanceDto.getId(), attendanceDto, attendanceDto.getPage()));
 
-        } else {
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.filterByDate(AuthenticationUtils.getCurrentUser().getUserId(), attendanceDto, attendanceDto.getPage()));
-        }
-
-        return "attendance/list";
-    }
 }

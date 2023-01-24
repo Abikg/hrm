@@ -1,6 +1,6 @@
 package com.makalu.hrm.service.impl;
 
-import com.makalu.hrm.converter.AttendanceConverter;
+
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.exceptions.AttendanceException;
 import com.makalu.hrm.model.AttendanceDto;
@@ -17,9 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,27 +28,35 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AttendanceServiceImp implements AttendanceService {
 
-    private final AttendanceConverter attendanceConverter;
     private final AttendanceRepository attendanceRepository;
     private final UserService userService;
     private final AttendanceValidation attendanceValidation;
-    private final int pageSize=2;
+    private final int pageSize=3;
+
+
+
 
 
     @Override
-    public List<AttendanceDto> findAll() {
-        return attendanceConverter.convertToDtoList(attendanceRepository.findAll());
+    public RestResponseDto findAllUserAttendance(int page){
+        Page<PersistentAttendanceEntity> pages=attendanceRepository.findAll(PageRequest.of(page,pageSize));
+        return RestResponseDto.INSTANCE().success().detail(Map.of("data",pages
+                ,"currentPage",page,"totalPages",pages.getTotalPages(),"noDateFilterFlag",true));
+    }
+    @Override
+    public  RestResponseDto findAllUserAttendanceFilteredByDate(AttendanceDto attendanceDto){
+        Page<PersistentAttendanceEntity> pages=attendanceRepository.findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(attendanceDto.getFromDate(),attendanceDto.getToDate(),PageRequest.of(attendanceDto.getPage(),pageSize));
+        return RestResponseDto.INSTANCE().success().detail(Map.of("data",pages
+                ,"currentPage",attendanceDto.getPage(),"totalPages",pages.getTotalPages(),"noDateFilterFlag",false));
     }
     @Override
     public RestResponseDto findByUser_Id(UUID userid, int page) {
         Page<PersistentAttendanceEntity> pages =attendanceRepository.findByUser_Id(userid,PageRequest.of(page,pageSize));
-
         return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", page, "totalPages", pages.getTotalPages(),
                 "noDateFilterFlag", true,"userName",getUserName(userid),"userId",userid));
     }
     @Override
-    public RestResponseDto filterByDate(UUID userid, AttendanceDto attendanceDto, int page) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd");
+    public RestResponseDto filterByDate(UUID userid, AttendanceDto attendanceDto) {
 
         try {
             AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
@@ -59,11 +64,11 @@ public class AttendanceServiceImp implements AttendanceService {
                 return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
             }
             Page<PersistentAttendanceEntity> pages =  attendanceRepository.findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndUser_Id(
-                    attendanceDto.getFromDate(), attendanceDto.getToDate(), userid,PageRequest.of(page,pageSize));
+                    attendanceDto.getFromDate(), attendanceDto.getToDate(), userid,PageRequest.of(attendanceDto.getPage(),pageSize));
 
-            return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", page,
-                    "totalPages", pages.getTotalPages(), "noDateFilterFlag", false, "fromDate", dateFormat.format(attendanceDto.getFromDate()),
-                    "toDate", dateFormat.format(attendanceDto.getToDate()),"userName",getUserName(userid),"userId",userid));
+            return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", attendanceDto.getPage(),
+                    "totalPages", pages.getTotalPages(), "noDateFilterFlag", false));
+
 
         } catch (Exception ex) {
             return RestResponseDto.INSTANCE().internalServerError().detail(Map.of("data", attendanceDto));
