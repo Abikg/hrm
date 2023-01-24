@@ -21,6 +21,74 @@
 <section class="content" style="background-color: #eee;">
     <div class="container py-5">
         <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <div th:if="${employee.employeeImage != null}" th:with="imageData=${employee.employeeImage.image}">
+                            <img th:src="'data:'+${employee.employeeImage.type}+';base64,' + ${imageUtil.getImageData(imageData)}" alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 180px; height: 180px;">
+                        </div>
+                        <div th:unless="${employee.employeeImage != null}">
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 150px;">
+                        </div>
+                        <h5 class="my-3 d-inline-block" th:text="${employee.fullname}"></h5>
+                        <span  th:if="${employee.employeeStatus.name() == 'ACTIVE'}" class="badge badge-success">Active</span>
+                        <span  th:unless="${employee.employeeStatus.name() == 'ACTIVE'}" class="badge badge-danger">Resigned</span>
+                        <p class="text-muted mb-1" th:text="${employee.positionName}"></p>
+                        <p class="text-muted mb-4" th:text="${employee.contactDetailDTO.contactAddress}"></p>
+                    </div>
+                </div>
+                <div class="card" th:if="${employee.resignationReason == null}">
+                    <button id="add-new-employee-resignation" th:onclick="createResignation([[${employee.id}]])"
+                            class="btn btn-primary btn-sm w-100">Create Resignation</button>
+                </div>
+                <div class="card" th:unless="${employee.resignationReason == null }">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mt-2">
+                                <p class="mb-0">Resignation Details</p>
+                            </div>
+                            <div class="col-sm-12 mt-2">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0">Reason</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted mb-0"  th:text="${employee.resignationReason}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0">Resignation Date</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted mb-0" id="resDate" th:text="${employee.resignationDate}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0">Exit Date</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted mb-0" id="resExitDate" th:text="${employee.exitDate}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <button th:if="${employee.employeeStatus.name() == 'ACTIVE'}" id="edit-employee-resignation" th:onclick="editResignation([[${employee.id}]])"
+                                        class="btn btn-secondary btn-sm w-100">Edit Resignation</button>
+                                <p      th:unless="${employee.employeeStatus.name() == 'ACTIVE'}" class="text-success">Resignation Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" th:if="${employee.approvedById == null and employee.resignationReason != null}" id="approve-resignation" th:onclick="approveResignation([[${employee.id}]])"
+                        class="btn btn-warning btn-sm w-100">Approve Resignation</button>
+                <button type="button" th:if="${employee.approvedById != null and employee.employeeStatus.name() == 'ACTIVE'}" id="exit-resignation" th:onclick="exitResignation([[${employee.id}]])"
+                        class="btn btn-danger btn-sm w-100">Exit Resignation</button>
+            </div>
             <div class="col-lg-8">
                 <div class="card mb-4">
                     <div class="card-body">
@@ -39,8 +107,6 @@
                             </div>
                             <div class="col-sm-9">
                                 <p class="text-muted mb-0" th:text="${employee.fullname}"></p>
-                                <span  th:if="${employee.employeeStatus == 'active'}" th:text="${employee.employeeStatus}" class="badge badge-success"></span>
-                                <span  th:unless="${employee.employeeStatus == 'active'}" th:text="${employee.employeeStatus}" class="badge badge-warning"></span>
                             </div>
                         </div>
                         <hr>
@@ -216,72 +282,6 @@
                         <hr>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                        <div th:if="${employee.employeeImage != null}" th:with="imageData=${employee.employeeImage.image}">
-                            <img th:src="'data:'+${employee.employeeImage.type}+';base64,' + ${imageUtil.getImageData(imageData)}" alt="avatar"
-                                 class="rounded-circle img-fluid" style="width: 180px; height: 180px;">
-                        </div>
-                        <div th:unless="${employee.employeeImage != null}">
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                                 class="rounded-circle img-fluid" style="width: 150px;">
-                        </div>
-                        <h5 class="my-3" th:text="${employee.fullname}"></h5>
-                        <p class="text-muted mb-1" th:text="${employee.positionName}"></p>
-                        <p class="text-muted mb-4" th:text="${employee.contactDetailDTO.contactAddress}"></p>
-                    </div>
-                </div>
-                <div class="card" th:if="${employee.resignationReason == null}">
-                        <button id="add-new-employee-resignation" th:onclick="createResignation([[${employee.id}]])"
-                                class="btn btn-primary btn-sm w-100">Create Resignation</button>
-                </div>
-                <div class="card" th:unless="${employee.resignationReason == null }">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-12 mt-2">
-                                <p class="mb-0">Resignation Details</p>
-                            </div>
-                            <div class="col-sm-12 mt-2">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p class="mb-0">Reason</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="text-muted mb-0"  th:text="${employee.resignationReason}"></p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p class="mb-0">Resignation Date</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="text-muted mb-0" id="resDate" th:text="${employee.resignationDate}"></p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p class="mb-0">Exit Date</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="text-muted mb-0" id="resExitDate" th:text="${employee.exitDate}"></p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <button th:if="${employee.employeeStatus == 'active'}" id="edit-employee-resignation" th:onclick="editResignation([[${employee.id}]])"
-                                        class="btn btn-secondary btn-sm w-100">Edit Resignation</button>
-                                <p th:unless="${employee.employeeStatus == 'active'}" class="text-success">Resignation Completed</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" th:if="${employee.approvedById == null and employee.resignationReason != null }" id="approve-resignation" th:onclick="approveResignation([[${employee.id}]])"
-                        class="btn btn-warning btn-sm w-100">Approve Resignation</button>
-                <button type="button" th:if="${employee.approvedById != null and employee.employeeStatus == 'active'}" id="exit-resignation" th:onclick="exitResignation([[${employee.id}]])"
-                        class="btn btn-warning btn-sm w-100">Exit Resignation</button>
             </div>
         </div>
     </div>

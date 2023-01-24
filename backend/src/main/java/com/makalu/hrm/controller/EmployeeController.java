@@ -105,11 +105,18 @@ public class EmployeeController {
         return "employee/view";
     }
 
-    @PostMapping(path = "/employeeResignation")
+    @PostMapping(path = "/createResignation")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> employeeResignation(EmployeeDTO employeeDTO){
-        return ResponseEntity.ok(employeeService.employeeResignationOperation(employeeDTO));
+    public ResponseEntity<RestResponseDto> employeeResignationCreate(EmployeeDTO employeeDTO){
+        return ResponseEntity.ok(employeeService.employeeResignationCreate(employeeDTO));
+    }
+
+    @PostMapping(path = "/updateResignation")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> employeeResignationUpdate(EmployeeDTO employeeDTO){
+        return ResponseEntity.ok(employeeService.employeeResignationUpdate(employeeDTO));
     }
 
     @PostMapping(path = "/approveResignation/{id}")

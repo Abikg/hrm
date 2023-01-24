@@ -41,7 +41,7 @@ function setupForCreateResignationForm(id) {
     $("#employeeResId").val(id);
     $("#employeeResignationModalLabel").text("Create New Resignation");
     const formBaseUrl = $("#employeeResignationForm").data("action-base-url");
-    $("#employeeResignationForm").attr("action", formBaseUrl + "employeeResignation");
+    $("#employeeResignationForm").attr("action", formBaseUrl + "createResignation");
 }
 $("#employeeResignationForm").submit(function (event) {
     event.preventDefault();
@@ -85,7 +85,7 @@ function setupForEditResignationForm(id){
     $("#employeeResignationForm")[0].reset();
     $("#employeeResignationModalLabel").text("Edit Resignation");
     const formBaseUrl = $("#employeeResignationForm").data("action-base-url");
-    $("#employeeResignationForm").attr("action", formBaseUrl + "employeeResignation");
+    $("#employeeResignationForm").attr("action", formBaseUrl + "updateResignation");
 }
 function getEmployeeData(id){
     const url = $("#base-url").val() + "employee/get/" + id;
@@ -133,7 +133,6 @@ function approveResignation(id){
             success: function (data) {
                 console.log("saved");
                 if (data.status === 200) {
-                    $("#employeeResignationModal").modal('toggle');
                     viewEmployee(data.detail.id,"employee");
                     console.log("saved");
                 }
@@ -158,7 +157,6 @@ function exitResignation(id){
             success: function (data) {
                 console.log("saved");
                 if (data.status === 200) {
-                    $("#employeeResignationModal").modal('toggle');
                     viewEmployee(data.detail.id,"employee");
                     console.log("saved");
                 }

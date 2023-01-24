@@ -17,7 +17,9 @@ public interface EmployeeService {
 
     RestResponseDto update(EmployeeDTO employeeDTO);
 
-    RestResponseDto employeeResignationOperation(EmployeeDTO employeeDTO);
+    RestResponseDto employeeResignationCreate(EmployeeDTO employeeDTO);
+
+    RestResponseDto employeeResignationUpdate(EmployeeDTO employeeDTO);
 
     RestResponseDto employeeApproveResignation(UUID employeeId);
 

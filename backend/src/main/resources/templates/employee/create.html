@@ -33,7 +33,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form id="employeeForm" method="post" th:action="@{/employee/save}" th:object="${employee}" enctype="multipart/form-data">
+                    <form id="employeeForm" method="post" th:action="@{/employee/save}" th:object="${employee}" enctype="multipart/form-data" autocomplete="off">
                         <input type="hidden" th:field="*{id}">
                         <div class="card-body">
                             <div class="form-group">
@@ -87,7 +87,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-transparent" id="icon"><i class="fas fa-calendar"></i></span>
                                     </div>
-                                    <input class="form-control mydatepicker" th:field="*{joinDate}" data-date-format="yyyy/mm/dd">
+                                    <input class="form-control mydatepicker" th:field="*{joinDate}" id="joinDate" data-date-format="yyyy/mm/dd" required>
                                 </div>
                                 <div th:if="${#ctx.containsVariable('response')}">
                                     <p th:if="${response.status == 400  and response.detail.get('error').joinDate != null}"

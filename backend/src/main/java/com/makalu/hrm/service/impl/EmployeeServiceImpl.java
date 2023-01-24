@@ -148,7 +148,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public RestResponseDto employeeResignationOperation(EmployeeDTO employeeDTO) {
+    public RestResponseDto employeeResignationCreate(EmployeeDTO employeeDTO) {
         try {
             PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeDTO.getId()).orElse(null);
             if (employeeEntity == null) {
@@ -157,6 +157,27 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeEntity.setResignationReason(employeeDTO.getResignationReason());
             employeeEntity.setResignationDate(employeeDTO.getResignationDate());
             employeeEntity.setExitDate(employeeDTO.getExitDate());
+
+            return RestResponseDto.INSTANCE().success()
+                    .detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(employeeEntity)));
+        }catch (Exception e){
+            log.error("Error while creating resignation",e);
+            return RestResponseDto.INSTANCE().internalServerError();
+        }
+    }
+
+    @Override
+    @Transactional
+    public RestResponseDto employeeResignationUpdate(EmployeeDTO employeeDTO) {
+        try {
+            PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeDTO.getId()).orElse(null);
+            if (employeeEntity == null) {
+                return RestResponseDto.INSTANCE().notFound();
+            }
+            employeeEntity.setResignationReason(employeeDTO.getResignationReason());
+            employeeEntity.setResignationDate(employeeDTO.getResignationDate());
+            employeeEntity.setExitDate(employeeDTO.getExitDate());
+            employeeEntity.setApprovedBy(null);
 
             return RestResponseDto.INSTANCE().success()
                     .detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(employeeEntity)));

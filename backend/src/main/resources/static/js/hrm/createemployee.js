@@ -31,8 +31,13 @@ $(document).ready(function(){
 });
 
 $("#joinDate").change(function() {
-    let date = moment($(this).val(), 'yyyy/mm/dd').toDate();
-    $(this).val(date);
+    if($(this).val() != null) {
+        let date = moment($(this).val(), 'yyyy/mm/dd').toDate();
+        $(this).val(date);
+    }
+    else{
+        $(this).val(null);
+    }
 });
 
 $(".inputDate").change(function() {
