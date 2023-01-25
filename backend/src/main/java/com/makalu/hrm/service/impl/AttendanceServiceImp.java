@@ -45,15 +45,29 @@ public class AttendanceServiceImp implements AttendanceService {
     }
     @Override
     public  RestResponseDto findAllUserAttendanceFilteredByDate(AttendanceDto attendanceDto){
-        Page<PersistentAttendanceEntity> pages=attendanceRepository.findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(attendanceDto.getFromDate(),attendanceDto.getToDate(),PageRequest.of(attendanceDto.getPage(),pageSize));
-        return RestResponseDto.INSTANCE().success().detail(Map.of("data",pages
-                ,"currentPage",attendanceDto.getPage(),"totalPages",pages.getTotalPages(),"noDateFilterFlag",false));
+       try {
+           AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
+           if (!error.isValid()) {
+               return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
+           }
+           Page<PersistentAttendanceEntity> pages = attendanceRepository.findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(attendanceDto.getFromDate(), attendanceDto.getToDate(), PageRequest.of(attendanceDto.getPage(), pageSize));
+           return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages
+                   , "currentPage", attendanceDto.getPage(), "totalPages", pages.getTotalPages(), "noDateFilterFlag", false));
+       }catch (Exception ex){
+           return  RestResponseDto.INSTANCE().internalServerError().detail(Map.of("date",attendanceDto));
+       }
+
     }
     @Override
     public RestResponseDto findByUser_Id(UUID userid, int page) {
-        Page<PersistentAttendanceEntity> pages =attendanceRepository.findByUser_Id(userid,PageRequest.of(page,pageSize));
-        return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", page, "totalPages", pages.getTotalPages(),
-                "noDateFilterFlag", true,"userName",getUserName(userid),"userId",userid));
+        try {
+
+            Page<PersistentAttendanceEntity> pages = attendanceRepository.findByUser_Id(userid, PageRequest.of(page, pageSize));
+            return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", page, "totalPages", pages.getTotalPages(),
+                    "noDateFilterFlag", true, "userName", getUserName(userid), "userId", userid));
+        }catch (Exception ex){
+            return RestResponseDto.INSTANCE().internalServerError();
+        }
     }
     @Override
     public RestResponseDto filterByDate(UUID userid, AttendanceDto attendanceDto) {
