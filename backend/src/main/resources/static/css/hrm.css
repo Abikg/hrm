@@ -11,14 +11,10 @@
 }
 
 .datetime2{
-    height: 100px;
-    width: 50%;
+
 }
 .datesubmit-button{
-    height: 5px;
-    width: 10px;
-    margin-top: 36px;
-    margin-left: 1px;
+
 }
 
 .dates-picker-div{
@@ -27,8 +23,7 @@
 }
 
 #dateFilterButton{
-    float: right;
-    margin-right: 15px;
+
 }
 
 .user-list{

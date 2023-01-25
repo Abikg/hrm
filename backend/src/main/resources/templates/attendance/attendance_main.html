@@ -11,10 +11,10 @@
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" layout:fragment="content">
-<div class="wrapper">
+<div class="wrapper mt-2">
     <section class="content-header">
         <div class="container">
-            <div class="row mb-2">
+            <div class="row mb-2 ">
                 <div class="col-sm-5">
                     <h1> Attendance </h1>
 
@@ -25,7 +25,7 @@
                 <div class="card w-100 " style="height: 150px">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col" sec:authorize="hasRole('SUPER_ADMIN')">
+                            <div class="col-4" sec:authorize="hasRole('SUPER_ADMIN')">
                                 <label for="select-user">Select User</label>
                                 <select class="custom-select" onchange="selectFunction()" name="id" id="select-user">
                                     <option selected th:value="ALL">All</option>
@@ -34,7 +34,7 @@
                                             th:text="${user.username}"></option>
                                 </select>
                             </div>
-                            <div class="col datetime1">
+                            <div class="col-3 datetime1">
                                 <label for="fromdate">From:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -43,7 +43,7 @@
                                     <input type="text" class="form-control mydatepicker" id="fromDate" name="fromDate" data-date-format="yyyy/mm/dd" autocomplete="off">
                                 </div>
                             </div>
-                            <div class="col datetime2">
+                            <div class="col-3 datetime2">
                                 <label for="todate">To:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -52,13 +52,13 @@
                                     <input type="text" class="form-control mydatepicker" id="toDate" name="toDate" data-date-format="yyyy/mm/dd" autocomplete="off">
                                 </div>
                             </div>
+                            <div class="col-2">
+
+                                <button type="button" class="btn btn-primary mt-auto" id="dateFilterButton" onclick="filterByDate()">Filter</button>
+                            </div>
 
                         </div>
 
-
-                    </div>
-                    <div class="card-footer bg-transparent pt-0 lh-small">
-                        <button type="button" class="btn btn-primary " id="dateFilterButton" onclick="filterByDate()">Filter</button>
                     </div>
                 </div>
             </div>

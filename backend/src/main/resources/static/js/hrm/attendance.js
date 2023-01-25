@@ -6,23 +6,26 @@ $('.mydatepicker').on('click', function (e) {
 document.addEventListener("DOMContentLoaded", function () {
 
     if ($("#adminFlag").val() == "true") {
-        var url = "/attendance/allUserAttendance?page=0";
+        var url = "/attendance/filter?page=0";
 
     } else if ($("#adminFlag").val() == "false") {
-        var url = "/attendance/attendancelist?page=0";
+        var url = "/attendance/filter?page=0";
     }
     getAttendanceData(url);
 })
 
 function pagination(page) {
+
     var url;
     if ($('#adminFlag').val() == "true") {
 
         if ($('#noDateFilterFlagForAllUsers').val() == "true") {
-            url = "/attendance/allUserAttendance?page=" + page;
+            
+            url = "/attendance/filter?page=" + page;
 
         } else if ($('#noDateFilterFlagForAllUsers').val() == "false") {
-            url = "/attendance/allUserAttendanceByDate?page=" + page + "&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
+
+            url = "/attendance/filter?page=" + page + "&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
         }
     }
 
@@ -34,17 +37,17 @@ function paginationsecond(page) {
     if ($('#adminFlag').val() == "true") {
         var userId = $("#select-user").find(":selected").val();
         if ($('#noDateFilterFlag').val() == "true") {
-            var url = "/attendance/attendancelist?page=" + page + "&id=" + userId;
+            var url = "/attendance/filter?page=" + page + "&id=" + userId;
 
         } else if ($('#noDateFilterFlag').val() == "false") {
-            var url = "/attendance/dateFilterForUser?page=" + page + "&id=" + userId + "&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
+            var url = "/attendance/filter?page=" + page + "&id=" + userId + "&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
         }
     } else if ($('#adminFlag').val() == "false") {
         if ($('#noDateFilterFlag').val() == "true") {
-            var url = "/attendance/attendancelist?page=" + page;
+            var url = "/attendance/filter?page=" + page;
 
         } else if ($('#noDateFilterFlag').val() == "false") {
-            var url = "/attendance/dateFilterForUser?page=" + page + "&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
+            var url = "/attendance/filter?page=" + page + "&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
         }
     }
 
@@ -53,12 +56,12 @@ function paginationsecond(page) {
 
 function selectFunction() {
     if ($("#select-user").find(":selected").val() == "ALL") {
-        var url = "/attendance/allUserAttendance?page=0";
+        var url = "/attendance/filter?page=0";
     } else {
         var userId = $("#select-user").find(":selected").val();
         $('#fromDate').val("");
         $('#toDate').val("");
-        var url = "/attendance/attendancelist?page=0&id=" + userId;
+        var url = "/attendance/filter?page=0&id=" + userId;
     }
 
     getAttendanceData(url);
@@ -67,19 +70,19 @@ function selectFunction() {
 function filterByDate() {
     let date1 = new Date($('#toDate').val());
     let date2 = new Date($('#fromDate').val());
-    let days = (date1.getTime() - date2.getTime())/(1000 * 60 * 60 * 24);
 
+    let days = (date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24);
     if (days <= 365) {
 
         if ($("#adminFlag").val() == "true") {
 
             if ($("#select-user").val() == "ALL") {
-                var url = "/attendance/allUserAttendanceByDate?page=0&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
+                var url = "/attendance/filter?page=0&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
             } else {
-                var url = "/attendance/dateFilterForUser?page=0&id=" + $("#select-user").find(":selected").val() + "&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
+                var url = "/attendance/filter?page=0&id=" + $("#select-user").find(":selected").val() + "&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
             }
         } else if ($("#adminFlag").val() == "false") {
-            var url = "/attendance/dateFilterForUser?page=0&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
+            var url = "/attendance/filter?page=0&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
 
         }
         getAttendanceData(url);

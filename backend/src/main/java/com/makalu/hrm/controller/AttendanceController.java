@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -35,7 +34,6 @@ public class AttendanceController {
         }
         return "redirect:/";
     }
-
     @GetMapping("/punchOut")
     public String punchOut(HttpServletRequest request) {
         try {
@@ -45,10 +43,8 @@ public class AttendanceController {
         }
         return "redirect:/";
     }
-
     @GetMapping("/userList")
     public String userList(AttendanceDto attendanceDto, ModelMap map) {
-
         if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
             map.addAttribute(ParameterConstant.USER_LIST, userService.findALl());
             map.addAttribute(ParameterConstant.ADMIN_FLAG, true);
@@ -58,39 +54,31 @@ public class AttendanceController {
             return "attendance/attendance_main";
         }
     }
+//    @PreAuthorize("hasRole('SUPER_ADMIN')")
+//    @GetMapping("/allUserAttendance")
+//    public String getAllUserAttendanceNoFilter(AttendanceDto attendanceDto, ModelMap map) {
+//        map.addAttribute(ParameterConstant.RESPONSE, attendanceService.Filter(attendanceDto));
+//        return "attendance/allUsersAttendance";
+//
+//    }
 
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @GetMapping("/allUserAttendance")
-    public String getAllUserAttendance(AttendanceDto attendanceDto, ModelMap map) {
-        map.addAttribute(ParameterConstant.RESPONSE, attendanceService.findAllUserAttendance(attendanceDto.getPage()));
-        return "attendance/allUsersAttendance";
-
-    }
-
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @GetMapping("/allUserAttendanceByDate")
-    public String getAllUserAttendanceByDate(AttendanceDto attendanceDto, ModelMap map) {
-        map.addAttribute(ParameterConstant.RESPONSE, attendanceService.findAllUserAttendanceFilteredByDate(attendanceDto));
-        return "attendance/allUsersAttendance";
-
-    }
-
-    @GetMapping("/attendancelist")
-    public String loginedUserAttendanceList(AttendanceDto attendanceDto, ModelMap map) {
+    @GetMapping("/filter")
+    public String AttendanceList(AttendanceDto attendanceDto, ModelMap map) {
         if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.findByUser_Id(attendanceDto.getId(), attendanceDto.getPage()));
-        } else
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.findByUser_Id(AuthenticationUtils.getCurrentUser().getUserId(), attendanceDto.getPage()));
+            if(attendanceDto.getId()==null&&attendanceDto.getFromDate()==null&&attendanceDto.getToDate()==null)
+            {
+                map.addAttribute(ParameterConstant.RESPONSE, attendanceService.Filter(attendanceDto));
+                return "attendance/allUsersAttendance";
+            }
+            else if(attendanceDto.getId()==null&&attendanceDto.getFromDate()!=null&&attendanceDto.getToDate()!=null){
+                map.addAttribute(ParameterConstant.RESPONSE, attendanceService.Filter(attendanceDto));
+                return "attendance/allUsersAttendance";
+            }
+            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.Filter(attendanceDto));
+        } else{
+            attendanceDto.setId(AuthenticationUtils.getCurrentUser().getUserId());
+            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.Filter(attendanceDto));
+        }
         return "attendance/UserAttendancelist";
     }
-
-    @GetMapping("/dateFilterForUser")
-    public String filterByDate(AttendanceDto attendanceDto, ModelMap map) {
-        if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.filterByDate(attendanceDto.getId(), attendanceDto));
-        } else
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.filterByDate(AuthenticationUtils.getCurrentUser().getUserId(), attendanceDto));
-        return "attendance/UserAttendancelist";
-    }
-
 }

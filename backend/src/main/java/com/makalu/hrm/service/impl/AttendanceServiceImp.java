@@ -1,6 +1,7 @@
 package com.makalu.hrm.service.impl;
 
 
+import com.makalu.hrm.Specification.AttendanceSpecification;
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.exceptions.AttendanceException;
 import com.makalu.hrm.model.AttendanceDto;
@@ -34,60 +35,34 @@ public class AttendanceServiceImp implements AttendanceService {
     private final int pageSize=3;
 
 
-
-
-
     @Override
-    public RestResponseDto findAllUserAttendance(int page){
-        Page<PersistentAttendanceEntity> pages=attendanceRepository.findAll(PageRequest.of(page,pageSize));
-        return RestResponseDto.INSTANCE().success().detail(Map.of("data",pages
-                ,"currentPage",page,"totalPages",pages.getTotalPages(),"noDateFilterFlag",true));
-    }
-    @Override
-    public  RestResponseDto findAllUserAttendanceFilteredByDate(AttendanceDto attendanceDto){
-       try {
-           AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
-           if (!error.isValid()) {
-               return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
-           }
-           Page<PersistentAttendanceEntity> pages = attendanceRepository.findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(attendanceDto.getFromDate(), attendanceDto.getToDate(), PageRequest.of(attendanceDto.getPage(), pageSize));
-           return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages
-                   , "currentPage", attendanceDto.getPage(), "totalPages", pages.getTotalPages(), "noDateFilterFlag", false));
-       }catch (Exception ex){
-           return  RestResponseDto.INSTANCE().internalServerError().detail(Map.of("date",attendanceDto));
-       }
-
-    }
-    @Override
-    public RestResponseDto findByUser_Id(UUID userid, int page) {
-        try {
-
-            Page<PersistentAttendanceEntity> pages = attendanceRepository.findByUser_Id(userid, PageRequest.of(page, pageSize));
-            return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", page, "totalPages", pages.getTotalPages(),
-                    "noDateFilterFlag", true, "userName", getUserName(userid), "userId", userid));
-        }catch (Exception ex){
-            return RestResponseDto.INSTANCE().internalServerError();
-        }
-    }
-    @Override
-    public RestResponseDto filterByDate(UUID userid, AttendanceDto attendanceDto) {
+    public RestResponseDto Filter(AttendanceDto attendanceDto){
+        Boolean noDateFilterFlag=true;
 
         try {
-            AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
-            if (!error.isValid()) {
-                return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
+            if (attendanceDto.getToDate() != null && attendanceDto.getFromDate() != null) {
+                AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
+
+                if (!error.isValid()) {
+                    return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
+                }
+                noDateFilterFlag = false;
             }
-            Page<PersistentAttendanceEntity> pages =  attendanceRepository.findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndUser_Id(
-                    attendanceDto.getFromDate(), attendanceDto.getToDate(), userid,PageRequest.of(attendanceDto.getPage(),pageSize));
-
+            Page<PersistentAttendanceEntity> pages =  attendanceRepository.findAll(new AttendanceSpecification(attendanceDto),PageRequest.of(attendanceDto.getPage(),pageSize,Sort.by(Sort.Direction.DESC, "punchInDate")));
             return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", attendanceDto.getPage(),
-                    "totalPages", pages.getTotalPages(), "noDateFilterFlag", false));
+                    "totalPages", pages.getTotalPages(), "noDateFilterFlag", noDateFilterFlag));
 
-
-        } catch (Exception ex) {
-            return RestResponseDto.INSTANCE().internalServerError().detail(Map.of("data", attendanceDto));
+        }catch (Exception ex){
+            return  RestResponseDto.INSTANCE().internalServerError().detail(Map.of("date",attendanceDto));
         }
     }
+    @Override
+    public RestResponseDto findAllUserAttendance(int page) {
+        Page<PersistentAttendanceEntity> pages=attendanceRepository.findAll(PageRequest.of(page,pageSize,Sort.by(Sort.Direction.DESC, "punchInDate")));
+        return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", pages,
+                "totalPages", pages.getTotalPages(), "noDateFilterFlag", true));
+    }
+
     @Transactional
     @Override
     public void punchIn(String ip) {
