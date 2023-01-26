@@ -17,7 +17,7 @@ public interface AttendanceRepository extends JpaRepository<PersistentAttendance
 
     List<PersistentAttendanceEntity> findAllByUser_Id(UUID userId, Pageable pageable);
 
-//    Page<PersistentAttendanceEntity> findAll(Pageable pageable);
+
 
 
 }
