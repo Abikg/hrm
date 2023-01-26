@@ -4,7 +4,6 @@ import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.model.AttendanceDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;

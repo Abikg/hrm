@@ -16,11 +16,8 @@ public interface AttendanceRepository extends JpaRepository<PersistentAttendance
 
 
     List<PersistentAttendanceEntity> findAllByUser_Id(UUID userId, Pageable pageable);
-    Page<PersistentAttendanceEntity> findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqualAndUser_Id(Date fromDate,Date toDate,UUID uuid,Pageable pageable);
-    Page<PersistentAttendanceEntity> findByUser_Id(UUID userid,Pageable pageable);
-    Page<PersistentAttendanceEntity> findAll(Pageable pageable);
-    Page<PersistentAttendanceEntity> findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(Date fromDate,Date toDate,Pageable pageable);
 
+//    Page<PersistentAttendanceEntity> findAll(Pageable pageable);
 
 
 }

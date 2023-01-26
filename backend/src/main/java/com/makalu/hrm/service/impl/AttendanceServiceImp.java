@@ -39,7 +39,6 @@ public class AttendanceServiceImp implements AttendanceService {
     public RestResponseDto Filter(AttendanceDto attendanceDto){
         Boolean noDateFilterFlag=true;
 
-
         try {
             if (attendanceDto.getToDate() != null && attendanceDto.getFromDate() != null) {
                 AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
@@ -58,7 +57,6 @@ public class AttendanceServiceImp implements AttendanceService {
             return  RestResponseDto.INSTANCE().internalServerError().detail(Map.of("date",attendanceDto));
         }
     }
-
     @Transactional
     @Override
     public void punchIn(String ip) {

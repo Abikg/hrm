@@ -23,8 +23,8 @@
             </div>
             <div class="row mb-2">
                 <div class="card w-100 " style="height: 150px">
-                    <div class="card-body">
-                        <div class="row">
+                    <div class="card-body ">
+                        <div class="row flex-fill">
                             <div class="col-4" sec:authorize="hasRole('SUPER_ADMIN')">
                                 <label for="select-user">Select User</label>
                                 <select class="custom-select" onchange="selectFunction()" name="id" id="select-user">
@@ -38,27 +38,35 @@
                                 <label for="fromdate">From:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text bg-transparent" id="icon"><i class="fas fa-calendar"></i></span>
+                                        <span class="input-group-text bg-transparent" id="iconFromDate"><i
+                                                class="fas fa-calendar"></i></span>
                                     </div>
-                                    <input type="text" class="form-control mydatepicker" id="fromDate" name="fromDate" data-date-format="yyyy/mm/dd" autocomplete="off">
+                                    <input type="text" class="form-control mydatepicker" id="fromDate" name="fromDate"
+                                           data-date-format="yyyy/mm/dd" autocomplete="off" readonly>
                                 </div>
                             </div>
                             <div class="col-3 datetime2">
                                 <label for="todate">To:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text bg-transparent" id="icon"><i class="fas fa-calendar"></i></span>
+                                        <span class="input-group-text bg-transparent" id="iconToDate"><i
+                                                class="fas fa-calendar"></i></span>
                                     </div>
-                                    <input type="text" class="form-control mydatepicker" id="toDate" name="toDate" data-date-format="yyyy/mm/dd" autocomplete="off">
+                                    <input type="text" class="form-control mydatepicker " data-date-format="yyyy/mm/dd"
+                                           id="toDate" name="toDate" readonly>
                                 </div>
                             </div>
-                            <div class="col-2" sec:authorize="hasRole('SUPER_ADMIN')">
+                            <div class="row  ml-1" sec:authorize="hasRole('SUPER_ADMIN')">
 
-                                <button type="button" class="btn btn-primary mt-auto" id="dateFilterButton" onclick="filterByDateForAdmin()">Filter</button>
+                                <button type="button" class="btn btn-primary mt-auto" id="dateFilterButton"
+                                        onclick="filterByDateForAdmin()">Filter
+                                </button>
                             </div>
-                            <div class="col-2" sec:authorize="!hasRole('SUPER_ADMIN')">
+                            <div class="row  ml-1" sec:authorize="!hasRole('SUPER_ADMIN')">
 
-                                <button type="button" class="btn btn-primary mt-auto" id="dateFilterButton2" onclick="filterByDateForNormal()">Filter</button>
+                                <button type="button" class="btn btn-primary mt-auto" id="dateFilterButton2"
+                                        onclick="filterByDateForNormal()">Filter
+                                </button>
                             </div>
 
                         </div>

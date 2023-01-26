@@ -26,7 +26,7 @@
                         <table class="table" id="attendance-table">
                             <thead>
                             <tr>
-                                <th th:if="${response.detail.get('allUserAttendanceFlag')}">Username</th>
+                                <th sec:authorize="hasRole('SUPER_ADMIN')">Username</th>
                                 <th>punchIn DateTime</th>
                                 <th>PunchIn Ip</th>
                                 <th>PunchOut Datetime</th>
@@ -36,7 +36,7 @@
                             </thead>
                             <tbody th:each="attendance: ${data}">
                             <tr>
-                                <td th:if="${response.detail.get('allUserAttendanceFlag')}" th:text="${attendance.user.username}"  class="start-date"></td>
+                                <td sec:authorize="hasRole('SUPER_ADMIN')" th:text="${attendance.user.username}"  class="start-date"></td>
                                 <td th:text="${attendance.punchInDate}" class="start-date"></td>
                                 <td th:text="${attendance.punchInIp}" class="cm-number"></td>
                                 <td th:text="${attendance.punchOutDate}" class="end-date"></td>
