@@ -9,7 +9,6 @@ import com.makalu.hrm.utils.AuthenticationUtils;
 import com.makalu.hrm.utils.IPUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
