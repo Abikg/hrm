@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns="http://www.w3.org/1999/html">
+      xmlns="http://www.w3.org/1999/html"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
 <section class="content-header">
@@ -26,7 +26,7 @@
                         <table class="table" id="attendance-table">
                             <thead>
                             <tr>
-
+                                <th th:if="${response.detail.get('allUserAttendanceFlag')}">Username</th>
                                 <th>punchIn DateTime</th>
                                 <th>PunchIn Ip</th>
                                 <th>PunchOut Datetime</th>
@@ -36,7 +36,7 @@
                             </thead>
                             <tbody th:each="attendance: ${data}">
                             <tr>
-
+                                <td th:if="${response.detail.get('allUserAttendanceFlag')}" th:text="${attendance.user.username}"  class="start-date"></td>
                                 <td th:text="${attendance.punchInDate}" class="start-date"></td>
                                 <td th:text="${attendance.punchInIp}" class="cm-number"></td>
                                 <td th:text="${attendance.punchOutDate}" class="end-date"></td>
@@ -55,20 +55,35 @@
       <input type="hidden" th:value="${response.detail.get('noDateFilterFlag')}" id="noDateFilterFlag">
         <nav  aria-label="Page navigation example">
 
-            <ul class="pagination" >
+            <ul class="pagination" sec:authorize="hasRole('SUPER_ADMIN')" >
                 <li th:if="${currentPage !=0}" class="page-item">
-                    <a class="page-link" th:onclick="paginationsecond([[${currentPage-1}]])" >Previous</a>
+                    <a class="page-link" th:onclick="paginationAdmin([[${currentPage-1}]])" >Previous</a>
                 </li>
 
                 <li th:each="i:${#numbers.sequence(1,totalPages)}" th:classappend="${currentPage==i-1 ? 'active' : '' }"
                     class="page-item">
-                    <a class="page-link" th:onclick="paginationsecond([[${i-1}]])">[[${i}]]</a>
+                    <a class="page-link" th:onclick="paginationAdmin([[${i-1}]])">[[${i}]]</a>
                 </li>
 
                 <li th:if="${currentPage+1!=totalPages}" class="page-item">
-                    <a class="page-link" th:onclick="paginationsecond([[${currentPage+1}]])">Next</a>
+                    <a class="page-link" th:onclick="paginationAdmin([[${currentPage+1}]])">Next</a>
                 </li>
             </ul>
+        </nav>
+        <ul class="pagination" sec:authorize="!hasRole('SUPER_ADMIN')" >
+            <li th:if="${currentPage !=0}" class="page-item">
+                <a class="page-link" th:onclick="paginationNormal([[${currentPage-1}]])" >Previous</a>
+            </li>
+
+            <li th:each="i:${#numbers.sequence(1,totalPages)}" th:classappend="${currentPage==i-1 ? 'active' : '' }"
+                class="page-item">
+                <a class="page-link" th:onclick="paginationNormal([[${i-1}]])">[[${i}]]</a>
+            </li>
+
+            <li th:if="${currentPage+1!=totalPages}" class="page-item">
+                <a class="page-link" th:onclick="paginationNormal([[${currentPage+1}]])">Next</a>
+            </li>
+        </ul>
         </nav>
 
     </div>

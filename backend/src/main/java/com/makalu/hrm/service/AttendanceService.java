@@ -12,7 +12,7 @@ public interface AttendanceService {
 
     RestResponseDto Filter(AttendanceDto attendanceDto);
 
-    RestResponseDto findAllUserAttendance(int page);
+//    RestResponseDto findAllUserAttendance(int page);
 
     void punchIn(String ip);
 

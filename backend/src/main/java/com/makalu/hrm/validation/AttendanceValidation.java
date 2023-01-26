@@ -12,6 +12,7 @@ public class AttendanceValidation {
     private final AttendanceError attendanceError = new AttendanceError();
 
     public AttendanceError validateDateRange(AttendanceDto dto) {
+
         Duration duration = Duration.between(dto.getFromDate().toInstant(), dto.getToDate().toInstant());
         long days = duration.toDays();
         if (days > 365) {
