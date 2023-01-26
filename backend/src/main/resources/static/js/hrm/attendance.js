@@ -14,18 +14,21 @@ function paginationNormal(page) {
 }
 
 function paginationAdmin(page) {
+
     let userId = $("#select-user").find(":selected").val();
-    ;
-    if (userId = "ALL") {
+    if (userId == "ALL") {
         if ($('#noDateFilterFlag').val() == "true") {
+
             var url = "/attendance/filter?page=" + page;
 
         } else if ($('#noDateFilterFlag').val() == "false") {
+
             var url = "/attendance/filter?page=" + page + "&toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val();
         }
 
     } else {
         if ($('#noDateFilterFlag').val() == "true") {
+
             var url = "/attendance/filter?page=" + page + "&id=" + userId;
 
         } else if ($('#noDateFilterFlag').val() == "false") {
@@ -88,7 +91,7 @@ function validateDate() {
 function getAttendanceData(url) {
 
     var positionReq = $.ajax(window.location.origin + url, {
-        method: "GET", timeout: 500,
+        method: "GET", timeout: 10000,
 
         beforeSend: function () {
             if (positionReq !== undefined && positionReq != null) {

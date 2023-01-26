@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.text.DecimalFormat;
+
 @Component
 @RequiredArgsConstructor
 public class AttendanceConverter extends Convertable<PersistentAttendanceEntity, AttendanceDto> {
@@ -40,7 +42,7 @@ public class AttendanceConverter extends Convertable<PersistentAttendanceEntity,
         dto.setPunchInIp(entity.getPunchInIp());
         dto.setPunchOutDate(entity.getPunchOutDate());
         dto.setPunchOutIp(entity.getPunchOutIp());
-        dto.setTotalWorkedHours(entity.getTotalWorkedHours());
+        dto.setTotalWorkedHours((entity.getTotalWorkedHours()));
         dto.setUser(userConverter.convertToDto(entity.getUser()));
 
         return dto;
