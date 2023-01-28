@@ -3,6 +3,7 @@ package com.makalu.hrm.controller;
 import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.AttendanceDto;
+import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.AttendanceService;
 import com.makalu.hrm.service.UserService;
 import com.makalu.hrm.utils.AuthenticationUtils;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Timer;
 
 
 @Controller
@@ -33,14 +37,29 @@ public class AttendanceController {
         }
         return "redirect:/";
     }
+
+    @ResponseBody
     @GetMapping("/punchOut")
-    public String punchOut(HttpServletRequest request) {
+    public RestResponseDto punchOut(HttpServletRequest request) {
+        RestResponseDto restResponseDto =new RestResponseDto();
         try {
-            attendanceService.punchOut(IPUtils.getClientIp(request));
+             restResponseDto= attendanceService.punchOut(IPUtils.getClientIp(request));
         } catch (Exception ex) {
             log.error("Error while punchOut", ex);
         }
+        return restResponseDto;
+    }
+
+    @PostMapping("/nextDayPunchout")
+    public  String nextDayPunchout(@RequestParam String time,HttpServletRequest request){
+        try {
+            attendanceService.setPunchinAnotherDay(time, IPUtils.getClientIp(request));
+        }catch (Exception ex)
+        {
+            log.error("Error while punchout",ex);
+        }
         return "redirect:/";
+
     }
     @GetMapping("/userList")
     public String userList(AttendanceDto attendanceDto, ModelMap map) {

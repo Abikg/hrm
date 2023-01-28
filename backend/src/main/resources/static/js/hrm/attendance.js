@@ -116,3 +116,42 @@ $("#iconToDate").click(function () {
     $('#toDate').datepicker().datepicker("show");
 });
 
+
+$('#punchout').click(function (){
+    punchout('/attendance/punchOut');
+});
+
+function punchout(url) {
+
+    var positionReq = $.ajax(window.location.origin + url, {
+        method: "GET",
+        dataType: 'json',
+        timeout: 10000,
+
+        beforeSend: function () {
+            if (positionReq !== undefined && positionReq != null) {
+                positionReq.abort();
+            }
+        }, success: function (data, status, xhr) {
+            console.log("get called");
+            if(data.detail.dayPassed===true){
+                showHourInput();
+            }
+            else{
+
+
+            }
+
+            }, error: function (jqXhr, textStatus, errorMessage) {
+            console.log("error")
+            console.log(textStatus)
+            console.log(errorMessage)
+        }
+    });
+}
+
+
+function  showHourInput(){
+$('#attendanceModal').modal('toggle');
+}
+

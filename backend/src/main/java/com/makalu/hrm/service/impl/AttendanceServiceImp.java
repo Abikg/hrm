@@ -32,7 +32,7 @@ public class AttendanceServiceImp implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final UserService userService;
     private final AttendanceValidation attendanceValidation;
-    private final int pageSize=3;
+    private final int pageSize=4;
 
 
     @Override
@@ -42,7 +42,6 @@ public class AttendanceServiceImp implements AttendanceService {
         try {
             if (attendanceDto.getToDate() != null && attendanceDto.getFromDate() != null) {
                 AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
-
                 if (!error.isValid()) {
                     return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
                 }
@@ -69,14 +68,24 @@ public class AttendanceServiceImp implements AttendanceService {
         attendanceRepository.saveAndFlush(entity);
 
     }
-    @Transactional
+
     @Override
-    public void punchOut(String ip) {
+    public RestResponseDto punchOut(String ip) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
         previousAttendance.setPunchOutIp(ip);
         previousAttendance.setPunchOutDate(new Date());
-        previousAttendance.setTotalWorkedHours(DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate()));
-        attendanceRepository.saveAndFlush(previousAttendance);
+        double hours=DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
+
+        if(hours<8.00) {
+            previousAttendance.setTotalWorkedHours(hours);
+            attendanceRepository.saveAndFlush(previousAttendance);
+            return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", false));
+        }
+        else {
+            return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", true));
+        }
+
+
     }
 
     private PersistentAttendanceEntity getLastAttendanceOfUser(UUID userId) {
@@ -93,7 +102,7 @@ public class AttendanceServiceImp implements AttendanceService {
             throw new AttendanceException("There is no previous punch in record for this user " + AuthenticationUtils.getCurrentUser().getUsername());
         }
 
-        if (previousAttendance.getPunchOutDate() == null || DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date())) {
+        if (previousAttendance.getPunchOutDate() == null||DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date()) ) {
             return previousAttendance;
 
         }
@@ -107,13 +116,29 @@ public class AttendanceServiceImp implements AttendanceService {
         if (previousAttendance == null) {
             return true;
         }
-
         if (previousAttendance.getPunchOutDate() != null && !DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date())) {
             return true;
         }
 
         return false;
     }
+
+    @Override
+    public void setPunchinAnotherDay(String time,String ips) {
+        PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
+        previousAttendance.setPunchOutIp(ips);
+        Date punchoutDate=previousAttendance.getPunchInDate();
+        punchoutDate.setHours(Integer.parseInt(time.split(":")[0]));
+        punchoutDate.setMinutes(Integer.parseInt(time.split(":")[1]));
+        punchoutDate.setSeconds(Integer.parseInt("00"));
+
+        previousAttendance.setPunchOutDate(punchoutDate);
+        double hours=DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
+        previousAttendance.setTotalWorkedHours(hours);
+        attendanceRepository.saveAndFlush(previousAttendance);
+
+    }
+
     @Override
     public boolean isValidToPunchOut(UUID userId) {
         try {

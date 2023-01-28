@@ -21,9 +21,6 @@ public class DateUtils {
         DecimalFormat df = new DecimalFormat("#.00000");
         hours = Double.valueOf(df.format(hours));
 
-        if(hours>8.0)
-            hours=0.0;
-
         return  hours;
 
     }
