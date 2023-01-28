@@ -50,15 +50,17 @@ public class AttendanceController {
         return restResponseDto;
     }
 
+    @ResponseBody
     @PostMapping("/nextDayPunchout")
-    public  String nextDayPunchout(@RequestParam String time,HttpServletRequest request){
+    public  RestResponseDto nextDayPunchout(@RequestParam String time,HttpServletRequest request){
+        RestResponseDto restResponseDto=new RestResponseDto();
         try {
-            attendanceService.setPunchinAnotherDay(time, IPUtils.getClientIp(request));
+            restResponseDto=attendanceService.setPunchinAnotherDay(time, IPUtils.getClientIp(request));
         }catch (Exception ex)
         {
             log.error("Error while punchout",ex);
         }
-        return "redirect:/";
+        return restResponseDto;
 
     }
     @GetMapping("/userList")

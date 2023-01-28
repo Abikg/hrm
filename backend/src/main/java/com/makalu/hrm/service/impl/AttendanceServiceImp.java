@@ -69,14 +69,15 @@ public class AttendanceServiceImp implements AttendanceService {
 
     }
 
+    @Transactional
     @Override
     public RestResponseDto punchOut(String ip) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
-        previousAttendance.setPunchOutIp(ip);
-        previousAttendance.setPunchOutDate(new Date());
-        double hours=DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
-
+        Date today=new Date();
+        double hours=DateUtils.getHours(today, previousAttendance.getPunchInDate());
         if(hours<8.00) {
+            previousAttendance.setPunchOutIp(ip);
+            previousAttendance.setPunchOutDate(today);
             previousAttendance.setTotalWorkedHours(hours);
             attendanceRepository.saveAndFlush(previousAttendance);
             return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", false));
@@ -123,20 +124,25 @@ public class AttendanceServiceImp implements AttendanceService {
         return false;
     }
 
+    @Transactional
     @Override
-    public void setPunchinAnotherDay(String time,String ips) {
+    public RestResponseDto setPunchinAnotherDay(String time,String ips) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
-        previousAttendance.setPunchOutIp(ips);
-        Date punchoutDate=previousAttendance.getPunchInDate();
+        int hours=Integer.parseInt(time.split(":")[0]);
+        if(hours<9&&hours>17){
+            return RestResponseDto.INSTANCE().success().detail(Map.of("exceedOfficeHours", true));
+        }  else {
+        Date punchoutDate = previousAttendance.getPunchInDate();
         punchoutDate.setHours(Integer.parseInt(time.split(":")[0]));
         punchoutDate.setMinutes(Integer.parseInt(time.split(":")[1]));
         punchoutDate.setSeconds(Integer.parseInt("00"));
-
-        previousAttendance.setPunchOutDate(punchoutDate);
-        double hours=DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
-        previousAttendance.setTotalWorkedHours(hours);
-        attendanceRepository.saveAndFlush(previousAttendance);
-
+        double workHours = DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
+          previousAttendance.setPunchOutDate(punchoutDate);
+            previousAttendance.setPunchOutIp(ips);
+            previousAttendance.setTotalWorkedHours(workHours);
+            attendanceRepository.saveAndFlush(previousAttendance);
+        }
+     return  RestResponseDto.INSTANCE().detail(Map.of("exceedOfficeHours",false));
     }
 
     @Override
