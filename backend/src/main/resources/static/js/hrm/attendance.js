@@ -120,17 +120,56 @@ $("#iconToDate").click(function () {
 $('#punchout').click(function (){
     punchout('/attendance/punchOut');
 });
+$("#attendanceTimeForm").submit(function (e) {
+
+
+        var postData = $(this).serializeArray();
+        var formURL = $(this).attr("action");
+
+        $.ajax(
+            {
+                url : formURL,
+                type: "POST",
+                crossDomain: true,
+                data : postData,
+                dataType : "json",
+                success:function(data, textStatus, jqXHR)
+                {
+                    console.log("next day punhout called");
+
+                    if(data.detail.notOfficeHours===true){
+
+                        $('#error-attendancetTime').text("Please Enter officeHours");
+                    }
+                    else{
+
+                        $('#attendanceModal').modal('toggle');
+
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    //if fails
+                    alert('it didnt work');
+                }
+            });
+        e.preventDefault(); //STOP default action
+        e.unbind();
+
+
+});
+
 
 function punchout(url) {
 
-    var positionReq = $.ajax(window.location.origin + url, {
+    var attendanceReq = $.ajax(window.location.origin + url, {
         method: "GET",
         dataType: 'json',
         timeout: 10000,
 
         beforeSend: function () {
-            if (positionReq !== undefined && positionReq != null) {
-                positionReq.abort();
+            if (attendanceReq !== undefined && attendanceReq!= null) {
+                attendanceReq.abort();
             }
         }, success: function (data, status, xhr) {
             console.log("get called");

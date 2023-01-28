@@ -2,6 +2,7 @@ package com.makalu.hrm.service.impl;
 
 
 import com.makalu.hrm.Specification.AttendanceSpecification;
+import com.makalu.hrm.constant.IntegerConstant;
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.exceptions.AttendanceException;
 import com.makalu.hrm.model.AttendanceDto;
@@ -129,20 +130,22 @@ public class AttendanceServiceImp implements AttendanceService {
     public RestResponseDto setPunchinAnotherDay(String time,String ips) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
         int hours=Integer.parseInt(time.split(":")[0]);
-        if(hours<9&&hours>17){
-            return RestResponseDto.INSTANCE().success().detail(Map.of("exceedOfficeHours", true));
+        if(hours <IntegerConstant.OFFICE_START||hours>IntegerConstant.OFFICE_END){
+            return RestResponseDto.INSTANCE().success().detail(Map.of("notOfficeHours", true));
         }  else {
-        Date punchoutDate = previousAttendance.getPunchInDate();
-        punchoutDate.setHours(Integer.parseInt(time.split(":")[0]));
-        punchoutDate.setMinutes(Integer.parseInt(time.split(":")[1]));
-        punchoutDate.setSeconds(Integer.parseInt("00"));
-        double workHours = DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
-          previousAttendance.setPunchOutDate(punchoutDate);
+            Date punchoutDate = previousAttendance.getPunchInDate();
+            punchoutDate.setHours(Integer.parseInt(time.split(":")[0]));
+            punchoutDate.setMinutes(Integer.parseInt(time.split(":")[1]));
+            punchoutDate.setSeconds(Integer.parseInt("00"));
+
+            previousAttendance.setPunchOutDate(punchoutDate);
+            double workHours = DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
             previousAttendance.setPunchOutIp(ips);
             previousAttendance.setTotalWorkedHours(workHours);
             attendanceRepository.saveAndFlush(previousAttendance);
+            return RestResponseDto.INSTANCE().detail(Map.of("notOfficeHours", false));
         }
-     return  RestResponseDto.INSTANCE().detail(Map.of("exceedOfficeHours",false));
+
     }
 
     @Override

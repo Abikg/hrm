@@ -14,7 +14,7 @@ public interface AttendanceService {
 
     boolean isValidToPunchIn(UUID userId);
 
-    void setPunchinAnotherDay(String time,String ip);
+    RestResponseDto setPunchinAnotherDay(String time,String ip);
 
     boolean isValidToPunchOut(UUID userId);
 }
