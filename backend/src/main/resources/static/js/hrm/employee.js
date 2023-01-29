@@ -1,5 +1,4 @@
 window.addEventListener('DOMContentLoaded', (event) => {
-    console.log('DOM fully loaded and parsed');
     listData("employee","api/list", "employee-table")
 });
 function viewEmployee(id, module){
@@ -131,7 +130,6 @@ function approveResignation(id){
                 }
             },
             success: function (data) {
-                console.log("saved");
                 if (data.status === 200) {
                     viewEmployee(data.detail.id,"employee");
                     console.log("saved");
@@ -155,7 +153,6 @@ function exitResignation(id){
                 }
             },
             success: function (data) {
-                console.log("saved");
                 if (data.status === 200) {
                     viewEmployee(data.detail.id,"employee");
                     console.log("saved");

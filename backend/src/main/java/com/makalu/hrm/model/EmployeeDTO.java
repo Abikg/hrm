@@ -12,9 +12,11 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,6 +73,5 @@ public class EmployeeDTO {
     public EmployeeDTO() {
         this.workExperienceDTO.add(new WorkExperienceDTO());
     }
-
 
 }

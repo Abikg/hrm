@@ -26,18 +26,16 @@ $(document).ready(function(){
                 "min-height": "100%"});
         }
     if($("#joinDate").val()){
-        $("#joinDate").val(moment($("#joinDate").val()).format("yyyy/MM/DD"));
+        $("#joinDate").val(moment($("#joinDate").val()).format("YYYY/MM/DD"));
     }
 });
-
+$(".dateIcon").on("click", function(){
+    console.log("clicked");
+    $(this).parent().next().datepicker().datepicker("show");
+});
 $("#joinDate").change(function() {
-    if($(this).val() != null) {
-        let date = moment($(this).val(), 'yyyy/mm/dd').toDate();
+        let date = moment($(this).val(), 'YYYY/MM/DD').toDate();
         $(this).val(date);
-    }
-    else{
-        $(this).val(null);
-    }
 });
 
 $(".inputDate").change(function() {
@@ -82,18 +80,18 @@ function  addWorkExperience(workExperienceCount){
                 " <label class=\"mr-3\">From</label>\n" +
                 " <div class=\"input-group\">\n" +
                 " <div class=\"input-group-prepend\">\n" +
-                "  <span class=\"input-group-text bg-transparent\" id=\"icon\"><i class=\"fas fa-calendar\"></i></span>\n" +
+                "  <span class=\"input-group-text bg-transparent dateIcon\" id=\"icon\"><i class=\"fas fa-calendar\"></i></span>\n" +
                 "  </div>\n" +
-                "  <input type=\"text\" class=\"form-control mydatepicker fromDate\" name=\"workExperienceDTO["+dtoCount+"\].joinDate\" data-date-format=\"yyyy/mm/dd\" required>\n" +
+                "  <input type=\"text\" class=\"form-control mydatepicker fromDate bg-transparent\" name=\"workExperienceDTO["+dtoCount+"\].joinDate\" data-date-format=\"yyyy/mm/dd\" required readonly>\n" +
                 "   </div>\n" +
                 "   </div>\n" +
                 "   <div class=\"form-group ml-0 ml-sm-auto\">\n" +
                 "   <label class=\"mr-3\">To</label>\n" +
                 "   <div class=\"input-group\">\n" +
                 "   <div class=\"input-group-prepend\">\n" +
-                "   <span class=\"input-group-text bg-transparent\" id=\"icon\"><i class=\"fas fa-calendar\"></i></span>\n" +
+                "   <span class=\"input-group-text bg-transparent dateIcon\" id=\"icon\"><i class=\"fas fa-calendar\"></i></span>\n" +
                 "   </div>\n" +
-                "   <input type=\"text\" class=\"form-control mydatepicker toDate\" name=\"workExperienceDTO["+dtoCount+"\].leftDate\" data-date-format=\"yyyy/mm/dd\" required>\n" +
+                "   <input type=\"text\" class=\"form-control mydatepicker toDate bg-transparent\" name=\"workExperienceDTO["+dtoCount+"\].leftDate\" data-date-format=\"yyyy/mm/dd\" required readonly>\n" +
                 "   </div>\n" +
                 "   </div>";
     html +=     "</div>";
@@ -121,5 +119,4 @@ function  addWorkExperience(workExperienceCount){
 }
 function remove(countValue){
     $(".work-experience-content_"+countValue).remove();
-
 }

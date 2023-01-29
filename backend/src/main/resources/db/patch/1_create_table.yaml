@@ -112,6 +112,7 @@ databaseChangeLog:
                       type: varchar(255)
                       constraints:
                         nullable: false
+
       - changeSet:
           id: 2022-12-29-employee-create-table
           author: suvam
@@ -236,82 +237,12 @@ databaseChangeLog:
                         foreignKeyName: fk_approved_by_user_id
                         references: auth_user(id)
 
-  #      - changeSet:
-#          id: 2022-12-29-department-create-table
-#          author: suvam
-#          changes:
-#            - createTable:
-#                tableName: department
-#                columns:
-#                  - column:
-#                      name: id
-#                      type: varchar(36)
-#                      constraints:
-#                        primaryKey: true
-#                        nullable: false
-#                  - column:
-#                      name: created_date
-#                      type: date
-#                      constraints:
-#                        nullable: false
-#                        defaultValue: null
-#                  - column:
-#                      name: last_modified_date
-#                      type: date
-#                      constraints:
-#                        defaultValue: null
-#                  - column:
-#                      name: version
-#                      type: int
-#                      constraints:
-#                        nullable: false
-#                        defaultValue: 0
-#                  - column:
-#                      name: title
-#                      type: varchar(50)
-#                      constraints:
-#                        nullable: false
-#                        unique: true
-#                  - column:
-#                      name: detail
-#                      type: varchar(500)
-#                      constraints:
-#                        nullable: false
-#                  - column:
-#                      name: department_code
-#                      type: varchar(10)
-#                      constraints:
-#                        nullable: false
-#                        unique: true
-
-      -  changeSet:
-           id:  2022-12-29-employee_position_create-table
-           author:  suvam
-           changes:
-             -  createTable:
-                  tableName: employee_position
-                  columns:
-                    - column:
-                        name: employee_id
-                        type: varchar(36)
-                        constraints:
-                          nullable: false
-                          foreignKeyName: fk_employee_id
-                          references: employee(id)
-                    - column:
-                        name: position_id
-                        type: varchar(36)
-                        constraints:
-                          nullable: false
-                          foreignKeyName: fk_position_id
-                          references: position(id)
-
       - changeSet:
-          id: 2023-01-16-work_experience-create-table
+          id: 2022-12-29-department-create-table
           author: suvam
           changes:
             - createTable:
-                tableName: work_experience
+                tableName: department
                 columns:
                   - column:
                       name: id
@@ -337,46 +268,41 @@ databaseChangeLog:
                         nullable: false
                         defaultValue: 0
                   - column:
-                      name: previous_company
-                      type: varchar(255)
+                      name: title
+                      type: varchar(50)
+                      constraints:
+                        nullable: false
+                        unique: true
+                  - column:
+                      name: detail
+                      type: varchar(500)
                       constraints:
                         nullable: false
                   - column:
-                      name: job_title
-                      type: varchar(255)
+                      name: department_code
+                      type: varchar(10)
                       constraints:
                         nullable: false
-                  - column:
-                      name: start_date
-                      type: date
-                      constraints:
-                        nullable: false
-                        defaultValue: false
-                  - column:
-                      name: exit_date
-                      type: date
-                      constraints:
-                        nullable: false
-                        defaultValue: false
+                        unique: true
 
-      - changeSet:
-          id: 2022-12-29-employee_work_experience-table
-          author: suvam
-          changes:
-            - createTable:
-                tableName: employee_work_experience
-                columns:
-                  - column:
-                      name: employee_id
-                      type: varchar(36)
-                      constraints:
-                        nullable: false
-                        foreignKeyName: fk_employee_dep_id
-                        references: employee(id)
-                  - column:
-                      name: work_experience_id
-                      type: varchar(36)
-                      constraints:
-                        nullable: false
-                        foreignKeyName: fk_work_experience_id
-                        references: work_experience(id)
+      -  changeSet:
+           id:  2022-12-29-employee_position_create-table
+           author:  suvam
+           changes:
+             -  createTable:
+                  tableName: employee_position
+                  columns:
+                    - column:
+                        name: employee_id
+                        type: varchar(36)
+                        constraints:
+                          nullable: false
+                          foreignKeyName: fk_employee_id
+                          references: employee(id)
+                    - column:
+                        name: position_id
+                        type: varchar(36)
+                        constraints:
+                          nullable: false
+                          foreignKeyName: fk_position_id
+                          references: position(id)

@@ -50,9 +50,22 @@ function createTable(data, module, tableId) {
                 "data": val.name,
                 "title": val.displayName + "<span></span>",
                 orderable: val.orderable,
-                width: val.width
+                width: val.width,
             }
-        } else {
+        }else if(val.name == "employeeStatus"){
+            tableColumns[key] = {
+                "data": val.name,
+                "title": val.displayName + "<span></span>",
+                orderable: val.orderable,
+            render: function (data, type, row){
+                    if(data == "ACTIVE") {
+                        return '<span class="badge badge-success">' + data + '</span>'
+                    }else if(data == "RESIGNED"){
+                        return '<span class="badge badge-danger">' + data + '</span>'
+                    }
+            }}
+        }
+        else {
             tableColumns[key] = {"data": val.name, "title": val.displayName + "<span></span>", orderable: val.orderable}
         }
     });

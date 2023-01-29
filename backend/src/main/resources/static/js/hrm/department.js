@@ -36,7 +36,6 @@ function deleteDepartment(id, module) {
                 }
             },
             success: function (data, status, xhr) {
-                console.log("saved");
                 if (data.status === 200) {
                     listData("department","api/list", "department-table")
                     // $("#" + id).remove();
@@ -65,7 +64,6 @@ function getDepartmentData(id) {
                 }
             },
             success: function (data, status, xhr) {
-                console.log("saved");
                 if (data.status === 200) {
                     populateDataInForm(data.detail);
                     $('#departmentModal').modal('toggle');
