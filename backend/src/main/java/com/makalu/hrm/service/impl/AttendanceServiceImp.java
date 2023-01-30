@@ -2,7 +2,8 @@ package com.makalu.hrm.service.impl;
 
 
 import com.makalu.hrm.Specification.AttendanceSpecification;
-import com.makalu.hrm.constant.IntegerConstant;
+import com.makalu.hrm.constant.NumericConstant;
+import com.makalu.hrm.converter.AttendanceConverter;
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.exceptions.AttendanceException;
 import com.makalu.hrm.model.AttendanceDto;
@@ -12,6 +13,7 @@ import com.makalu.hrm.service.AttendanceService;
 import com.makalu.hrm.service.UserService;
 import com.makalu.hrm.utils.AuthenticationUtils;
 import com.makalu.hrm.utils.DateUtils;
+import com.makalu.hrm.utils.FieldService;
 import com.makalu.hrm.validation.AttendanceValidation;
 import com.makalu.hrm.validation.error.AttendanceError;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +35,12 @@ public class AttendanceServiceImp implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final UserService userService;
     private final AttendanceValidation attendanceValidation;
-    private final int pageSize=4;
+    private final FieldService fieldService;
+    private final AttendanceConverter attendanceConverter;
 
 
     @Override
-    public RestResponseDto Filter(AttendanceDto attendanceDto){
-        Boolean noDateFilterFlag=true;
+    public RestResponseDto filter(AttendanceDto attendanceDto) {
 
         try {
             if (attendanceDto.getToDate() != null && attendanceDto.getFromDate() != null) {
@@ -46,17 +48,15 @@ public class AttendanceServiceImp implements AttendanceService {
                 if (!error.isValid()) {
                     return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
                 }
-                noDateFilterFlag = false;
             }
+            List<AttendanceDto> list = attendanceConverter.convertToDtoList(attendanceRepository.findAll(new AttendanceSpecification(attendanceDto)));
+            return RestResponseDto.INSTANCE().success().detail(list).column(fieldService.getAttendanceFields());
 
-            Page<PersistentAttendanceEntity> pages =  attendanceRepository.findAll(new AttendanceSpecification(attendanceDto),PageRequest.of(attendanceDto.getPage(),pageSize,Sort.by(Sort.Direction.DESC, "punchInDate")));
-            return RestResponseDto.INSTANCE().success().detail(Map.of("data", pages, "currentPage", attendanceDto.getPage(),
-                    "totalPages", pages.getTotalPages(), "noDateFilterFlag", noDateFilterFlag));
-
-        }catch (Exception ex){
-            return  RestResponseDto.INSTANCE().internalServerError().detail(Map.of("date",attendanceDto));
+        } catch (Exception ex) {
+            return RestResponseDto.INSTANCE().internalServerError().detail(Map.of("data", attendanceDto));
         }
     }
+
     @Transactional
     @Override
     public void punchIn(String ip) {
@@ -74,16 +74,15 @@ public class AttendanceServiceImp implements AttendanceService {
     @Override
     public RestResponseDto punchOut(String ip) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
-        Date today=new Date();
-        double hours=DateUtils.getHours(today, previousAttendance.getPunchInDate());
-        if(hours<8.00) {
+        Date today = new Date();
+        double hours = DateUtils.getHours(today, previousAttendance.getPunchInDate());
+        if (hours < NumericConstant.OFFICE_HOURS) {
             previousAttendance.setPunchOutIp(ip);
             previousAttendance.setPunchOutDate(today);
             previousAttendance.setTotalWorkedHours(hours);
             attendanceRepository.saveAndFlush(previousAttendance);
             return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", false));
-        }
-        else {
+        } else {
             return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", true));
         }
 
@@ -104,7 +103,7 @@ public class AttendanceServiceImp implements AttendanceService {
             throw new AttendanceException("There is no previous punch in record for this user " + AuthenticationUtils.getCurrentUser().getUsername());
         }
 
-        if (previousAttendance.getPunchOutDate() == null||DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date()) ) {
+        if (previousAttendance.getPunchOutDate() == null || DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date())) {
             return previousAttendance;
 
         }
@@ -127,12 +126,12 @@ public class AttendanceServiceImp implements AttendanceService {
 
     @Transactional
     @Override
-    public RestResponseDto setPunchinAnotherDay(String time,String ips) {
+    public RestResponseDto setPunchinAnotherDay(String time, String ips) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
-        int hours=Integer.parseInt(time.split(":")[0]);
-        if(hours <IntegerConstant.OFFICE_START||hours>IntegerConstant.OFFICE_END){
+        int hours = Integer.parseInt(time.split(":")[0]);
+        if (hours < NumericConstant.OFFICE_START || hours > NumericConstant.OFFICE_END) {
             return RestResponseDto.INSTANCE().success().detail(Map.of("notOfficeHours", true));
-        }  else {
+        } else {
             Date punchoutDate = previousAttendance.getPunchInDate();
             punchoutDate.setHours(Integer.parseInt(time.split(":")[0]));
             punchoutDate.setMinutes(Integer.parseInt(time.split(":")[1]));
@@ -157,13 +156,14 @@ public class AttendanceServiceImp implements AttendanceService {
         }
         return true;
     }
-    private String getUserName(UUID userid){
 
-        String userName=userService.findById(userid).getUsername();
-        if(userName!=null)
-          return  userName;
+    private String getUserName(UUID userid) {
 
-        return  "name not found";
+        String userName = userService.findById(userid).getUsername();
+        if (userName != null)
+            return userName;
+
+        return "name not found";
 
     }
 }

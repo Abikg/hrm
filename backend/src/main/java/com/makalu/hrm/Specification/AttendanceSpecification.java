@@ -8,6 +8,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +20,15 @@ public class AttendanceSpecification implements Specification<PersistentAttendan
     @Override
     public Predicate toPredicate(Root<PersistentAttendanceEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
      final List<Predicate> predicateList=new ArrayList<>();
+
       if(attendanceDto.getId()!=null){
         predicateList.add(criteriaBuilder.equal(root.get("user").get("id"),attendanceDto.getId()));
       }
-      if(attendanceDto.getFromDate()!=null){
-          predicateList.add(criteriaBuilder.between(root.get("createdDate"),attendanceDto.getFromDate(),attendanceDto.getToDate()));
+        if(attendanceDto.getFromDate()!=null){
+            predicateList.add(criteriaBuilder.greaterThanOrEqualTo(root.get("punchInDate"),attendanceDto.getFromDate()));
+        }
+      if(attendanceDto.getToDate()!=null){
+          predicateList.add(criteriaBuilder.lessThanOrEqualTo(root.get("punchInDate"),attendanceDto.getToDate()));
       }
         return criteriaBuilder.and(predicateList.toArray(new Predicate[]{}));
     }

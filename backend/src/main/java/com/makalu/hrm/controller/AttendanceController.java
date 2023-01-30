@@ -26,6 +26,7 @@ public class AttendanceController {
     private final AttendanceService attendanceService;
     private final UserService userService;
 
+
     @GetMapping("/punchIn")
     public String punchIn(HttpServletRequest request) {
         try {
@@ -71,14 +72,15 @@ public class AttendanceController {
             return "attendance/attendance_main";
         }
     }
+    @ResponseBody
     @GetMapping("/filter")
-    public String AttendanceList(AttendanceDto attendanceDto, ModelMap map) {
+    public RestResponseDto AttendanceList(AttendanceDto attendanceDto) {
         if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.Filter(attendanceDto));
+            return attendanceService.filter(attendanceDto);
         } else{
             attendanceDto.setId(AuthenticationUtils.getCurrentUser().getUserId());
-            map.addAttribute(ParameterConstant.RESPONSE, attendanceService.Filter(attendanceDto));
+            return attendanceService.filter(attendanceDto);
         }
-        return "attendance/UserAttendancelist";
+
     }
 }
