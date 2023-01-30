@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Table(name="employee_image")
+@Table(name = "employee_image")
 public class PersistentEmployeeImageEntity extends AbstractEntity {
 
     @Column(nullable = false, unique = true)
@@ -21,7 +21,7 @@ public class PersistentEmployeeImageEntity extends AbstractEntity {
     @Column(nullable = false)
     private String type;
 
-    @Type(type="org.hibernate.type.BinaryType")
+    @Type(type = "org.hibernate.type.BinaryType")
     @Column(nullable = false)
     private byte[] image;
 }

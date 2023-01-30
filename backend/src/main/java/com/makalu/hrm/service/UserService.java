@@ -3,6 +3,7 @@ package com.makalu.hrm.service;
 import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.RestResponseDto;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;

@@ -15,10 +15,11 @@ import javax.persistence.*;
 
 import java.util.Date;
 import java.util.List;
+
 @Entity
 @Data
 @Table(name = "employee")
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @ToString(exclude = {"employeeId"})
 public class PersistentEmployeeEntity extends AbstractEntity {
@@ -42,15 +43,15 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     private Date joinDate;
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb",name = "contact_detail")
+    @Column(columnDefinition = "jsonb", name = "contact_detail")
     private ContactDetailDTO contactDetail;
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb",name = "personal_detail")
+    @Column(columnDefinition = "jsonb", name = "personal_detail")
     private PersonalDetailDTO personalDetail;
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb",name = "work_experience")
+    @Column(columnDefinition = "jsonb", name = "work_experience")
     private List<WorkExperienceDTO> workExperience;
 
     @Column
@@ -81,8 +82,7 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     private PersistentEmployeeImageEntity image;
 
 
-
-    public String getEmployeeId(){
+    public String getEmployeeId() {
         return new StringBuilder().append("MS").append(employeeId).toString();
     }
 

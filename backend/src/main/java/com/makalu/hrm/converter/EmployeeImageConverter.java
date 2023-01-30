@@ -5,17 +5,17 @@ import com.makalu.hrm.model.EmployeeImageDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmployeeImageConverter extends Convertable<PersistentEmployeeImageEntity, EmployeeImageDTO>{
+public class EmployeeImageConverter extends Convertable<PersistentEmployeeImageEntity, EmployeeImageDTO> {
 
     @Override
     public PersistentEmployeeImageEntity convertToEntity(EmployeeImageDTO dto) {
-        return this.copyConvertToEntity(dto,new PersistentEmployeeImageEntity());
+        return this.copyConvertToEntity(dto, new PersistentEmployeeImageEntity());
     }
 
     @Override
     public EmployeeImageDTO convertToDto(PersistentEmployeeImageEntity entity) {
-        if(entity == null){
-            return  null;
+        if (entity == null) {
+            return null;
         }
         EmployeeImageDTO dto = new EmployeeImageDTO();
         dto.setId(entity.getId());
@@ -27,7 +27,7 @@ public class EmployeeImageConverter extends Convertable<PersistentEmployeeImageE
 
     @Override
     public PersistentEmployeeImageEntity copyConvertToEntity(EmployeeImageDTO dto, PersistentEmployeeImageEntity entity) {
-        if(dto == null || entity == null){
+        if (dto == null || entity == null) {
             return null;
         }
 

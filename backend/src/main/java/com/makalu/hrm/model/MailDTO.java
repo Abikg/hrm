@@ -9,12 +9,12 @@ public class MailDTO {
 
     private String username;
 
-    private String  password;
+    private String password;
 
 
-    public void setMessage(String username, String password){
+    public void setMessage(String username, String password) {
         this.message = "You have been registered to " +
-                "MakaluHRM with username: "+username+" password: "+password;
+                "MakaluHRM with username: " + username + " password: " + password;
     }
 
 }

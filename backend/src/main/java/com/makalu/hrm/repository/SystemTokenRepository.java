@@ -10,5 +10,5 @@ public interface SystemTokenRepository extends JpaRepository<PersistentSystemTok
 
     PersistentSystemTokenEntity findByToken(String token);
 
-    PersistentSystemTokenEntity findByTokenAndTokenType(String token , TokenType tokenType);
+    PersistentSystemTokenEntity findByTokenAndTokenType(String token, TokenType tokenType);
 }

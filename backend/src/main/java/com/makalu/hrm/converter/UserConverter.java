@@ -5,15 +5,15 @@ import com.makalu.hrm.model.UserDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserConverter extends Convertable<PersistentUserEntity, UserDTO>{
+public class UserConverter extends Convertable<PersistentUserEntity, UserDTO> {
     @Override
     public PersistentUserEntity convertToEntity(UserDTO dto) {
-        return this.copyConvertToEntity(dto,new PersistentUserEntity());
+        return this.copyConvertToEntity(dto, new PersistentUserEntity());
     }
 
     @Override
     public UserDTO convertToDto(PersistentUserEntity entity) {
-        if(entity == null){
+        if (entity == null) {
             return null;
         }
 
@@ -32,17 +32,17 @@ public class UserConverter extends Convertable<PersistentUserEntity, UserDTO>{
 
     @Override
     public PersistentUserEntity copyConvertToEntity(UserDTO dto, PersistentUserEntity entity) {
-       if(dto == null || entity == null){
-           return null;
-       }
+        if (dto == null || entity == null) {
+            return null;
+        }
 
-       entity.setUsername(dto.getUsername());
-       entity.setPassword(dto.getPassword());
-       entity.setEnabled(dto.isEnabled());
-       entity.setPasswordExpired(dto.isPasswordExpired());
-       entity.setAccountExpired(dto.isAccountExpired());
-       entity.setAccountLocked(dto.isAccountLocked());
-       entity.setUserType(dto.getUserType());
-       return entity;
+        entity.setUsername(dto.getUsername());
+        entity.setPassword(dto.getPassword());
+        entity.setEnabled(dto.isEnabled());
+        entity.setPasswordExpired(dto.isPasswordExpired());
+        entity.setAccountExpired(dto.isAccountExpired());
+        entity.setAccountLocked(dto.isAccountLocked());
+        entity.setUserType(dto.getUserType());
+        return entity;
     }
 }

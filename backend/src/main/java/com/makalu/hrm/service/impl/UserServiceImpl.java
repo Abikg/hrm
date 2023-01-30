@@ -1,6 +1,5 @@
 package com.makalu.hrm.service.impl;
 
-import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.repository.UserRepository;
 import com.makalu.hrm.service.UserService;
@@ -29,14 +28,13 @@ public class UserServiceImpl implements UserService {
     private final MailService mailService;
     private final PasswordUtil passwordUtil = new PasswordUtil();
 
-
     @Override
     @Transactional
     public RestResponseDto createEmployeeUser(String email) {
         try {
             PersistentUserEntity userEntity = new PersistentUserEntity();
             int len = 10;
-            String randomPassword =  passwordUtil.generatePassword(len);
+            String randomPassword = passwordUtil.generatePassword(len);
             userEntity.setUsername(email);
             userEntity.setPassword(passwordEncoder.encode(randomPassword));
             userEntity.setEnabled(true);
@@ -45,17 +43,16 @@ public class UserServiceImpl implements UserService {
             userEntity.setPasswordExpired(false);
             userEntity.setUserType(UserType.EMPLOYEE);
 
-            RestResponseDto rdto = mailService.sendMail(userEntity.getUsername(),"HRM Registeration",randomPassword);
+            RestResponseDto rdto = mailService.sendMail(userEntity.getUsername(), "HRM Registeration", randomPassword);
 
-            if(rdto.getStatus() !=200){
-               return RestResponseDto.INSTANCE().internalServerError();
+            if (rdto.getStatus() != 200) {
+                return RestResponseDto.INSTANCE().internalServerError();
             }
             return RestResponseDto.INSTANCE().success()
                     .detail(userConverter.convertToDto(userRepository.saveAndFlush(userEntity)));
 
-        }
-        catch (Exception ex) {
-            log.error("Error while creating user",ex);
+        } catch (Exception ex) {
+            log.error("Error while creating user", ex);
             return RestResponseDto.INSTANCE().internalServerError();
         }
     }
@@ -68,7 +65,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public RestResponseDto getResponseById(UUID employeeId) {
         PersistentUserEntity userEntity = userRepository.findById(employeeId).orElse(null);
-        if(userEntity == null){
+        if (userEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Employee not found");
         }
 

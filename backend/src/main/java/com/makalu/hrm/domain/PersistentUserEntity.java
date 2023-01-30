@@ -7,12 +7,12 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "auth_user", indexes = { @Index(name = "user_index_username", columnList = "username")})
+@Table(name = "auth_user", indexes = {@Index(name = "user_index_username", columnList = "username")})
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
-public class PersistentUserEntity extends AbstractEntity{
+@EqualsAndHashCode(callSuper = false)
+public class PersistentUserEntity extends AbstractEntity {
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;

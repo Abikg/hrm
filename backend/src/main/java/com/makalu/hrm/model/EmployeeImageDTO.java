@@ -2,7 +2,6 @@ package com.makalu.hrm.model;
 
 import lombok.Data;
 
-import javax.persistence.Lob;
 import java.util.UUID;
 
 @Data

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
@@ -39,7 +40,7 @@ public abstract class AbstractEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private PersistentUserEntity createdBy;*/
 
-    public void setId(UUID id){
+    public void setId(UUID id) {
         this.id = id;
     }
 
