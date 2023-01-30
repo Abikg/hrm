@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -74,5 +75,15 @@ public class UserServiceImpl implements UserService {
         return RestResponseDto.INSTANCE()
                 .success()
                 .detail(userConverter.convertToDto(userEntity));
+    }
+
+    @Override
+    public List<PersistentUserEntity> findAllByUserType(UserType userType) {
+        return null;
+    }
+
+    @Override
+    public List<PersistentUserEntity> findALl() {
+        return null;
     }
 }
