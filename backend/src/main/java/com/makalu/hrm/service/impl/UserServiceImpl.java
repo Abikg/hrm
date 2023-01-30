@@ -28,7 +28,6 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private  final UserConverter userConverter;
-    private final UserConverter userConverter;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final PasswordUtil passwordUtil = new PasswordUtil();

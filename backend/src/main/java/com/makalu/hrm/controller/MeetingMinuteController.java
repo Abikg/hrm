@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.UUID;
 
 
@@ -24,11 +25,11 @@ public class MeetingMinuteController {
 
     @GetMapping("/employees/list")
     public String showEmployeesMeeting(ModelMap map) {
-
         map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.EMPLOYEE.name().toUpperCase());
         map.addAttribute(ParameterConstant.MEETING_LIST, meetingMinuteMinuteService.findAll(MeetingType.EMPLOYEE));
         return "meetingMinute/list";
     }
+
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/bod/list")
     public String List(ModelMap map) {
@@ -36,22 +37,19 @@ public class MeetingMinuteController {
         map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.BOD.name().toUpperCase());
         return "meetingMinute/list";
     }
+
     @GetMapping("/employeeForm/{meetingtype}")
     public String showform(@PathVariable MeetingType meetingtype, ModelMap map) {
         if (MeetingType.EMPLOYEE.name().equals(meetingtype.name())) {
-
             map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), meetingtype.name().toUpperCase());
             map.addAttribute(ParameterConstant.ATTENDEDBY, userService.findALl());
             map.addAttribute(ParameterConstant.MEETIINGTYPEURL, "/meetingMinutes/employee/save");
-
         } else if (MeetingType.BOD.name().equals(meetingtype.name())
                 && AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
-
             map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), meetingtype.name().toUpperCase());
             map.addAttribute(ParameterConstant.ATTENDEDBY, userService.findAllByUserType(UserType.SUPER_ADMIN));
             map.addAttribute(ParameterConstant.MEETIINGTYPEURL, "/meetingMinutes/bod/save");
         }
-
         return "meetingMinute/meetingForm";
     }
 
@@ -61,18 +59,18 @@ public class MeetingMinuteController {
         map.addAttribute(ParameterConstant.RESPONSE, meetingMinuteMinuteService.save(meetingDto));
         return "meetingMinute/meetingForm";
     }
+
     @PostMapping("/employee/save")
     public String saveEmployees(MeetingMinutesDto meetingDto, ModelMap map) {
         map.addAttribute(ParameterConstant.RESPONSE, meetingMinuteMinuteService.save(meetingDto));
         return "meetingMinute/meetingForm";
-
     }
+
     @GetMapping("/showMinute/{id}")
     public String show(@PathVariable UUID id, ModelMap map) {
         map.addAttribute(ParameterConstant.MINUTE, meetingMinuteMinuteService.findById(id).getDetail());
         return "meetingMinute/minute";
     }
-
 
 }
 

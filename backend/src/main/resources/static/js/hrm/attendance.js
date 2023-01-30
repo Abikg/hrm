@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-
     listData("attendance","filter","attendance-table");
 })
 

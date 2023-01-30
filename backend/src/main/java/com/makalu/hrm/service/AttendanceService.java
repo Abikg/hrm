@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public interface AttendanceService {
 
-
     RestResponseDto filter(AttendanceDto attendanceDto);
+
     void punchIn(String ip);
 
     RestResponseDto   punchOut(String ip);
