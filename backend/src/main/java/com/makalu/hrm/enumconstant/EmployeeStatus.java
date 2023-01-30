@@ -1,19 +1,21 @@
 package com.makalu.hrm.enumconstant;
 
-public enum UserType {
-    SUPER_ADMIN("Super Admin"),
-    ADMIN("Admin"),
-    MANAGER("Manager"),
-    EMPLOYEE("Employee");
 
+
+public enum EmployeeStatus {
+    ACTIVE("active"),
+    RESIGNED("resigned");
+    
     private final String value;
 
-    UserType(String value){
+
+
+    EmployeeStatus(String value){
         this.value = value;
     }
 
-    public static UserType getEnum(String val){
-        for (UserType status : values()){
+    public static EmployeeStatus getEnum(String val){
+        for (EmployeeStatus status : values()){
             if (status.value.equals(val)){
                 return status;
             }
@@ -31,4 +33,6 @@ public enum UserType {
     public String toString() {
         return this.value;
     }
+    
+
 }

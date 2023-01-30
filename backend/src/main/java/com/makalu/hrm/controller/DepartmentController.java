@@ -4,6 +4,7 @@ import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.model.DepartmentDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.DepartmentService;
+import com.makalu.hrm.utils.FieldService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,8 @@ import java.util.UUID;
 public class DepartmentController {
 
     private final DepartmentService departmentService;
+
+    private final FieldService fieldService;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
@@ -44,7 +47,7 @@ public class DepartmentController {
     @PreAuthorize("hasRole('AUTHENTICATED')")
     @ResponseBody
     public ResponseEntity<RestResponseDto> list(){
-        return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(departmentService.list()));
+        return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(departmentService.list()).column(fieldService.getDepartmentFields()));
     }
 
     @PostMapping("/save")

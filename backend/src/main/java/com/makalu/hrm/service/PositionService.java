@@ -18,4 +18,5 @@ public interface PositionService {
     RestResponseDto update(PositionDTO positionDTO);
 
     RestResponseDto delete(UUID positionId);
+
 }

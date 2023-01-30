@@ -1,6 +1,6 @@
 databaseChangeLog:
       - changeSet:
-          id: 2022-12-29-user-recreate2-table
+          id: 2022-12-29-user-create-table
           author: suvam
           changes:
             - createTable:
@@ -113,6 +113,200 @@ databaseChangeLog:
                       constraints:
                         nullable: false
       - changeSet:
+          id: 2022-12-29-department-create-table
+          author: suvam
+          changes:
+            - createTable:
+                tableName: department
+                columns:
+                  - column:
+                      name: id
+                      type: varchar(36)
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: created_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: null
+                  - column:
+                      name: last_modified_date
+                      type: date
+                      constraints:
+                        defaultValue: null
+                  - column:
+                      name: version
+                      type: int
+                      constraints:
+                        nullable: false
+                        defaultValue: 0
+                  - column:
+                      name: title
+                      type: varchar(50)
+                      constraints:
+                        nullable: false
+                        unique: true
+                  - column:
+                      name: detail
+                      type: varchar(500)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: department_code
+                      type: varchar(10)
+                      constraints:
+                        nullable: false
+                        unique: true
+
+      - changeSet:
+          id: 2023-01-13-employee_image-create-table
+          author: suvam
+          changes:
+            - createTable:
+                tableName: employee_image
+                columns:
+                  - column:
+                      name: id
+                      type: varchar(36)
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: created_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: null
+                  - column:
+                      name: last_modified_date
+                      type: date
+                      constraints:
+                        defaultValue: null
+                  - column:
+                      name: version
+                      type: int
+                      constraints:
+                        nullable: false
+                        defaultValue: 0
+                  - column:
+                      name: name
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                        unique: true
+                  - column:
+                      name: type
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: image
+                      type: bytea
+                      constraints:
+                        nullable: false
+                        defaultValue: false
+
+      - changeSet:
+          id: 2022-12-29-department-create-table
+          author: suvam
+          changes:
+            - createTable:
+                tableName: department
+                columns:
+                  - column:
+                      name: id
+                      type: varchar(36)
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: created_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: null
+                  - column:
+                      name: last_modified_date
+                      type: date
+                      constraints:
+                        defaultValue: null
+                  - column:
+                      name: version
+                      type: int
+                      constraints:
+                        nullable: false
+                        defaultValue: 0
+                  - column:
+                      name: title
+                      type: varchar(50)
+                      constraints:
+                        nullable: false
+                        unique: true
+                  - column:
+                      name: detail
+                      type: varchar(500)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: department_code
+                      type: varchar(10)
+                      constraints:
+                        nullable: false
+                        unique: true
+
+
+      - changeSet:
+          id: 2023-01-13-employee_image-create-table
+          author: suvam
+          changes:
+            - createTable:
+                tableName: employee_image
+                columns:
+                  - column:
+                      name: id
+                      type: varchar(36)
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: created_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: null
+                  - column:
+                      name: last_modified_date
+                      type: date
+                      constraints:
+                        defaultValue: null
+                  - column:
+                      name: version
+                      type: int
+                      constraints:
+                        nullable: false
+                        defaultValue: 0
+                  - column:
+                      name: name
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                        unique: true
+                  - column:
+                      name: type
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: image
+                      type: bytea
+                      constraints:
+                        nullable: false
+                        defaultValue: false
+
+
+      - changeSet:
           id: 2022-12-29-employee-create-table
           author: suvam
           changes:
@@ -143,267 +337,96 @@ databaseChangeLog:
                         nullable: false
                         defaultValue: 0
                   - column:
+                      name: employee_id
+                      type: bigint
+                      constraints:
+                        nullable: false
+                        unique: false
+                  - column:
+                      name: employee_status
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                        defaultValue: 'ACTIVE'
+                  - column:
                       name: fullname
                       type: varchar(255)
                       constraints:
                         nullable: false
-                        unique: true
-                  - column:
-                      name: address
-                      type: varchar(255)
-                      constraints:
-                        nullable: false
-                  - column:
-                      name: phone
-                      type: varchar(255)
-                      constraints:
-                        nullable: false
-                        defaultValue: false
+                        unique: false
                   - column:
                       name: email
                       type: varchar(255)
                       constraints:
                         nullable: false
                   - column:
-                      name: emp_image
-                      type: varchar(255)
+                      name: join_date
+                      type: date
                       constraints:
                         nullable: false
+                  - column:
+                      name: personal_detail
+                      type: jsonb
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: contact_detail
+                      type: jsonb
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: work_experience
+                      type: jsonb
+                      constraints:
+                        nullable: true
                   - column:
                       name: user_id
                       type: varchar(36)
                       constraints:
-                        nullable: false
+                        nullable: true
                         foreignKeyName: fk_user_id
                         references: auth_user(id)
-
-#      - changeSet:
-#          id: 2022-12-29-department-create-table
-#          author: suvam
-#          changes:
-#            - createTable:
-#                tableName: department
-#                columns:
-#                  - column:
-#                      name: id
-#                      type: varchar(36)
-#                      constraints:
-#                        primaryKey: true
-#                        nullable: false
-#                  - column:
-#                      name: created_date
-#                      type: date
-#                      constraints:
-#                        nullable: false
-#                        defaultValue: null
-#                  - column:
-#                      name: last_modified_date
-#                      type: date
-#                      constraints:
-#                        defaultValue: null
-#                  - column:
-#                      name: version
-#                      type: int
-#                      constraints:
-#                        nullable: false
-#                        defaultValue: 0
-#                  - column:
-#                      name: title
-#                      type: varchar(50)
-#                      constraints:
-#                        nullable: false
-#                        unique: true
-#                  - column:
-#                      name: detail
-#                      type: varchar(500)
-#                      constraints:
-#                        nullable: false
-#                  - column:
-#                      name: department_code
-#                      type: varchar(10)
-#                      constraints:
-#                        nullable: false
-#                        unique: true
-
-      -  changeSet:
-           id:  2022-12-29-employee_position_create-table
-           author:  suvam
-           changes:
-             -  createTable:
-                  tableName: employee_position
-                  columns:
-                    - column:
-                        name: employee_id
-                        type: varchar(36)
-                        constraints:
-                          nullable: false
-                          foreignKeyName: fk_employee_id
-                          references: employee(id)
-                    - column:
-                        name: position_id
-                        type: varchar(36)
-                        constraints:
-                          nullable: false
-                          foreignKeyName: fk_position_id
-                          references: position(id)
-
-
-      -  changeSet:
-           id: 2023-01-10 attendance_table
-           author : keshab
-           changes:
-             -  createTable:
-                  tableName: attendance
-                  columns:
-                    - column:
-                        name: id
-                        type: varchar(36)
-                        constraints:
-                         primaryKey: true
-                         nullable: false
-                    - column:
-                        name: created_date
-                        type: date
-                        constraints:
-                          defaultValue: true
-
-                    - column:
-                        name: last_modified_date
-                        type: date
-                        constraints:
-                          defaultValue: null
-
-                    - column:
-                        name: version
-                        type: int
-                        constraints:
-                          nullable: false
-
-                    - column:
-                        name: punch_in_date
-                        type: timestamp
-                        constraints:
-                          nullable: true
-
-                    - column:
-                        name: punch_in_ip
-                        type: varchar(36)
-                        constraints:
-                          nullable: true
-                    - column:
-                        name: punch_out_date
-                        type: timestamp
-                        constraints:
-                           nullable: true
-                    - column:
-                        name: punch_out_ip
-                        type: varchar(36)
-                        constraints:
-                          nullable: true
-                    - column:
-                        name: user_id
-                        type: varchar(36)
-                        constraints:
-                          nullable: false
-                          foreignKeyName: fk_attendance_user_id
-                          references: auth_user(id)
-                    - column:
-                        name: total_worked_hours
-                        type: double
-                        constraints:
-                          primaryKey: true
-                          nullable: true
-
-
-
-      - changeSet:
-          id: 2023-01-16-meetingType-create-table
-          author: keshab
-          changes:
-            - createTable:
-                tableName: meeting_minutes
-                columns:
                   - column:
-                      name: id
+                      name: image_id
                       type: varchar(36)
                       constraints:
-                        primaryKey: true
-                        nullable: false
+                        nullable: true
+                        foreignKeyName: fk_image_id
+                        references: employee_image(id)
                   - column:
-                      name: created_date
+                      name: department_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: false
+                        foreignKeyName: fk_department_id
+                        references: department(id)
+                  - column:
+                      name: position_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: false
+                        foreignKeyName: fk_position_id
+                        references: position(id)
+                  - column:
+                      name: resignation_reason
+                      type: varchar(255)
+                      constraints:
+                        nullable: true
+                  - column:
+                      name: resignation_date
                       type: date
                       constraints:
-                        nullable: false
-                        defaultValue: null
+                        nullable: true
                   - column:
-                      name: last_modified_date
+                      name: exit_date
                       type: date
                       constraints:
-                        defaultValue: null
+                        nullable: true
                   - column:
-                      name: version
-                      type: int
+                      name: approved_by_id
+                      type: varchar(36)
                       constraints:
-                        nullable: false
-                        defaultValue: 0
-                  - column:
-                      name: title
-                      type: varchar(200)
-                      constraints:
-                       nullable: false
-
-                  - column:
-                      name: meeting_date
-                      type: date
-                      constraints:
-                        nullable: false
-
-                  - column:
-                      name: minutes
-                      type: text
-                      constraints:
-                        nullable: false
-
-                  - column:
-                      name: meeting_type
-                      type: varchar(20)
-                      constraints:
-                        nullable: false
-
-                  - column:
-                      name: created_by_id
-                      type: varchar(200)
-                      constraints:
-                        nullable: false
-                        foreignKeyName: fk_meeting_minute_created_by_id
+                        nullable: true
+                        foreignKeyName: fk_approved_by_user_id
                         references: auth_user(id)
-
-
-
-      - changeSet:
-          id: 2022-12-29-meeting_minute_user_create-table
-          author: keshab
-          changes:
-            - createTable:
-                tableName: meeting_minutes_user
-                columns:
-                  - column:
-                      name: meeting_id
-                      type: varchar(36)
-                      constraints:
-                        nullable: false
-                        foreignKeyName: fk_meeting_minutes_id
-                        references: meeting_minutes(id)
-                  - column:
-                      name: user_id
-                      type: varchar(36)
-                      constraints:
-                        nullable: false
-                        foreignKeyName: fk_meeting_minute_user_id
-                        references: auth_user(id)
-
-
-
-
-
 

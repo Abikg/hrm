@@ -117,4 +117,5 @@ public class DepartmentServiceImpl implements DepartmentService {
             return RestResponseDto.INSTANCE().internalServerError();
         }
     }
+
 }

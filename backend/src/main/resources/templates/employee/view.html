@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee</title>
+</head>
+<body layout:fragment="content">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-10">
+                <h1>Employee View</h1>
+            </div>
+            <div class="col-sm-2">
+                <a th:href="@{/employee/list}">
+                    <button  class="btn btn-primary btn-sm pull-right">Back</button></a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content" style="background-color: #eee;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <div th:if="${employee.employeeImage != null}" th:with="imageData=${employee.employeeImage.image}">
+                            <img th:src="'data:'+${employee.employeeImage.type}+';base64,' + ${imageUtil.getImageData(imageData)}" alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 180px; height: 180px;">
+                        </div>
+                        <div th:unless="${employee.employeeImage != null}">
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 150px;">
+                        </div>
+                        <h5 class="my-3 d-inline-block" th:text="${employee.fullname}"></h5>
+                        <span  th:if="${employee.employeeStatus.name() == 'ACTIVE'}" class="badge badge-success">Active</span>
+                        <span  th:unless="${employee.employeeStatus.name() == 'ACTIVE'}" class="badge badge-danger">Resigned</span>
+                        <p class="text-muted mb-1" th:text="${employee.positionName}"></p>
+                        <p class="text-muted mb-4" th:text="${employee.contactDetailDTO.contactAddress}"></p>
+                    </div>
+                </div>
+                <div class="card" th:if="${employee.resignationReason == null}">
+                    <button id="add-new-employee-resignation" th:onclick="createResignation([[${employee.id}]])"
+                            class="btn btn-primary btn-sm w-100">Create Resignation</button>
+                </div>
+                <div class="card" th:unless="${employee.resignationReason == null }">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mt-2">
+                                <p class="mb-0">Resignation Details</p>
+                            </div>
+                            <div class="col-sm-12 mt-2">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0">Reason</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted mb-0"  th:text="${employee.resignationReason}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0">Resignation Date</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted mb-0" id="resDate" th:text="${employee.resignationDate}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0">Exit Date</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted mb-0" id="resExitDate" th:text="${employee.exitDate}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <button th:if="${employee.employeeStatus.name() == 'ACTIVE'}" id="edit-employee-resignation" th:onclick="editResignation([[${employee.id}]])"
+                                        class="btn btn-secondary btn-sm w-100">Edit Resignation</button>
+                                <p      th:unless="${employee.employeeStatus.name() == 'ACTIVE'}" class="text-success">Resignation Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" th:if="${employee.approvedById == null and employee.resignationReason != null}" id="approve-resignation" th:onclick="approveResignation([[${employee.id}]])"
+                        class="btn btn-warning btn-sm w-100">Approve Resignation</button>
+                <button type="button" th:if="${employee.approvedById != null and employee.employeeStatus.name() == 'ACTIVE'}" id="exit-resignation" th:onclick="exitResignation([[${employee.id}]])"
+                        class="btn btn-danger btn-sm w-100">Exit Resignation</button>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Employee ID</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${employee.employeeId}"></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${employee.fullname}"></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${employee.email}"></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Department</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${employee.departmentName}"></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Position</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${employee.positionName}"></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Join Date</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" id="joinDate" th:text="${employee.joinDate}"></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="mb-0">Contact Details</p>
+                            </div>
+                            <div class="col-sm-12 custom-card-layout mt-2">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Phone</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.contactDetailDTO.contactPhone}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Email</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.contactDetailDTO.contactEmail}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Address</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.contactDetailDTO.contactAddress}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12 mt-2">
+                                <p class="mb-0">Personal Details</p>
+                            </div>
+                            <div class="col-sm-12 custom-card-layout mt-2">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">DOB</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.personalDetailDTO.dob}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Age</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.personalDetailDTO.age}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Gender</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:if="${employee.personalDetailDTO.gender == 'male'}" th:text="Male"></p>
+                                        <p class="text-muted mb-0" th:unless="${employee.personalDetailDTO.gender == 'male'}" th:text="Female"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Marital Status</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:if="${employee.personalDetailDTO.maritalStatus == 'married'}" th:text="Married"></p>
+                                        <p class="text-muted mb-0" th:unless="${employee.personalDetailDTO.maritalStatus == 'married'}" th:text="Unmarried"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="mb-0">Work Experience</p>
+                            </div>
+                            <div class="col-sm-12 custom-card-layout mt-2" th:each="we, itemStat: ${employee.workExperienceDTO}">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Previous Company</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.workExperienceDTO[__${itemStat.index}__].previousCompany}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Job Title</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.workExperienceDTO[__${itemStat.index}__].jobTitle}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">From</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.workExperienceDTO[__${itemStat.index}__].joinDate}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">To</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.workExperienceDTO[__${itemStat.index}__].leftDate}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Job Detail</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0" th:text="${employee.workExperienceDTO[__${itemStat.index}__].jobDesc}"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="employeeResignationModal" tabindex="-1" role="dialog" aria-labelledby="employeeResignationModal" aria-hidden="true">
+        <form id="employeeResignationForm" action="" th:data-action-base-url="@{/employee/}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="employeeResignationModalLabel">Create Resignation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="employeeResId">
+                        <div class="form-group">
+                            <label for="resignationReason" class="col-form-label">Resignation Reason</label>
+                            <textarea name="resignationReason" class="form-control" id="resignationReason" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Resignation Date</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text dateIcon bg-transparent" id="icon"><i class="fas fa-calendar"></i></span>
+                                </div>
+                                <input class="form-control mydatepicker rawDate" name="resignationDate" id="resignationDate" data-date-format="yyyy/mm/dd" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Exit Date</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text dateIcon bg-transparent" id="icon"><i class="fas fa-calendar"></i></span>
+                                </div>
+                                <input class="form-control mydatepicker rawDate" name="exitDate" id="exitDate" data-date-format="yyyy/mm/dd" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" id="btn-save-employee-resignation" class="btn btn-primary">Save Resignation</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<script type="text/javascript" th:src="@{/js/hrm/employee.js}"></script>
+</body>
+</html>

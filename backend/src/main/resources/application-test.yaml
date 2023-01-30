@@ -5,5 +5,21 @@ spring:
     restart:
       enabled: true
   datasource:
-    driver-class-name: "org.testcontainers.jdbc.ContainerDatabaseDriver"
-    url: "jdbc:tc:postgresql:11.1:///integration-tests-db"
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:init.sql'
+    username: sa
+    password:
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: testappmailservice49@gmail.com
+    password: qnqqnbomunbqwrog
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false
