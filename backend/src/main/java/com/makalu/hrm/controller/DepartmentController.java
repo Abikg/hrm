@@ -28,16 +28,16 @@ public class DepartmentController {
 
     @GetMapping("/")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public String index(){
+    public String index() {
         return "redirect:/department/list";
     }
 
     @GetMapping("/list")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public String list(ModelMap map){
+    public String list(ModelMap map) {
         try {
             map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Error occurred in get department", ex);
         }
         return "department/list";
@@ -46,35 +46,35 @@ public class DepartmentController {
     @GetMapping("/api/list")
     @PreAuthorize("hasRole('AUTHENTICATED')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> list(){
+    public ResponseEntity<RestResponseDto> list() {
         return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(departmentService.list()).column(fieldService.getDepartmentFields()));
     }
 
     @PostMapping("/save")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> save(@RequestBody DepartmentDTO departmentDTO){
+    public ResponseEntity<RestResponseDto> save(@RequestBody DepartmentDTO departmentDTO) {
         return ResponseEntity.ok().body(departmentService.save(departmentDTO));
     }
 
     @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> getById(@PathVariable("id") UUID departmentId){
+    public ResponseEntity<RestResponseDto> getById(@PathVariable("id") UUID departmentId) {
         return ResponseEntity.ok(departmentService.getResponseById(departmentId));
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> update(@RequestBody DepartmentDTO departmentDTO, RedirectAttributes redirectAttributes){
+    public ResponseEntity<RestResponseDto> update(@RequestBody DepartmentDTO departmentDTO, RedirectAttributes redirectAttributes) {
         return ResponseEntity.ok(departmentService.update(departmentDTO));
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> delete(@PathVariable("id") UUID departmentId){
+    public ResponseEntity<RestResponseDto> delete(@PathVariable("id") UUID departmentId) {
         return ResponseEntity.ok(departmentService.delete(departmentId));
     }
 

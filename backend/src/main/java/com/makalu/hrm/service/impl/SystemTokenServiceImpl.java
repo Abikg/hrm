@@ -44,7 +44,7 @@ public class SystemTokenServiceImpl implements SystemTokenService {
     public PersistentSystemTokenEntity generateEmailVerification(String userId) {
         try {
             return generate(TokenType.EMAIL_VERIFICATION, userId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("error on generateEmailVerification", ex);
             throw ex;
         }
@@ -54,7 +54,7 @@ public class SystemTokenServiceImpl implements SystemTokenService {
     public PersistentSystemTokenEntity generatePasswordReset(String userId) {
         try {
             return generate(TokenType.RESET_PASSWORD, userId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("error on generatePasswordReset", ex);
             throw ex;
         }
@@ -90,7 +90,7 @@ public class SystemTokenServiceImpl implements SystemTokenService {
         try {
             PersistentSystemTokenEntity systemToken = systemTokenRepository.findByTokenAndTokenType(token, tokenType);
             return validate(systemToken, tokenType, associateId, delete);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("error on validate", ex);
             throw ex;
         }
@@ -101,7 +101,7 @@ public class SystemTokenServiceImpl implements SystemTokenService {
         try {
             PersistentSystemTokenEntity systemToken = systemTokenRepository.findByTokenAndTokenType(token, tokenType);
             return validate(systemToken, tokenType, systemToken.getAssociateId(), delete) ? systemToken.getAssociateId() : null;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("error on validateAndGetAssociateId", ex);
             throw ex;
         }

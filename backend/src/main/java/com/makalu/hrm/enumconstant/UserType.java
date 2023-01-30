@@ -8,13 +8,13 @@ public enum UserType {
 
     private final String value;
 
-    UserType(String value){
+    UserType(String value) {
         this.value = value;
     }
 
-    public static UserType getEnum(String val){
-        for (UserType status : values()){
-            if (status.value.equals(val)){
+    public static UserType getEnum(String val) {
+        for (UserType status : values()) {
+            if (status.value.equals(val)) {
                 return status;
             }
         }
@@ -22,10 +22,9 @@ public enum UserType {
         return null;
     }
 
-    public String getValue(){
+    public String getValue() {
         return this.value;
     }
-
 
     @Override
     public String toString() {

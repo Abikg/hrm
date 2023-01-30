@@ -24,20 +24,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if (username == null || username.trim().isEmpty()){
+        if (username == null || username.trim().isEmpty()) {
             throw new UsernameNotFoundException(username + " is null");
         }
 
         Optional<PersistentUserEntity> userEntityOptional = userRepository.findByUsername(username);
 
-        if(userEntityOptional.isEmpty()){
+        if (userEntityOptional.isEmpty()) {
             throw new UsernameNotFoundException(username + " not found");
         }
 
         PersistentUserEntity user = userEntityOptional.get();
         List<SimpleGrantedAuthority> ROLES = new ArrayList<>();
         ROLES.add(new SimpleGrantedAuthority(StringConstant.DEFAULT_ROLE));
-        ROLES.add(new SimpleGrantedAuthority("ROLE_"+user.getUserType().name().toUpperCase()));
+        ROLES.add(new SimpleGrantedAuthority("ROLE_" + user.getUserType().name().toUpperCase()));
 
         return new CustomUserDetails(user, ROLES);
     }

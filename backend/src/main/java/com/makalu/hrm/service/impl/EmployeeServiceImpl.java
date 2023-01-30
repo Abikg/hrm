@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDTO> list() {
-            return employeeConverter.convertToDtoList(employeeRepository.findAll());
+        return employeeConverter.convertToDtoList(employeeRepository.findAll());
     }
 
 
@@ -46,9 +47,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public RestResponseDto save(@NotNull EmployeeDTO employeeDTO) {
         try {
-                long entityCount;
+            long entityCount;
 
-                EmployeeError error = employeeValidation.validateOnSave(employeeDTO);
+            EmployeeError error = employeeValidation.validateOnSave(employeeDTO);
 
             if (!error.isValid()) {
                 return RestResponseDto.INSTANCE()
@@ -63,12 +64,12 @@ public class EmployeeServiceImpl implements EmployeeService {
                     return RestResponseDto.INSTANCE()
                             .internalServerError()
                             .detail(Map.of("error", error, "data", employeeDTO));
-                }else{
+                } else {
                     EmployeeImageDTO employeeImageDTO = (EmployeeImageDTO) imageResponseDto.getDetail();
                     employeeDTO.setEmployeeImageId(employeeImageDTO.getId());
                 }
             }
-            if(employeeDTO.isCreateUser()) {
+            if (employeeDTO.isCreateUser()) {
                 RestResponseDto userResponseDto = userService.createEmployeeUser(employeeDTO.getEmail());
 
                 if (userResponseDto.getStatus() == 200) {
@@ -77,16 +78,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                 }
             }
             entityCount = employeeRepository.count();
-            employeeDTO.setEntityEmployeeId(entityCount+1);
+            employeeDTO.setEntityEmployeeId(entityCount + 1);
             employeeDTO.setEmployeeStatus(EmployeeStatus.ACTIVE);
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeConverter.convertToDto(
                             employeeRepository.saveAndFlush(employeeConverter.convertToEntity(employeeDTO))));
 
 
-        }catch (Exception ex){
-            log.error("Error while creating employee",ex);
-            return  RestResponseDto.INSTANCE()
+        } catch (Exception ex) {
+            log.error("Error while creating employee", ex);
+            return RestResponseDto.INSTANCE()
                     .internalServerError()
                     .detail(employeeDTO);
         }
@@ -95,7 +96,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public RestResponseDto getResponseById(UUID employeeId) {
         PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElse(null);
-        if(employeeEntity == null){
+        if (employeeEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Employee not found");
         }
 
@@ -107,31 +108,31 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public RestResponseDto update(EmployeeDTO employeeDTO) {
-        try{
+        try {
             EmployeeError error = employeeValidation.validateOnUpdate(employeeDTO);
-            if(!error.isValid()){
+            if (!error.isValid()) {
                 return RestResponseDto.INSTANCE().
                         validationError().
-                        detail(Map.of("error",error,"data",employeeDTO));
+                        detail(Map.of("error", error, "data", employeeDTO));
             }
             PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeDTO.getId()).orElse(null);
-            if(employeeEntity == null){
+            if (employeeEntity == null) {
                 return RestResponseDto.INSTANCE().notFound().message("Employee not found");
             }
-            if(employeeEntity.getUser() != null) {
+            if (employeeEntity.getUser() != null) {
                 employeeDTO.setUserId(employeeEntity.getUser().getId());
             }
-            if(employeeEntity.getImage() != null){
+            if (employeeEntity.getImage() != null) {
                 employeeDTO.setEmployeeImageId(employeeEntity.getImage().getId());
             }
-            if(!employeeEntity.getEmail().equals(employeeDTO.getEmail())){
+            if (!employeeEntity.getEmail().equals(employeeDTO.getEmail())) {
                 //employee update garda email update garna mildaina hai so user ni update garna bhayana
-                 //userService.updateEmployeeUser(employeeDTO.getEmail(), employeeDTO.getUserId());
+                //userService.updateEmployeeUser(employeeDTO.getEmail(), employeeDTO.getUserId());
             }
-            if(!employeeDTO.getEmpImage().isEmpty()){
+            if (!employeeDTO.getEmpImage().isEmpty()) {
                 if (employeeEntity.getImage() != null) {
                     employeeImageService.update(employeeDTO.getEmpImage(), employeeDTO.getEmployeeImageId());
-                }else {
+                } else {
                     RestResponseDto imageResponse = employeeImageService.save(employeeDTO.getEmpImage());
                     EmployeeImageDTO employeeImageDTO = (EmployeeImageDTO) imageResponse.getDetail();
                     employeeDTO.setEmployeeImageId(employeeImageDTO.getId());
@@ -139,9 +140,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(
-                            employeeConverter.copyConvertToEntity(employeeDTO,employeeEntity))));
-        }catch (Exception e){
-            log.error("Error updating employee",e);
+                            employeeConverter.copyConvertToEntity(employeeDTO, employeeEntity))));
+        } catch (Exception e) {
+            log.error("Error updating employee", e);
             return RestResponseDto.INSTANCE().internalServerError().detail(employeeDTO);
         }
     }
@@ -160,8 +161,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             return RestResponseDto.INSTANCE().success()
                     .detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(employeeEntity)));
-        }catch (Exception e){
-            log.error("Error while creating resignation",e);
+        } catch (Exception e) {
+            log.error("Error while creating resignation", e);
             return RestResponseDto.INSTANCE().internalServerError();
         }
     }
@@ -181,8 +182,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             return RestResponseDto.INSTANCE().success()
                     .detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(employeeEntity)));
-        }catch (Exception e){
-            log.error("Error while creating resignation",e);
+        } catch (Exception e) {
+            log.error("Error while creating resignation", e);
             return RestResponseDto.INSTANCE().internalServerError();
         }
     }
@@ -199,9 +200,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeEntity.setApprovedBy(userEntity);
             return RestResponseDto.INSTANCE().success()
                     .detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(employeeEntity)));
-        }catch (Exception e){
-        log.error("Error while approving resignation",e);
-        return RestResponseDto.INSTANCE().internalServerError();
+        } catch (Exception e) {
+            log.error("Error while approving resignation", e);
+            return RestResponseDto.INSTANCE().internalServerError();
         }
     }
 
@@ -213,19 +214,19 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (employeeEntity == null) {
                 return RestResponseDto.INSTANCE().notFound();
             }
-            if(employeeEntity.getUser() != null) {
+            if (employeeEntity.getUser() != null) {
                 PersistentUserEntity userEntity = userRepository.findById(employeeEntity.getUser().getId()).orElse(null);
                 userEntity.setEnabled(false);
                 PersistentUserEntity savedEntity = userRepository.saveAndFlush(userEntity);
-                if(savedEntity == null){
+                if (savedEntity == null) {
                     return RestResponseDto.INSTANCE().internalServerError();
                 }
             }
             employeeEntity.setEmployeeStatus(EmployeeStatus.RESIGNED);
             return RestResponseDto.INSTANCE().success()
                     .detail(employeeConverter.convertToDto(employeeRepository.saveAndFlush(employeeEntity)));
-        }catch (Exception e){
-            log.error("Error while approving resignation",e);
+        } catch (Exception e) {
+            log.error("Error while approving resignation", e);
             return RestResponseDto.INSTANCE().internalServerError();
         }
     }

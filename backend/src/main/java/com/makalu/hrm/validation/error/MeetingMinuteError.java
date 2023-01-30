@@ -8,9 +8,13 @@ import java.util.Date;
 public class MeetingMinuteError {
 
     boolean valid;
+
     String title;
-    String  minute;
+
+    String minute;
+
     Date date;
+
     String generalmessage;
 
 }

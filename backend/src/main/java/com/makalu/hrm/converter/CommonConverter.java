@@ -16,56 +16,56 @@ import java.util.Date;
 public class CommonConverter {
 
     public Date parseDate(String date, String format) throws ParseException {
-        try{
+        try {
             SimpleDateFormat sd = new SimpleDateFormat(format);
             return sd.parse(date);
-        }catch (ParseException ex){
+        } catch (ParseException ex) {
             log.error("error on parseDate " + date + " => " + format + " =>", ex);
             throw ex;
         }
     }
 
     public Date parseDate(LocalDate date, String format) throws Exception {
-        try{
+        try {
             return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("error on parseDate " + date + " => " + format + " =>", ex);
             throw ex;
         }
     }
 
-    public String format(Date date){
+    public String format(Date date) {
         try {
-            if (date == null){
+            if (date == null) {
                 return null;
             }
             SimpleDateFormat sd = new SimpleDateFormat(StringConstant.DEFAULT_DATE_FORMATE);
             return sd.format(date);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("error on parseDate " + date + " => " + StringConstant.DEFAULT_DATE_FORMATE + " =>", ex);
             throw ex;
         }
     }
 
-    public Date addHoursFromNow(int hours){
+    public Date addHoursFromNow(int hours) {
         DateTime dateTime = new DateTime();
         dateTime.plusHours(hours);
         return dateTime.toDate();
     }
 
-    public Date addDaysFromNow(int days){
+    public Date addDaysFromNow(int days) {
         DateTime dateTime = new DateTime();
         dateTime.plusDays(days);
         return dateTime.toDate();
     }
 
-    public Date addMonthFromNow(int months){
+    public Date addMonthFromNow(int months) {
         DateTime dateTime = new DateTime();
         dateTime.plusMonths(months);
         return dateTime.toDate();
     }
 
-    public Date addHours(Date date , int hours){
+    public Date addHours(Date date, int hours) {
         DateTime dateTime = new DateTime(date.getTime());
         dateTime.plusHours(hours);
         return dateTime.toDate();

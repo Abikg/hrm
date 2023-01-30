@@ -5,13 +5,12 @@ import com.makalu.hrm.model.PositionDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PositionConverter extends Convertable<PersistentPositionEntity, PositionDTO>{
+public class PositionConverter extends Convertable<PersistentPositionEntity, PositionDTO> {
 
     @Override
     public PersistentPositionEntity convertToEntity(PositionDTO dto) {
         return this.copyConvertToEntity(dto, new PersistentPositionEntity());
     }
-
 
     @Override
     public PositionDTO convertToDto(PersistentPositionEntity entity) {
@@ -30,7 +29,7 @@ public class PositionConverter extends Convertable<PersistentPositionEntity, Pos
 
     @Override
     public PersistentPositionEntity copyConvertToEntity(PositionDTO dto, PersistentPositionEntity entity) {
-        if (dto == null || entity == null){
+        if (dto == null || entity == null) {
             return null;
         }
 

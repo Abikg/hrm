@@ -1,20 +1,9 @@
 package com.makalu.hrm.model;
-import com.makalu.hrm.converter.DepartmentConverter;
-import com.makalu.hrm.converter.EmployeeImageConverter;
-import com.makalu.hrm.converter.PositionConverter;
-import com.makalu.hrm.converter.UserConverter;
-import com.makalu.hrm.domain.PersistentDepartmentEntity;
-import com.makalu.hrm.domain.PersistentEmployeeImageEntity;
-import com.makalu.hrm.domain.PersistentPositionEntity;
-import com.makalu.hrm.domain.PersistentUserEntity;
+
 import com.makalu.hrm.enumconstant.EmployeeStatus;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;

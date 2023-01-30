@@ -13,72 +13,73 @@ import java.util.*;
 public class ParseUtils {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    public static boolean isNull(String value){
-        if (value == null){
+
+    public static boolean isNull(String value) {
+        if (value == null) {
             return true;
-        } else if (value.isEmpty() || value.trim().equals("")){
+        } else if (value.isEmpty() || value.trim().equals("")) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    public static boolean isNull(Long value){
+    public static boolean isNull(Long value) {
         return value == null;
     }
 
-    public static boolean isNotNull(Long value){
+    public static boolean isNotNull(Long value) {
         return !isNull(value);
     }
 
-    public static boolean isNotNull(String value){
+    public static boolean isNotNull(String value) {
         return !isNull(value);
     }
 
-    public static boolean isNull(Double value , boolean considerZero){
-        if (value == null){
+    public static boolean isNull(Double value, boolean considerZero) {
+        if (value == null) {
             return true;
-        } else if (!considerZero && value == 0){
+        } else if (!considerZero && value == 0) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    public static boolean isNotNull(Double value , boolean considerZero){
-        return !isNull(value , considerZero);
+    public static boolean isNotNull(Double value, boolean considerZero) {
+        return !isNull(value, considerZero);
     }
 
-    public static Double getDoubleFromString(String value , Double defaultValue){
-        if (isNull(value) || !isNumber(trimString(value))){
+    public static Double getDoubleFromString(String value, Double defaultValue) {
+        if (isNull(value) || !isNumber(trimString(value))) {
             return defaultValue;
         }
 
         try {
             return doubleFormatter(Double.parseDouble(trimString(value)));
-        }catch (Exception e){
+        } catch (Exception e) {
             return defaultValue;
         }
     }
 
-    public static boolean isNumber(String str){
+    public static boolean isNumber(String str) {
 
         return isNotNull(str) && (str.trim().matches("[-\\+]?\\d+(\\.\\d+)?") || str.trim().matches("[-\\+]?+(\\.\\d+)?") || /*match a -ve number that ends with (.) */ str.trim().matches("[-\\+]?\\d+(\\.)?"));  //match a number with optional '-' and decimal.;
     }
 
-    public static String trimString(String value){
-        if (value == null){
+    public static String trimString(String value) {
+        if (value == null) {
             return value;
         }
 
         return value.trim();
     }
 
-    public static double doubleFormatter(Double value){
+    public static double doubleFormatter(Double value) {
 
         DecimalFormat df = new DecimalFormat("###.###");
 
-        if (value == null){
+        if (value == null) {
             return 0;
         }
 
@@ -86,9 +87,9 @@ public class ParseUtils {
 
     }
 
-    public static BigDecimal formatter(BigDecimal value){
+    public static BigDecimal formatter(BigDecimal value) {
 
-        if (value == null){
+        if (value == null) {
             return new BigDecimal(0);
         }
 
@@ -100,70 +101,70 @@ public class ParseUtils {
 
     public static boolean isDuplicateForLong(List<Long> value) {
 
-        if (value == null){
+        if (value == null) {
             return false;
         }
 
-        if (value.size() <= 1){
+        if (value.size() <= 1) {
             return false;
         }
 
         return value.stream().sequential().allMatch(new HashSet<>()::add);
     }
 
-    public static Long parseLong(String value){
-        if (isNull(value)){
+    public static Long parseLong(String value) {
+        if (isNull(value)) {
             return null;
         }
 
-        if (!isNumber(value)){
+        if (!isNumber(value)) {
             return null;
         }
 
         try {
             return Long.parseLong(trimString(value));
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public static Integer parseInt(String value){
-        if (isNull(value)){
+    public static Integer parseInt(String value) {
+        if (isNull(value)) {
             return null;
         }
 
-        if (!isNumber(value)){
+        if (!isNumber(value)) {
             return null;
         }
 
         try {
             return Integer.parseInt(trimString(value));
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public static Double parseDouble(String value){
-        if (isNull(value)){
+    public static Double parseDouble(String value) {
+        if (isNull(value)) {
             return null;
         }
 
-        if (!isNumber(value)){
+        if (!isNumber(value)) {
             return null;
         }
 
         try {
             return doubleFormatter(Double.parseDouble(trimString(value)));
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public static List<Long> getLongList(Long... idList){
+    public static List<Long> getLongList(Long... idList) {
         return new ArrayList<>(Arrays.asList(idList));
     }
 
-    public static List<Object> getObjectList(Object... objects){
+    public static List<Object> getObjectList(Object... objects) {
         return new ArrayList<>(Arrays.asList(objects));
     }
 
@@ -182,18 +183,18 @@ public class ParseUtils {
         return sb;
     }
 
-   public static Date calculateExpiryDate(int days) {
+    public static Date calculateExpiryDate(int days) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Timestamp(cal.getTime().getTime()));
         cal.add(Calendar.DATE, days);
         return new Date(cal.getTime().getTime());
     }
 
-    public String dateFormat(Date date){
+    public String dateFormat(Date date) {
         return dateFormat.format(date);
     }
 
-    public String dateTimeFormat(Date date){
+    public String dateTimeFormat(Date date) {
         return dateTimeFormat.format(date);
     }
 }

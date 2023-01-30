@@ -1,4 +1,5 @@
 package com.makalu.hrm.model;
+
 import lombok.Data;
 
 @Data

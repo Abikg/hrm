@@ -12,23 +12,23 @@ import java.util.stream.Collectors;
 public class AuthenticationUtils {
 
     public static CustomUserDetails getCurrentUser() {
-        if (SecurityContextHolder.getContext().getAuthentication() == null){
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return null;
         }
         Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principle == null){
+        if (principle == null) {
             return null;
         }
-        if (principle instanceof CustomUserDetails){
+        if (principle instanceof CustomUserDetails) {
             return (CustomUserDetails) principle;
         }
 
         return null;
     }
 
-    public static String getUserName(){
+    public static String getUserName() {
         CustomUserDetails user = getCurrentUser();
-        if (user != null){
+        if (user != null) {
             return user.getUsername();
         }
 
@@ -36,20 +36,20 @@ public class AuthenticationUtils {
     }
 
     public static List<String> getCurrentUserAuthorities() {
-        if (SecurityContextHolder.getContext().getAuthentication() == null){
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return null;
         }
 
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().parallelStream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
     }
 
-    public static boolean hasRole(String role){
+    public static boolean hasRole(String role) {
         List<String> roleList = getCurrentUserAuthorities();
-        if (roleList == null || role == null){
+        if (roleList == null || role == null) {
             return false;
         }
 
-        role = role.startsWith("ROLE_")?role:"ROLE_"+role;
+        role = role.startsWith("ROLE_") ? role : "ROLE_" + role;
         return roleList.contains(role);
     }
 }

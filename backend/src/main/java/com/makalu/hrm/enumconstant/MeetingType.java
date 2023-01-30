@@ -6,13 +6,13 @@ public enum MeetingType {
 
     private final String value;
 
-    MeetingType(String value){
+    MeetingType(String value) {
         this.value = value;
     }
 
-    public static MeetingType getEnum(String val){
-        for (MeetingType status : values()){
-            if (status.value.equals(val)){
+    public static MeetingType getEnum(String val) {
+        for (MeetingType status : values()) {
+            if (status.value.equals(val)) {
                 return status;
             }
         }
@@ -20,10 +20,9 @@ public enum MeetingType {
         return null;
     }
 
-    public String getValue(){
+    public String getValue() {
         return this.value;
     }
-
 
     @Override
     public String toString() {

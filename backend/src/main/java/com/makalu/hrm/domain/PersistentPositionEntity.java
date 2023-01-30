@@ -8,15 +8,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "position")
 @Data
-@EqualsAndHashCode(callSuper=false)
-public class PersistentPositionEntity  extends AbstractEntity{
-    @Column(nullable = false,unique = true)
+@EqualsAndHashCode(callSuper = false)
+public class PersistentPositionEntity extends AbstractEntity {
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column(nullable = false)
     private String detail;
-
-//    @ManyToMany(mappedBy = "position" , fetch = FetchType.LAZY)
-//    private List<PersistentEmployeeEntity> employee;
 
 }
