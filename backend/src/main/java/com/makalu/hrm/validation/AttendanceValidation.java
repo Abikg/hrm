@@ -4,6 +4,7 @@ import com.makalu.hrm.model.AttendanceDto;
 import com.makalu.hrm.validation.error.AttendanceError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
 import java.time.Duration;
 
 @Component

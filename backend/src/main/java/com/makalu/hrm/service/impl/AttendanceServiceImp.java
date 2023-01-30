@@ -39,7 +39,6 @@ public class AttendanceServiceImp implements AttendanceService {
     private final FieldService fieldService;
     private final AttendanceConverter attendanceConverter;
 
-
     @Override
     public RestResponseDto filter(AttendanceDto attendanceDto) {
 
@@ -86,7 +85,6 @@ public class AttendanceServiceImp implements AttendanceService {
         } else {
             return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", true));
         }
-
 
     }
 
@@ -149,10 +147,10 @@ public class AttendanceServiceImp implements AttendanceService {
     }
 
     @Override
-    public boolean isValidToPunchOut(UUID userId){
+    public boolean isValidToPunchOut(UUID userId) {
         try {
             getEntityForPunchOut(userId);
-        }catch (AttendanceException ex){
+        } catch (AttendanceException ex) {
             return false;
         }
         return true;

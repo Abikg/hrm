@@ -37,5 +37,4 @@ public class PersistentMeetingMinutesEntity extends AbstractEntity {
     @ManyToOne
     private PersistentUserEntity createdBy;
 
-
 }

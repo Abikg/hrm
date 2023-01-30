@@ -13,12 +13,8 @@ import java.util.UUID;
 @Repository
 public interface AttendanceRepository extends JpaRepository<PersistentAttendanceEntity, UUID>, JpaSpecificationExecutor<PersistentAttendanceEntity> {
 
-
     List<PersistentAttendanceEntity> findAllByUser_Id(UUID userId, Pageable pageable);
 
     List<PersistentAttendanceEntity> findAllByCreatedDate(Date date);
-
-
-
 
 }

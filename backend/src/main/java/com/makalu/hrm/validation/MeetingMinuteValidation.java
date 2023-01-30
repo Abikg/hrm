@@ -1,8 +1,6 @@
 package com.makalu.hrm.validation;
 
-import com.makalu.hrm.model.DepartmentDTO;
 import com.makalu.hrm.model.MeetingMinutesDto;
-import com.makalu.hrm.validation.error.DepartmentError;
 import com.makalu.hrm.validation.error.MeetingMinuteError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -51,8 +49,6 @@ public class MeetingMinuteValidation {
             return false;
         }
         return true;
-
-
     }
 
 
