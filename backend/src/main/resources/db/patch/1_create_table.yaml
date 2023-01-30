@@ -1,6 +1,6 @@
 databaseChangeLog:
       - changeSet:
-          id: 2022-12-29-user-create-table
+          id: 2022-12-29-user-recreate2-table
           author: suvam
           changes:
             - createTable:
@@ -311,30 +311,99 @@ databaseChangeLog:
                         name: total_worked_hours
                         type: double
                         constraints:
+                          primaryKey: true
                           nullable: true
 
 
 
+      - changeSet:
+          id: 2023-01-16-meetingType-create-table
+          author: keshab
+          changes:
+            - createTable:
+                tableName: meeting_minutes
+                columns:
+                  - column:
+                      name: id
+                      type: varchar(36)
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: created_date
+                      type: date
+                      constraints:
+                        nullable: false
+                        defaultValue: null
+                  - column:
+                      name: last_modified_date
+                      type: date
+                      constraints:
+                        defaultValue: null
+                  - column:
+                      name: version
+                      type: int
+                      constraints:
+                        nullable: false
+                        defaultValue: 0
+                  - column:
+                      name: title
+                      type: varchar(200)
+                      constraints:
+                       nullable: false
+
+                  - column:
+                      name: meeting_date
+                      type: date
+                      constraints:
+                        nullable: false
+
+                  - column:
+                      name: minutes
+                      type: text
+                      constraints:
+                        nullable: false
+
+                  - column:
+                      name: meeting_type
+                      type: varchar(20)
+                      constraints:
+                        nullable: false
+
+                  - column:
+                      name: created_by_id
+                      type: varchar(200)
+                      constraints:
+                        nullable: false
+                        foreignKeyName: fk_meeting_minute_created_by_id
+                        references: auth_user(id)
 
 
-#      - changeSet:
-#              id: 2022-12-29-employee_department_create-table
-#              author: suvam
-#              changes:
-#                - createTable:
-#                    tableName: employee_department
-#                    columns:
-#                      - column:
-#                          name: employee_id
-#                          type: varchar(36)
-#                          constraints:
-#                            nullable: false
-#                            foreignKeyName: fk_employee_dep_id
-#                            references: employee(id)
-#                      - column:
-#                          name: department_id
-#                          type: varchar(36)
-#                          constraints:
-#                            nullable: false
-#                            foreignKeyName: fk_department_id
-#                            references: department(id)
+
+      - changeSet:
+          id: 2022-12-29-meeting_minute_user_create-table
+          author: keshab
+          changes:
+            - createTable:
+                tableName: meeting_minutes_user
+                columns:
+                  - column:
+                      name: meeting_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: false
+                        foreignKeyName: fk_meeting_minutes_id
+                        references: meeting_minutes(id)
+                  - column:
+                      name: user_id
+                      type: varchar(36)
+                      constraints:
+                        nullable: false
+                        foreignKeyName: fk_meeting_minute_user_id
+                        references: auth_user(id)
+
+
+
+
+
+

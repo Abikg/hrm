@@ -28,3 +28,6 @@ management:
       base-path: /manage
       cors:
         allowed-origins: '*'
+
+
+

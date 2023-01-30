@@ -5,13 +5,7 @@ spring:
     restart:
       enabled: true
 
-makalu:
-  network:
-    ip: 0:0:0:0:0:0:0:1
 
 
 
-your:
-  path:
-    yml:
-      string: hello
+
