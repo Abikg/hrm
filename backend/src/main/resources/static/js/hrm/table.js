@@ -26,17 +26,20 @@ function createTable(data, module, tableId) {
     actualData = data.detail
     $.each(actualData, function (k, v) {
         var actionDataElement = '<div class="actionElements">' +
-            '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm">' +
-            '<i class="fa fa-edit" style="margin-left:10px;font-size:14px;color:white"></i>' +
+            '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm"' +
+            'style="width: 50px;">' +
+            '<i class="fa fa-edit" style="font-size:14px;color:white"></i>' +
             '</a>' ;
             if(module === "employee"){
-                actionDataElement += '<a href="#" onclick="viewRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-warning btn-sm">' +
-                                    '<i class="fa fa-info-circle" style="margin-left:10px;font-size:14px;color:white"></i>' +
+                actionDataElement += '<a href="#" onclick="viewRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-warning btn-sm ml-2" ' +
+                    'style="width: 50px;">' +
+                                    '<i class="fa fa-info-circle" style="font-size:14px;color:white"></i>' +
                                     '</a>' +
                                     '</div>';
             }else{
-                actionDataElement += '<a href="#" onclick="deleteRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-danger btn-sm">' +
-                    '<i class="fa fa-trash" style="margin-left:10px;font-size:14px;color:white"></i>' +
+                actionDataElement += '<a href="#" onclick="deleteRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-danger btn-sm ml-2"' +
+                    'style="width: 50px;">' +
+                    '<i class="fa fa-trash" style="font-size:14px;color:white"></i>' +
                     '</a>' +
                     '</div>';
             }

@@ -1,45 +1,53 @@
 $(document).ready(function(){
 
-        if($(".alertSuccess").length){
+    if($(".alertSuccess").length){
+            $('#employeeForm input').attr('readonly', 'readonly');
+            $('#position').attr("disabled",true);
+            $('#department').attr("disabled",true);
+            window.setTimeout(function() {
+                    window.location.href = "/employee/list";
+            }, 3000);
+    }
 
-                $('#employeeForm input').attr('readonly', 'readonly');
-                $('#position').attr("disabled",true);
-                $('#department').attr("disabled",true);
+    const imageCard = $(".imageCard");
+    if(imageCard.length){
+            $(".imageCard").css({
+                    "width": "200px",
+                    "height": "200px",
+                    "display": "flex",
+                    "justify-content": "center",
+                   "align-items": "center",
+                    "overflow": "hidden"
+            });
+            $(".imageCard img").css({  "flex-shrink": "0",
+            "min-width": "100%",
+            "min-height": "100%"});
+    }
 
-                window.setTimeout(function() {
-                        window.location.href = "/employee/list";
-                }, 3000);
-        }
-
-        const imageCard = $(".imageCard");
-        if(imageCard.length){
-                $(".imageCard").css({
-                        "width": "200px",
-                        "height": "200px",
-                        "display": "flex",
-                        "justify-content": "center",
-                       "align-items": "center",
-                        "overflow": "hidden"
-                });
-                $(".imageCard img").css({  "flex-shrink": "0",
-                "min-width": "100%",
-                "min-height": "100%"});
-        }
     if($("#joinDate").val()){
-        $("#joinDate").val(moment($("#joinDate").val()).format("YYYY/MM/DD"));
+        const format = "ddd MMM D HH:mm:ss z yyyy";
+        if (moment($("#joinDate").val(), format).isValid()) {
+            $("#joinDate").val(moment($("#joinDate").val(), format).format("YYYY/MM/DD"));
+
+        } else {
+            $("#joinDate").val(moment($("#joinDate").val()).format("YYYY/MM/DD"));
+        }
     }
 });
+
 $(".dateIcon").on("click", function(){
-    console.log("clicked");
     $(this).parent().next().datepicker().datepicker("show");
 });
+
 $("#joinDate").change(function() {
-        let date = moment($(this).val(), 'YYYY/MM/DD').toDate();
-        $(this).val(date);
+        let date = new Date(Date.parse($(this).val()));
+        const formattedDate = moment(date).format("YYYY-MM-DD HH:mm:ss.S");
+
+        $(this).val(formattedDate);
 });
 
-$(".inputDate").change(function() {
-    setAge($(".inputDate").val());
+$(".inputDobDate").change(function() {
+    setAge($(".inputDobDate").val());
 });
 $(".checkUser").change(function() {
     if(this.checked) {

@@ -87,7 +87,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-transparent dateIcon"><i class="fas fa-calendar"></i></span>
                                     </div>
-                                    <input class="form-control mydatepicker bg-transparent" th:field="*{joinDate}" data-date-format="yyyy/mm/dd" required readonly>
+                                    <input class="form-control mydatepicker bg-transparent" th:field="*{joinDate}"
+                                           th:value="${#dates.format(employee.joinDate, 'yyyy/MM/dd')}" data-date-format="yyyy/mm/dd" required readonly>
                                 </div>
                                 <div th:if="${#ctx.containsVariable('response')}">
                                     <p th:if="${response.status == 400  and response.detail.get('error').joinDate != null}"
@@ -148,7 +149,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text bg-transparent dateIcon" id="icon"><i class="fas fa-calendar"></i></span>
                                             </div>
-                                            <input type="text" class="form-control bg-transparent mydatepicker" th:field="*{personalDetailDTO.dob}" data-date-format="yyyy/mm/dd" readonly>
+                                            <input type="text" class="form-control bg-transparent mydatepicker inputDobDate" th:field="*{personalDetailDTO.dob}" data-date-format="yyyy/mm/dd" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group ml-0 ml-sm-auto">

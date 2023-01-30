@@ -8,10 +8,13 @@ function editEmployee(id,module) {
     window.location.href = "/"+module+"/edit/" + id;
 }
 $(document).ready(function(){
-
     $("#joinDate").text(moment($("#joinDate").text()).format("yyyy/MM/DD"));
     $("#resDate").text(moment($("#resDate").text()).format("yyyy/MM/DD"));
     $("#resExitDate").text(moment($("#resExitDate").text()).format("yyyy/MM/DD"));
+});
+
+$(".dateIcon").on("click", function(){
+    $(this).parent().next().datepicker().datepicker("show");
 });
 
 $('#employeeResignationModal').on('shown.bs.modal', function () {

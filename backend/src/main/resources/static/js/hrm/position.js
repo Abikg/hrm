@@ -4,7 +4,6 @@ $("#add-new-position").click(function (){
 })
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    console.log('DOM fully loaded and parsed');
     listData("position","api/list", "position-table")
 
 });
