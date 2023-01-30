@@ -5,7 +5,7 @@ import com.makalu.hrm.model.DepartmentDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DepartmentConverter extends Convertable<PersistentDepartmentEntity, DepartmentDTO>{
+public class DepartmentConverter extends Convertable<PersistentDepartmentEntity, DepartmentDTO> {
 
     @Override
     public PersistentDepartmentEntity convertToEntity(DepartmentDTO dto) {
@@ -15,7 +15,7 @@ public class DepartmentConverter extends Convertable<PersistentDepartmentEntity,
     @Override
     public PersistentDepartmentEntity copyConvertToEntity(DepartmentDTO dto, PersistentDepartmentEntity entity) {
 
-        if (entity == null || dto == null){
+        if (entity == null || dto == null) {
             return null;
         }
 
@@ -28,7 +28,7 @@ public class DepartmentConverter extends Convertable<PersistentDepartmentEntity,
 
     @Override
     public DepartmentDTO convertToDto(PersistentDepartmentEntity entity) {
-        if (entity == null){
+        if (entity == null) {
             return null;
         }
 
@@ -41,4 +41,5 @@ public class DepartmentConverter extends Convertable<PersistentDepartmentEntity,
 
         return dto;
     }
+
 }

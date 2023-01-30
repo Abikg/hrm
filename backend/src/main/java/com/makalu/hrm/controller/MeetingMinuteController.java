@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.UUID;
 
 @Slf4j
@@ -30,6 +31,7 @@ public class MeetingMinuteController {
         map.addAttribute(ParameterConstant.MEETING_LIST, meetingMinuteMinuteService.findAll(MeetingType.EMPLOYEE));
         return "meetingMinute/list";
     }
+
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/bod/list")
     public String List(ModelMap map) {
@@ -37,6 +39,7 @@ public class MeetingMinuteController {
         map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.BOD.name().toUpperCase());
         return "meetingMinute/list";
     }
+
     @GetMapping("/employeeForm/{meetingtype}")
     public String showform(@PathVariable MeetingType meetingtype, ModelMap map) {
         if (MeetingType.EMPLOYEE.name().equals(meetingtype.name())) {
@@ -61,8 +64,8 @@ public class MeetingMinuteController {
     public String saveBod(MeetingMinutesDto meetingDto, ModelMap map) {
         try {
             map.addAttribute(ParameterConstant.MINUTE, meetingMinuteMinuteService.save(meetingDto).getDetail());
-        }catch (Exception e){
-            log.error("error creating minute",e);
+        } catch (Exception e) {
+            log.error("error creating minute", e);
         }
         return "meetingMinute/minute";
     }
@@ -71,18 +74,18 @@ public class MeetingMinuteController {
     public String saveEmployees(MeetingMinutesDto meetingDto, ModelMap map) {
         try {
             map.addAttribute(ParameterConstant.MINUTE, meetingMinuteMinuteService.save(meetingDto).getDetail());
-        }catch (Exception e){
-            log.error("error creating minute",e);
+        } catch (Exception e) {
+            log.error("error creating minute", e);
         }
         return "meetingMinute/minute";
 
     }
+
     @GetMapping("/showMinute/{id}")
     public String show(@PathVariable UUID id, ModelMap map) {
         map.addAttribute(ParameterConstant.MINUTE, meetingMinuteMinuteService.findById(id).getDetail());
         return "meetingMinute/minute";
     }
-
 
 }
 

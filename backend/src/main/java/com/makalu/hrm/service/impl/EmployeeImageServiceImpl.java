@@ -46,7 +46,7 @@ public class EmployeeImageServiceImpl implements EmployeeImageService {
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeImageConverter.convertToDto(employeeImageRepository.saveAndFlush(imageEntity)));
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return RestResponseDto
                     .INSTANCE()
                     .internalServerError()
@@ -61,12 +61,12 @@ public class EmployeeImageServiceImpl implements EmployeeImageService {
 
     @Override
     @Transactional
-    public RestResponseDto update(@NotNull MultipartFile file,UUID imageId) {
+    public RestResponseDto update(@NotNull MultipartFile file, UUID imageId) {
         PersistentEmployeeImageEntity imageEntity = employeeImageRepository.findById(imageId).orElse(null);
-        if(imageEntity == null){
+        if (imageEntity == null) {
             RestResponseDto.INSTANCE().notFound().message("Image not found");
         }
-        try{
+        try {
             String fileName = file.getOriginalFilename();
             String fileType = file.getContentType();
             byte[] data = file.getBytes();
@@ -78,7 +78,7 @@ public class EmployeeImageServiceImpl implements EmployeeImageService {
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeImageConverter.convertToDto(employeeImageRepository.saveAndFlush(imageEntity)));
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return RestResponseDto
                     .INSTANCE()
                     .internalServerError()

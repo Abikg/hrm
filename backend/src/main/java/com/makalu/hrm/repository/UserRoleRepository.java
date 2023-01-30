@@ -23,8 +23,4 @@ public interface UserRoleRepository extends JpaRepository<PersistentUserRoleEnti
     @Query("select ur.role from PersistentUserRoleEntity ur where ur.user.id=?1")
     List<PersistentRoleEntity> findAllRoleByUser_Id(String userId);
 
-
-
-
-
 }

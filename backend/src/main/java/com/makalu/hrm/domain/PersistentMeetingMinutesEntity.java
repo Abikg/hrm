@@ -3,6 +3,7 @@ package com.makalu.hrm.domain;
 import com.makalu.hrm.enumconstant.MeetingType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;

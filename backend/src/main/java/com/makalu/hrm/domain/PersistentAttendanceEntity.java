@@ -10,8 +10,8 @@ import java.util.Date;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Table(name="attendance")
-public class PersistentAttendanceEntity extends  AbstractEntity {
+@Table(name = "attendance")
+public class PersistentAttendanceEntity extends AbstractEntity {
 
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -20,7 +20,7 @@ public class PersistentAttendanceEntity extends  AbstractEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "punch_out_date")
-    private Date punchOutDate ;
+    private Date punchOutDate;
 
     private String punchInIp;
 

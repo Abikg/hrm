@@ -1,6 +1,5 @@
 package com.makalu.hrm.model;
 
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
@@ -21,44 +20,43 @@ public class RestResponseDto {
 
     private HashMap<String, String> response;
 
-    public static RestResponseDto INSTANCE(){
+    public static RestResponseDto INSTANCE() {
         return new RestResponseDto();
     }
 
 
-
-    public RestResponseDto success(){
+    public RestResponseDto success() {
         this.status = HttpStatus.OK.value();
         return this;
     }
 
-    public RestResponseDto notFound(){
+    public RestResponseDto notFound() {
         this.status = HttpStatus.NOT_FOUND.value();
         return this;
     }
 
-    public RestResponseDto validationError(){
+    public RestResponseDto validationError() {
         this.status = HttpStatus.BAD_REQUEST.value();
         return this;
     }
 
-    public RestResponseDto internalServerError(){
+    public RestResponseDto internalServerError() {
         this.status = HttpStatus.INTERNAL_SERVER_ERROR.value();
         return this;
     }
 
 
-    public RestResponseDto message(String message){
+    public RestResponseDto message(String message) {
         this.message = message;
         return this;
     }
 
-    public RestResponseDto detail(Object detail){
+    public RestResponseDto detail(Object detail) {
         this.detail = detail;
         return this;
     }
 
-    public RestResponseDto column(List<Object> column){
+    public RestResponseDto column(List<Object> column) {
         this.column = column;
         return this;
     }

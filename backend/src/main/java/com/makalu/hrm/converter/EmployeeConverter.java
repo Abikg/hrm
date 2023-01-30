@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
-public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, EmployeeDTO>{
+public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, EmployeeDTO> {
 
     private final PositionRepository positionRepository;
     private final DepartmentRepository departmentRepository;
@@ -26,12 +26,12 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
 
     @Override
     public PersistentEmployeeEntity convertToEntity(EmployeeDTO dto) {
-        return this.copyConvertToEntity(dto,new PersistentEmployeeEntity());
+        return this.copyConvertToEntity(dto, new PersistentEmployeeEntity());
     }
 
     @Override
     public EmployeeDTO convertToDto(PersistentEmployeeEntity entity) {
-        if(entity == null){
+        if (entity == null) {
             return null;
         }
 
@@ -39,7 +39,7 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
 
         dto.setId(entity.getId());
         dto.setEmployeeId(entity.getEmployeeId());
-        dto.setEntityEmployeeId(employeeRepository.findAll().indexOf(entity)+1);
+        dto.setEntityEmployeeId(employeeRepository.findAll().indexOf(entity) + 1);
         dto.setEmployeeStatus(entity.getEmployeeStatus());
         dto.setFullname(entity.getFullname());
         dto.setEmail(entity.getEmail());
@@ -52,16 +52,16 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         dto.setContactDetailDTO(entity.getContactDetail());
         dto.setPersonalDetailDTO(entity.getPersonalDetail());
         dto.setWorkExperienceDTO(entity.getWorkExperience());
-        if(entity.getResignationReason() != null){
+        if (entity.getResignationReason() != null) {
             dto.setResignationReason(entity.getResignationReason());
         }
-        if(entity.getResignationDate() !=null){
+        if (entity.getResignationDate() != null) {
             dto.setResignationDate(entity.getResignationDate());
         }
-        if(entity.getExitDate() !=null){
+        if (entity.getExitDate() != null) {
             dto.setExitDate(entity.getExitDate());
         }
-        if(entity.getApprovedBy() != null){
+        if (entity.getApprovedBy() != null) {
             dto.setApprovedById(entity.getApprovedBy().getId());
         }
 
@@ -70,7 +70,7 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
 
     @Override
     public PersistentEmployeeEntity copyConvertToEntity(EmployeeDTO dto, PersistentEmployeeEntity entity) {
-        if(dto == null || entity == null){
+        if (dto == null || entity == null) {
             return entity;
         }
 
@@ -81,25 +81,25 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         entity.setJoinDate(dto.getJoinDate());
         entity.setPosition(positionRepository.findById(dto.getPositionId()).orElse(null));
         entity.setDepartment(departmentRepository.findById(dto.getDepartmentId()).orElse(null));
-        if(dto.getEmployeeImageId() != null) {
+        if (dto.getEmployeeImageId() != null) {
             entity.setImage(employeeImageRepository.findById(dto.getEmployeeImageId()).orElse(null));
         }
-        if(dto.getUserId() != null) {
+        if (dto.getUserId() != null) {
             entity.setUser(userRepository.findById(dto.getUserId()).orElse(null));
         }
         entity.setContactDetail(dto.getContactDetailDTO());
         entity.setPersonalDetail(dto.getPersonalDetailDTO());
         entity.setWorkExperience(dto.getWorkExperienceDTO());
-        if(dto.getResignationReason() !=null){
+        if (dto.getResignationReason() != null) {
             entity.setResignationReason(dto.getResignationReason());
         }
-        if(dto.getResignationDate() !=null){
+        if (dto.getResignationDate() != null) {
             entity.setResignationDate(dto.getResignationDate());
         }
-        if(dto.getExitDate() !=null){
+        if (dto.getExitDate() != null) {
             entity.setExitDate(dto.getExitDate());
         }
-        if(dto.getApprovedById() != null){
+        if (dto.getApprovedById() != null) {
             entity.setApprovedBy(userRepository.findById(dto.getApprovedById()).orElse(null));
         }
         return entity;

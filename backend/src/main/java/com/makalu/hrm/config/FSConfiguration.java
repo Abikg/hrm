@@ -22,14 +22,14 @@ public class FSConfiguration {
     @Bean
     public File filesystemRoot() throws IOException {
         File file = new File(filesystemRoot);
-        if(!file.exists()){
+        if (!file.exists()) {
             Files.createDirectories(file.toPath());
         }
         return file;
     }
 
     @Bean
-   public FileSystemResourceLoader fileSystemResourceLoader() throws IOException {
+    public FileSystemResourceLoader fileSystemResourceLoader() throws IOException {
         String path = filesystemRoot().getAbsolutePath();
         System.out.println("path ===> : " + path);
         return new FileSystemResourceLoader(path);

@@ -10,8 +10,8 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
-public class PersistentUserRoleEntity extends AbstractEntity{
+@EqualsAndHashCode(callSuper = false)
+public class PersistentUserRoleEntity extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private PersistentUserEntity user;

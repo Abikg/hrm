@@ -15,7 +15,6 @@ public class MeetingMinuteConverter extends Convertable<PersistentMeetingMinutes
     private final UserConverter userConverter;
     private final UserRepository userRepository;
 
-
     public PersistentMeetingMinutesEntity convertToEntity(MeetingMinutesDto dto) {
         PersistentMeetingMinutesEntity entity = new PersistentMeetingMinutesEntity();
         entity.setTitle(dto.getTitle());

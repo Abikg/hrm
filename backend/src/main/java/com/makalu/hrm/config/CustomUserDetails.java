@@ -40,7 +40,7 @@ public class CustomUserDetails extends User {
     }
 
     public CustomUserDetails(PersistentUserEntity user, Collection<? extends GrantedAuthority> authorities) {
-        this(user.getUsername(), user.getPassword(),user.getUserType(), user.isEnabled(), !user.isAccountExpired(), !user.isPasswordExpired(), !user.isAccountLocked(), authorities);
+        this(user.getUsername(), user.getPassword(), user.getUserType(), user.isEnabled(), !user.isAccountExpired(), !user.isPasswordExpired(), !user.isAccountLocked(), authorities);
         this.userId = user.getId();
     }
 }

@@ -13,6 +13,7 @@ import java.util.UUID;
 public interface MeetingMinuteRepository extends JpaRepository<PersistentMeetingMinutesEntity, UUID> {
 
  List<PersistentMeetingMinutesEntity> findByMeetingType(MeetingType meetingType);
+
  Optional<PersistentMeetingMinutesEntity> findById(UUID id);
 
 }
