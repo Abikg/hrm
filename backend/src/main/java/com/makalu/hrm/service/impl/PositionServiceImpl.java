@@ -83,16 +83,15 @@ public class PositionServiceImpl implements PositionService {
                 return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", positionDTO));
             }
 
-            PersistentPositionEntity position = positionRepository.findById(positionDTO.getId()).orElse(null);
-            if (position == null) {
+            PersistentPositionEntity positionEntity = positionRepository.findById(positionDTO.getId()).orElse(null);
+            if (positionEntity == null) {
                 return RestResponseDto.INSTANCE()
                         .notFound().message("Position not found").detail(positionDTO);
             }
-            position = positionConverter.copyConvertToEntity(positionDTO, position);
             return RestResponseDto.INSTANCE()
                     .success()
                     .detail(positionConverter.convertToDto(
-                            positionRepository.saveAndFlush(position)
+                            positionRepository.saveAndFlush(positionConverter.copyConvertToEntity(positionDTO, positionEntity))
                     ));
         }catch (Exception e){
             log.error("Error while creating position", e);
@@ -120,4 +119,5 @@ public class PositionServiceImpl implements PositionService {
         }
 
     }
+
 }

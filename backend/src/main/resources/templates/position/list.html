@@ -25,23 +25,6 @@
                 <div class="card">
                     <div class="card-body">
                         <table class="table" id="position-table">
-                            <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Code</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody th:each="position: ${positionList}">
-                            <tr th:id="${position.id}">
-                                <td th:text="${position.title}" class="title"></td>
-                                <td th:text="${position.detail}" class="detail"></td>
-                                <td>
-                                    <button type="button" th:data-id="${position.id}" th:onclick="editPosition([[${position.id}]])" class="position-edit btn btn-info btn-sm">Edit</button>
-                                    <button type="button" th:data-id="${position.id}" th:onclick="deletePosition([[${position.id}]])" class="btn btn-danger btn-sm">Delete</button>
-                                </td>
-                            </tr>
-                            </tbody>
                         </table>
                     </div>
                 </div>

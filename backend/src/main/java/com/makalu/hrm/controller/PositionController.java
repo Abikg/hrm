@@ -4,6 +4,7 @@ import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.model.PositionDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.PositionService;
+import com.makalu.hrm.utils.FieldService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,8 @@ import java.util.UUID;
 public class PositionController {
 
     private final PositionService positionService;
+
+    private final FieldService fieldService;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
@@ -45,7 +48,7 @@ public class PositionController {
     @PreAuthorize("hasRole('AUTHENTICATED')")
     @ResponseBody
     public ResponseEntity<RestResponseDto> list(){
-        return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(positionService.list()));
+        return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(positionService.list()).column(fieldService.getPositionFields()));
     }
 
     @PostMapping("/save")

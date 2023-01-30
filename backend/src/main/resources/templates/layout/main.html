@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title layout:title-pattern="$CONTENT_TITLE">Admin</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
-
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -23,7 +22,8 @@
     <link rel="stylesheet" th:href="@{/lte/dist/css/adminlte.min.css}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" th:href="@{/lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
-
+    <!-- Daterange picker -->
+    <link rel="stylesheet" th:href="@{/lte/plugins/daterangepicker/daterangepicker.css}">
     <!-- summernote -->
     <link rel="stylesheet" th:href="@{/lte/plugins/summernote/summernote-bs4.min.css}">
     <link rel="stylesheet" th:href="@{/css/hrm.css}">
@@ -32,6 +32,11 @@
     <script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
     <!-- jQuery UI 1.11.4 -->
     <script type="text/javascript" th:src="@{/lte/plugins/jquery-ui/jquery-ui.min.js}"></script>
+
+    <script type="text/javascript" th:src="@{/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+
+
+
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -56,6 +61,7 @@
     <script type="text/javascript">
         $.widget.bridge('uibutton', $.ui.button)
     </script>
+
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
     <!-- Bootstraplte/ 4 -->
     <script type="text/javascript" th:src="@{/lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
@@ -79,9 +85,10 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script type="text/javascript" th:src="@{/lte/dist/js/pages/dashboard.js}"></script>
 
-    <script type="text/javascript" th:src="@{/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+    <!-- table generator js -->
+    <script type="text/javascript" th:src="@{/js/hrm/table.js}"></script>
 
-
+    <%--for sidebar active--%>
     <script>
         /** add active class and stay opened when selected */
         var url = window.location;

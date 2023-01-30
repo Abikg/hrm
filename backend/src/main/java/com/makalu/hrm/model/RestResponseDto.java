@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Data
 
@@ -15,6 +16,8 @@ public class RestResponseDto {
     private String message;
 
     private Object detail;
+
+    private List<Object> column;
 
     private HashMap<String, String> response;
 
@@ -52,6 +55,11 @@ public class RestResponseDto {
 
     public RestResponseDto detail(Object detail){
         this.detail = detail;
+        return this;
+    }
+
+    public RestResponseDto column(List<Object> column){
+        this.column = column;
         return this;
     }
 }

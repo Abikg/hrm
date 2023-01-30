@@ -1,108 +1,170 @@
-$('#add-new-employee').click(function (){
-    setupForCreateForm();
-    $('#employeeModal').modal('toggle');
+window.addEventListener('DOMContentLoaded', (event) => {
+    listData("employee","api/list", "employee-table")
+});
+function viewEmployee(id, module){
+    window.location.href = "/"+module+"/view/" + id;
+}
+function editEmployee(id,module) {
+    window.location.href = "/"+module+"/edit/" + id;
+}
+$(document).ready(function(){
+    $("#joinDate").text(moment($("#joinDate").text()).format("yyyy/MM/DD"));
+    $("#resDate").text(moment($("#resDate").text()).format("yyyy/MM/DD"));
+    $("#resExitDate").text(moment($("#resExitDate").text()).format("yyyy/MM/DD"));
+});
+
+$(".dateIcon").on("click", function(){
+    $(this).parent().next().datepicker().datepicker("show");
+});
+
+$('#employeeResignationModal').on('shown.bs.modal', function () {
+    $(".rawDate").each(function() {
+        if ($(this).val()) {
+            $(this).val(moment($(this).val()).format("yyyy/MM/DD"));
+        }
+    });
+});
+
+
+$("#resignationDate").change(function() {
+    let date = moment($("#resignationDate").val(), 'yyyy/mm/dd').toDate();
+    $("#resignationDate").val(date);
+});
+$("#exitDate").change(function() {
+    let date = moment($("#exitDate").val(), 'yyyy/mm/dd').toDate();
+    $("#exitDate").val(date);
+});
+function createResignation(id){
+    setupForCreateResignationForm(id);
+    $('#employeeResignationModal').modal('toggle');
+};
+function setupForCreateResignationForm(id) {
+    $("#employeeResignationForm")[0].reset();
+    $("#employeeResId").val(id);
+    $("#employeeResignationModalLabel").text("Create New Resignation");
+    const formBaseUrl = $("#employeeResignationForm").data("action-base-url");
+    $("#employeeResignationForm").attr("action", formBaseUrl + "createResignation");
+}
+$("#employeeResignationForm").submit(function (event) {
+    event.preventDefault();
+    const url = event.target.action;
+    saveData(url)
 })
 
 let employeeReq = null;
-
-function setupForCreateForm(){
-    $("#employeeForm")[0].reset();
-    $("#employeeModalLabel").text("Create New Employee");
-    getSelectOption();
-    const formBaseUrl = $("#employeeForm").data("action-base-url");
-    $("#employeeForm").attr("action",formBaseUrl+"save");
-    resetFormError();
-}
-$("#employeeForm").submit(function (event){
-    event.preventDefault();
-    const form = $('#employeeForm')[0];
-    const data = new FormData(form);
-    const jsonData = Object.fromEntries(data.entries());
-    const url = event.target.action;
-    saveData(jsonData,url)
-})
-
-function saveData(data,url){
-    employeeReq = $.ajax(url,{
-        method: "POST",
-        enctype: 'multipart/form-data',
-        processData: false,
-        contentType: false,
-        timeout: 500,
-        data:{
-            data: $("#employeeForm").serialize(),
-            file: $("#empImg")[0].files
-        },
-
-        beforeSend: function (){
-            if(employeeReq !== undefined && employeeReq != null){
-                employeeReq.abort();
-            }
-        },
-        success: function (data,status,xhr){
-            if(data.status === 200){
+function saveData(url) {
+    employeeReq = $.ajax(url,
+        {
+            method: "POST",
+            data: $("#employeeResignationForm").serialize(),
+            beforeSend: function () {
+                if (employeeReq !== undefined && employeeReq != null) {
+                    employeeReq.abort();
+                }
+            },
+            success: function (data) {
                 console.log("saved");
-            }else if(data.status === 400){
-                showFormError(data.detail.error)
+                if (data.status === 200) {
+                  $("#employeeResignationModal").modal('toggle');
+                  viewEmployee(data.detail.id,"employee");
+                  console.log("saved");
+                }
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
             }
-        },
-        error: function (jqXhr, textStatus, errorMessage) {
-            console.log("error")
-            console.log(textStatus)
-            console.log(errorMessage)
-        }
-    })
+        });
 }
-function resetFormError(){
-    $("#error-fullname").text("")
-    $("#error-address").text("")
-    $("#error-email").text("")
-    $("#error-phone").text("")
-    $("#error-position").text("")
-    $("#error-department").text("")
-    $("#error-empImage").text("")
+function editResignation(id){
+    setupForEditResignationForm(id);
+    getEmployeeData(id);
+    $('#employeeResignationModal').modal('toggle');
+    
+}
+function setupForEditResignationForm(id){
+    $("#employeeResignationForm")[0].reset();
+    $("#employeeResignationModalLabel").text("Edit Resignation");
+    const formBaseUrl = $("#employeeResignationForm").data("action-base-url");
+    $("#employeeResignationForm").attr("action", formBaseUrl + "updateResignation");
+}
+function getEmployeeData(id){
+    const url = $("#base-url").val() + "employee/get/" + id;
+    employeeReq = $.ajax(url,
+        {
+            method: "GET",
+            dataType: 'json',
+            timeout: 500,
+            beforeSend: function () {
+                if (employeeReq !== undefined && employeeReq != null) {
+                    employeeReq.abort();
+                }
+            },
+            success: function (data, status, xhr) {
+                console.log("saved");
+                if (data.status === 200) {
+                    populateDataInForm(data.detail);
+                    $('#employeeResignationModal').modal('toggle');
+                }
 
-}
-function showFormError(error){
-    $("#error-fullname").text(error.fullname)
-    $("#error-address").text(error.address)
-    $("#error-email").text(error.email)
-    $("#error-phone").text(error.phone)
-    $("#error-position").text(error.position)
-    $("#error-department").text(error.department)
-    $("#error-empImage").text(error.empImage)
-}
-function getSelectOption(){
-    const url= $("#base-url").val()+"employee/getSelectList"
-    employeeReq = $.ajax(url,{
-        method:"GET",
-        dataType:"json",
-        timeout: 500,
-
-        beforeSend: function (){
-            if(employeeReq !== undefined && employeeReq != null){
-                employeeReq.abort();
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
             }
-        },
-        success :function (data){
-            if(data.status === 200){
-                populateSelectForm(data.detail)
-            }
-        },
-        error: function (jqXhr, textStatus, errorMessage) {
-            console.log("error")
-            console.log(textStatus)
-            console.log(errorMessage)
-        }
-    });
+        });
 }
-
-function populateSelectForm(data){
-    console.log(data)
-    for (var index = 0; index < data.positionList.length; index++) {
-        $('#position').append('<option value="' + data.positionList[index].id + '">' + data.positionList[index].title + '</option>');
-    }
-    for (var index = 0; index < data.departmentList.length; index++) {
-        $('#department').append('<option value="' + data.departmentList[index].id + '">' + data.departmentList[index].title + '</option>');
-    }
+function  populateDataInForm(data){
+    $("#employeeResignationModal").find("#employeeResId").val(data.id);
+    $("#employeeResignationModal").find("#resignationReason").val(data.resignationReason);
+    $("#employeeResignationModal").find("#resignationDate").val(data.resignationDate);
+    $("#employeeResignationModal").find("#exitDate").val(data.exitDate);
+}
+function approveResignation(id){
+    const url = window.location.origin + "/employee/approveResignation/"+ id;
+    employeeReq = $.ajax(url,
+        {
+            method: "POST",
+            beforeSend: function () {
+                if (employeeReq !== undefined && employeeReq != null) {
+                    employeeReq.abort();
+                }
+            },
+            success: function (data) {
+                if (data.status === 200) {
+                    viewEmployee(data.detail.id,"employee");
+                    console.log("saved");
+                }
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
+            }
+        });
+}
+function exitResignation(id){
+    const url = window.location.origin + "/employee/exitResignation/"+ id;
+    employeeReq = $.ajax(url,
+        {
+            method: "POST",
+            beforeSend: function () {
+                if (employeeReq !== undefined && employeeReq != null) {
+                    employeeReq.abort();
+                }
+            },
+            success: function (data) {
+                if (data.status === 200) {
+                    viewEmployee(data.detail.id,"employee");
+                    console.log("saved");
+                }
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
+            }
+        });
 }
