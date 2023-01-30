@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Meeting</title>
+</head>
+<body layout:fragment="content">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-10">
+                <h1>Meetings</h1>
+            </div>
+            <div class="col-sm-2">
+                <a th:href="@{/meetingMinutes/employeeForm/{meetingtype} (meetingtype= ${MEETINGTYPE})}">
+                    <button id="add-new-meeting" class="btn btn-primary btn-sm pull-right">Add New Meeting</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table" id="meeting-table">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>CreatedBy</th>
+
+                            </tr>
+                            </thead>
+                            <tbody th:each="meeting: ${meetingList}">
+                            <input type="hidden" th:value="${MEETINGTYPE}">
+                            <tr th:id="${meeting.id} ">
+                                <td class="title"><a th:href="@{/meetingMinutes/showMinute/{id}(id=${meeting.id})}"
+                                                     th:text="${meeting.title}"></a></td>
+                                <td th:text="${meeting.meetingDate}" class="minuteDate"></td>
+                                <td th:utext="${meeting.createdBy.username}" class="departmentCode"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<script type="text/javascript" th:src="@{/js/ckeditor/ckeditor.js}"></script>
+<script>
+    CKEDITOR.replace('minute');
+</script>
+</body>
+</html>

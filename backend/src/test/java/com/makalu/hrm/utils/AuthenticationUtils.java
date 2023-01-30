@@ -29,5 +29,5 @@ public class AuthenticationUtils {
         }
 
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().parallelStream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-    }
+       }
 }

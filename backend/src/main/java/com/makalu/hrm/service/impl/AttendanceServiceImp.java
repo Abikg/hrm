@@ -71,7 +71,7 @@ public class AttendanceServiceImp implements AttendanceService {
     }
 
     private PersistentAttendanceEntity getEntityForPunchOut(UUID userId){
-        PersistentAttendanceEntity previousAttendance = getLastAttendanceOfUser(AuthenticationUtils.getCurrentUser().getUserId());
+        PersistentAttendanceEntity previousAttendance = getLastAttendanceOfUser(AuthenticationUtils.getCurrentUser().  getUserId());
         if (previousAttendance == null){
             throw new AttendanceException("There is no previous punch in record for this user " + AuthenticationUtils.getCurrentUser().getUsername());
         }
