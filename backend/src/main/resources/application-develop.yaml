@@ -5,6 +5,20 @@ spring:
     restart:
       enabled: true
 
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: testappmailservice49@gmail.com
+    password: qnqqnbomunbqwrog
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
 
 
 

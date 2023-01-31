@@ -14,7 +14,7 @@ public interface UserService {
 
     PersistentUserEntity getCurrentUserEntity();
 
-    RestResponseDto createEmployeeUser(@NotNull String email);
+    RestResponseDto createEmployeeUser(@NotNull String email, @NotNull String name);
 
     RestResponseDto getResponseById(@NotNull UUID userId);
 
