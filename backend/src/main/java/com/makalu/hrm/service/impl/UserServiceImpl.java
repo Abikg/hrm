@@ -1,15 +1,13 @@
 package com.makalu.hrm.service.impl;
 
 import com.makalu.hrm.converter.UserConverter;
-import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.UserDTO;
 import com.makalu.hrm.repository.UserRepository;
+import com.makalu.hrm.service.MailTemplateParser;
 import com.makalu.hrm.service.UserService;
 import com.makalu.hrm.utils.AuthenticationUtils;
-import com.makalu.hrm.converter.UserConverter;
-import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.MailService;
 import com.makalu.hrm.utils.PasswordUtil;
@@ -19,7 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -31,10 +31,11 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final PasswordUtil passwordUtil = new PasswordUtil();
+    private final MailTemplateParser mailTemplateParser;
 
     @Override
     @Transactional
-    public RestResponseDto createEmployeeUser(String email) {
+    public RestResponseDto createEmployeeUser(String email, String name) {
         try {
             PersistentUserEntity userEntity = new PersistentUserEntity();
             int len = 10;
@@ -47,7 +48,9 @@ public class UserServiceImpl implements UserService {
             userEntity.setPasswordExpired(false);
             userEntity.setUserType(UserType.EMPLOYEE);
 
-            RestResponseDto rdto = mailService.sendMail(userEntity.getUsername(), "HRM Registeration", randomPassword);
+            Map<String, Object> mailMap = Map.of("user", name, "email", email, "password", randomPassword);
+
+            RestResponseDto rdto = mailService.sendHtmMail(email, "Congrats! Welcome to Makalu HRM", mailTemplateParser.sendPasswordTemplate(mailMap));
 
             if (rdto.getStatus() != 200) {
                 return RestResponseDto.INSTANCE().internalServerError();

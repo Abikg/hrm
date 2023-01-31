@@ -70,7 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 }
             }
             if (employeeDTO.isCreateUser()) {
-                RestResponseDto userResponseDto = userService.createEmployeeUser(employeeDTO.getEmail());
+                RestResponseDto userResponseDto = userService.createEmployeeUser(employeeDTO.getEmail(),employeeDTO.getFullname());
 
                 if (userResponseDto.getStatus() == 200) {
                     UserDTO userDTO = (UserDTO) userResponseDto.getDetail();
