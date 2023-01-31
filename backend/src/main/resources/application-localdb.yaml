@@ -8,18 +8,3 @@ spring:
 #      schema: jagire
   jpa:
 #    show_sql: true
-
-  mail:
-    host: smtp.gmail.com
-    username: testappmailservice49@gmail.com
-    password: qnqqnbomunbqwrog
-    port: 587
-    default-encoding: UTF-8
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-    protocol: smtp
-    test-connection: false
