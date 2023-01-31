@@ -43,13 +43,13 @@ public class FieldService {
     public  List<Object> getAttendanceFields(){
         List<Object> fields=new ArrayList<>();
         if(AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())){
-            fields.add(Map.of("name","user.username","displayName","UserName","orderable",false));
+            fields.add(Map.of("name","user.username","displayName","USER","orderable",false));
         }
-        fields.add(Map.of("name","punchInDate","displayName","Punchin Date","orderable",true));
-        fields.add(Map.of("name","punchInIp","displayName","punchin Ip","orderable",false));
-        fields.add(Map.of("name","punchOutDate","displayName","punchout Date","orderable",true));
-        fields.add(Map.of("name","punchOutIp","displayName","punchout Date","orderable",false));
-        fields.add(Map.of("name","totalWorkedHours","displayName","Worked Hours","orderable",true));
+        fields.add(Map.of("name","punchInDate","displayName","PUNCHINDATE","orderable",true));
+        fields.add(Map.of("name","punchInIp","displayName","PUNCHINIP","orderable",false));
+        fields.add(Map.of("name","punchOutDate","displayName","PUNCHOUTIP","orderable",true));
+        fields.add(Map.of("name","punchOutIp","displayName","PUNCHOUTDATE","orderable",false));
+        fields.add(Map.of("name","totalWorkedHours","displayName","WORKEDHOURS","orderable",true));
          return  fields;
     }
 
