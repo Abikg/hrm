@@ -21,7 +21,7 @@ public class PublicController {
     @RequestMapping(value = "/")
     @PreAuthorize("permitAll()")
     public String index(ModelMap map) {
-        if (AuthenticationUtils.getCurrentUser() != null&&!AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
+        if (AuthenticationUtils.getCurrentUser() != null) {
             map.put(ATTENDANCE_BUTTON, attendanceService.isValidToPunchIn(AuthenticationUtils.getCurrentUser().getUserId()) ? "PUNCHIN" : "PUNCHOUT");
         }
         if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
