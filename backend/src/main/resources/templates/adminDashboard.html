@@ -9,23 +9,52 @@
         <div class="container-fluid">
             <div class="row mb-2">
 
-                <div class="col-sm-4">
+                <div class="col-sm-4"   th:if="${#ctx.containsVariable('attendanceBtn')}">
 
-<!--                    <a th:if="${attendanceBtn.equals('PUNCHIN')}" th:href="@{/attendance/punchIn}">-->
-<!--                        <button  class="btn btn-primary btn-sm mr-5 pull-right">PunchIn</button>-->
-<!--                    </a>-->
+                    <a th:if="${attendanceBtn.equals('PUNCHIN')}" th:href="@{/attendance/punchIn}">
+                        <button  class="btn btn-primary btn-sm mr-5 pull-right">PunchIn</button>
+                    </a>
 
 
-<!--                    <a th:if="${attendanceBtn.equals('PUNCHOUT')}" th:href="@{/attendance/punchOut}">-->
-<!--                        <button class="btn btn-danger btn-sm mr-2">PunchOut</button>-->
-<!--                    </a>-->
+                    <a th:if="${attendanceBtn.equals('PUNCHOUT')}" >
+                        <button class="btn btn-danger btn-sm mr-2" id="punchout" >PunchOut</button>
+                    </a>
 
                 </div>
             </div>
         </div>
     </section>
+    <div class="modal fade" id="attendanceModal" tabindex="-1" role="dialog" aria-labelledby="departmentModal" aria-hidden="true">
+        <form id="attendanceTimeForm" method="" action="/attendance/nextDayPunchout">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-bold" id="departmentModalLabel">Give Your last Day Punchout Time</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="time" class="col-form-label">Time</label>
+                            <input type="time" class="form-control" name="time"  id="time">
+                            <p class="alert-warning" id="error-attendancetTime"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" id="btn-save-attendance" class="btn btn-primary">Save</button>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
     <section class="content">
 <h1>Welcome to makalu HRM</h1>
     </section>
+
+<script type="text/javascript" src="/js/hrm/attendance.js"></script>
+
 </body>
 </html>

@@ -14,4 +14,9 @@ public class AttendanceDto {
     private String punchOutIp;
     private Double totalWorkedHours;
     private UserDTO user;
+    private Date fromDate;
+    private Date toDate;
+    private int page;
+
+
 }

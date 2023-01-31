@@ -13,7 +13,6 @@ import java.util.Date;
 @Table(name = "attendance")
 public class PersistentAttendanceEntity extends AbstractEntity {
 
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "punch_in_date")
     private Date punchInDate = new Date();

@@ -1,5 +1,6 @@
 package com.makalu.hrm.utils;
 
+import com.makalu.hrm.enumconstant.UserType;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -37,6 +38,19 @@ public class FieldService {
         fields.add(Map.of("name", "employeeStatus", "displayName", "Status", "orderable", true));
         fields.add(Map.of("name", "action", "displayName", "Action", "orderable", false, "width", "120px"));
         return fields;
+    }
+
+    public  List<Object> getAttendanceFields(){
+        List<Object> fields=new ArrayList<>();
+        if(AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())){
+            fields.add(Map.of("name","user.username","displayName","USER","orderable",false));
+        }
+        fields.add(Map.of("name","punchInDate","displayName","PUNCHINDATE","orderable",true));
+        fields.add(Map.of("name","punchInIp","displayName","PUNCHINIP","orderable",false));
+        fields.add(Map.of("name","punchOutDate","displayName","PUNCHOUTIP","orderable",true));
+        fields.add(Map.of("name","punchOutIp","displayName","PUNCHOUTDATE","orderable",false));
+        fields.add(Map.of("name","totalWorkedHours","displayName","WORKEDHOURS","orderable",true));
+         return  fields;
     }
 
 }

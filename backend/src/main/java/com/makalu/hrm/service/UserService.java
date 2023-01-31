@@ -2,6 +2,8 @@ package com.makalu.hrm.service;
 
 import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.enumconstant.UserType;
+import com.makalu.hrm.model.UserDTO;
+
 import com.makalu.hrm.model.RestResponseDto;
 
 import javax.validation.constraints.NotNull;
@@ -18,7 +20,6 @@ public interface UserService {
 
     List<PersistentUserEntity> findAllByUserType(UserType userType);
 
-    List<PersistentUserEntity> findALl();
-
+    List<UserDTO> findALl();
+    UserDTO findById(UUID userid);
 }
-

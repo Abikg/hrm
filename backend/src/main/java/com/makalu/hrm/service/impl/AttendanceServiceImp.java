@@ -1,23 +1,30 @@
 package com.makalu.hrm.service.impl;
 
+
+import com.makalu.hrm.Specification.AttendanceSpecification;
+import com.makalu.hrm.constant.NumericConstant;
 import com.makalu.hrm.converter.AttendanceConverter;
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.exceptions.AttendanceException;
 import com.makalu.hrm.model.AttendanceDto;
+import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.repository.AttendanceRepository;
 import com.makalu.hrm.service.AttendanceService;
 import com.makalu.hrm.service.UserService;
 import com.makalu.hrm.utils.AuthenticationUtils;
 import com.makalu.hrm.utils.DateUtils;
+import com.makalu.hrm.utils.FieldService;
+import com.makalu.hrm.validation.AttendanceValidation;
+import com.makalu.hrm.validation.error.AttendanceError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -26,13 +33,28 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AttendanceServiceImp implements AttendanceService {
 
-    private final AttendanceConverter attendanceConverter;
     private final AttendanceRepository attendanceRepository;
     private final UserService userService;
+    private final AttendanceValidation attendanceValidation;
+    private final FieldService fieldService;
+    private final AttendanceConverter attendanceConverter;
 
     @Override
-    public List<AttendanceDto> findAll() {
-        return attendanceConverter.convertToDtoList(attendanceRepository.findAll());
+    public RestResponseDto filter(AttendanceDto attendanceDto) {
+
+        try {
+            if (attendanceDto.getToDate() != null && attendanceDto.getFromDate() != null) {
+                AttendanceError error = attendanceValidation.validateDateRange(attendanceDto);
+                if (!error.isValid()) {
+                    return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", attendanceDto));
+                }
+            }
+            List<AttendanceDto> list = attendanceConverter.convertToDtoList(attendanceRepository.findAll(new AttendanceSpecification(attendanceDto)));
+            return RestResponseDto.INSTANCE().success().detail(list).column(fieldService.getAttendanceFields());
+
+        } catch (Exception ex) {
+            return RestResponseDto.INSTANCE().internalServerError().detail(Map.of("data", attendanceDto));
+        }
     }
 
     @Transactional
@@ -42,24 +64,28 @@ public class AttendanceServiceImp implements AttendanceService {
             throw new AttendanceException("This user is no valid for punch in" + AuthenticationUtils.getCurrentUser().getUsername());
         }
         PersistentAttendanceEntity entity = new PersistentAttendanceEntity();
-
         entity.setPunchInIp(ip);
         entity.setUser(userService.getCurrentUserEntity());
-
         attendanceRepository.saveAndFlush(entity);
 
     }
 
     @Transactional
     @Override
-    public void punchOut(String ip) {
+    public RestResponseDto punchOut(String ip) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
+        Date today = new Date();
+        double hours = DateUtils.getHours(today, previousAttendance.getPunchInDate());
+        if (hours < NumericConstant.OFFICE_HOURS) {
+            previousAttendance.setPunchOutIp(ip);
+            previousAttendance.setPunchOutDate(today);
+            previousAttendance.setTotalWorkedHours(hours);
+            attendanceRepository.saveAndFlush(previousAttendance);
+            return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", false));
+        } else {
+            return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", true));
+        }
 
-        previousAttendance.setPunchOutIp(ip);
-        previousAttendance.setPunchOutDate(new Date());
-        previousAttendance.setTotalWorkedHours(DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate()));
-
-        attendanceRepository.saveAndFlush(previousAttendance);
     }
 
     private PersistentAttendanceEntity getLastAttendanceOfUser(UUID userId) {
@@ -90,12 +116,34 @@ public class AttendanceServiceImp implements AttendanceService {
         if (previousAttendance == null) {
             return true;
         }
-
         if (previousAttendance.getPunchOutDate() != null && !DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date())) {
             return true;
         }
 
         return false;
+    }
+
+    @Transactional
+    @Override
+    public RestResponseDto setPunchinAnotherDay(String time, String ips) {
+        PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
+        int hours = Integer.parseInt(time.split(":")[0]);
+        if (hours < NumericConstant.OFFICE_START || hours > NumericConstant.OFFICE_END) {
+            return RestResponseDto.INSTANCE().success().detail(Map.of("notOfficeHours", true));
+        } else {
+            Date punchoutDate = previousAttendance.getPunchInDate();
+            punchoutDate.setHours(Integer.parseInt(time.split(":")[0]));
+            punchoutDate.setMinutes(Integer.parseInt(time.split(":")[1]));
+            punchoutDate.setSeconds(Integer.parseInt("00"));
+
+            previousAttendance.setPunchOutDate(punchoutDate);
+            double workHours = DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
+            previousAttendance.setPunchOutIp(ips);
+            previousAttendance.setTotalWorkedHours(workHours);
+            attendanceRepository.saveAndFlush(previousAttendance);
+            return RestResponseDto.INSTANCE().detail(Map.of("notOfficeHours", false));
+        }
+
     }
 
     @Override
@@ -108,4 +156,13 @@ public class AttendanceServiceImp implements AttendanceService {
         return true;
     }
 
+    private String getUserName(UUID userid) {
+
+        String userName = userService.findById(userid).getUsername();
+        if (userName != null)
+            return userName;
+
+        return "name not found";
+
+    }
 }

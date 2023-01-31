@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/main}">
+
+<meta charset="UTF-8">
+<title>Atte</title>
+
+<head>
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed" layout:fragment="content">
+<div class="wrapper mt-2">
+    <section class="content-header">
+        <div class="container">
+            <div class="row mb-2 ">
+                <div class="col-sm-5">
+                    <h1> Attendance </h1>
+
+                </div>
+
+            </div>
+            <div class="row mb-2">
+                <div class="card w-100 " style="height: 150px">
+                    <div class="card-body ">
+                        <div class="row flex-fill">
+                            <div class="col-4" sec:authorize="hasRole('SUPER_ADMIN')">
+                                <label for="select-user">Select User</label>
+                                <select class="custom-select" onchange="selectFunction()" name="id" id="select-user">
+                                    <option selected th:value="ALL">All</option>
+                                    <option th:each="user:${userList}"
+                                            th:value="${user.id}"
+                                            th:text="${user.username}"></option>
+                                </select>
+                            </div>
+                            <div class="col-3 datetime1">
+                                <label for="fromdate">From:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-transparent" id="iconFromDate"><i
+                                                class="fas fa-calendar"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control mydatepicker" id="fromDate" name="fromDate"
+                                           data-date-format="yyyy/mm/dd" autocomplete="off" readonly>
+                                </div>
+                            </div>
+                            <div class="col-3 datetime2">
+                                <label for="todate">To:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-transparent" id="iconToDate"><i
+                                                class="fas fa-calendar"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control mydatepicker " data-date-format="yyyy/mm/dd"
+                                           id="toDate" name="toDate" readonly>
+                                </div>
+                            </div>
+                            <div class="row  ml-1" sec:authorize="hasRole('SUPER_ADMIN')">
+
+                                <button type="button" class="btn btn-primary mt-auto" id="dateFilterButton"
+                                        onclick="filterByDateForAdmin()">Filter
+                                </button>
+                            </div>
+                            <div class="row  ml-1" sec:authorize="!hasRole('SUPER_ADMIN')">
+
+                                <button type="button" class="btn btn-primary mt-auto" id="dateFilterButton2"
+                                        onclick="filterByDateForNormal()">Filter
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table" id="attendance-table"></table>
+
+    </section>
+</div>
+
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+</div>
+
+<script type="text/javascript" th:src="@{/js/hrm/attendance.js}"></script>
+
+</body>
+</html>

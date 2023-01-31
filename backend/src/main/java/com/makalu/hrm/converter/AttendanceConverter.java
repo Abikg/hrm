@@ -5,6 +5,7 @@ import com.makalu.hrm.model.AttendanceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+
 @Component
 @RequiredArgsConstructor
 public class AttendanceConverter extends Convertable<PersistentAttendanceEntity, AttendanceDto> {
@@ -28,13 +29,12 @@ public class AttendanceConverter extends Convertable<PersistentAttendanceEntity,
             return null;
 
         AttendanceDto dto = new AttendanceDto();
-
         dto.setId(entity.getId());
         dto.setPunchInDate(entity.getPunchInDate());
         dto.setPunchInIp(entity.getPunchInIp());
         dto.setPunchOutDate(entity.getPunchOutDate());
         dto.setPunchOutIp(entity.getPunchOutIp());
-        dto.setTotalWorkedHours(entity.getTotalWorkedHours());
+        dto.setTotalWorkedHours((entity.getTotalWorkedHours()));
         dto.setUser(userConverter.convertToDto(entity.getUser()));
 
         return dto;

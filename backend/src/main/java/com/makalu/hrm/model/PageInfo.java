@@ -1,5 +1,8 @@
 package com.makalu.hrm.model;
 
+
+
+
 public class PageInfo {
 
     private int pageNumber;
@@ -8,11 +11,13 @@ public class PageInfo {
     public PageInfo(int pageNumber, int limit) {
         this.pageNumber = pageNumber;
         this.limit = limit;
+
     }
 
     public PageInfo() {
         this.pageNumber = 1;
         this.limit = 100;
+
     }
 
     public PageInfo pageNumber(int pageNumber) {

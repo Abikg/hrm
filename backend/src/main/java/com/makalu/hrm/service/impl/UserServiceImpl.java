@@ -1,6 +1,10 @@
 package com.makalu.hrm.service.impl;
 
+import com.makalu.hrm.converter.UserConverter;
+import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
+import com.makalu.hrm.enumconstant.UserType;
+import com.makalu.hrm.model.UserDTO;
 import com.makalu.hrm.repository.UserRepository;
 import com.makalu.hrm.service.UserService;
 import com.makalu.hrm.utils.AuthenticationUtils;
@@ -23,7 +27,7 @@ import java.util.UUID;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final UserConverter userConverter;
+    private  final UserConverter userConverter;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final PasswordUtil passwordUtil = new PasswordUtil();
@@ -76,11 +80,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<PersistentUserEntity> findAllByUserType(UserType userType) {
-        return null;
+        return userRepository.findByUserType(userType);
+    }
+    @Override
+    public List<UserDTO> findALl(){
+        return userConverter.convertToDtoList(userRepository.findAll());
+
     }
 
     @Override
-    public List<PersistentUserEntity> findALl() {
-        return null;
+    public UserDTO findById(UUID userid) {
+        return userConverter.convertToDto(userRepository.findById(userid).get());
     }
 }

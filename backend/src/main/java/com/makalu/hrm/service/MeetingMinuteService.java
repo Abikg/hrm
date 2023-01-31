@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public interface MeetingMinuteService {
 
-
     public RestResponseDto save(MeetingMinutesDto meetingDto);
 
     public List<MeetingMinutesDto> findAll(MeetingType meetingType);

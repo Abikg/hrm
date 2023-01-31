@@ -12,8 +12,8 @@ import java.util.UUID;
 @Repository
 public interface MeetingMinuteRepository extends JpaRepository<PersistentMeetingMinutesEntity, UUID> {
 
- List<PersistentMeetingMinutesEntity> findByMeetingType(MeetingType meetingType);
+    List<PersistentMeetingMinutesEntity> findByMeetingType(MeetingType meetingType);
 
- Optional<PersistentMeetingMinutesEntity> findById(UUID id);
+    Optional<PersistentMeetingMinutesEntity> findById(UUID id);
 
 }
