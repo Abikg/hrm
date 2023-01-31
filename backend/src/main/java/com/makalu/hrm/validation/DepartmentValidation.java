@@ -15,7 +15,7 @@ public class DepartmentValidation {
     private final DepartmentRepository departmentRepository;
     private static DepartmentError error;
 
-    public DepartmentError validateOnSave(DepartmentDTO dto){
+    public DepartmentError validateOnSave(DepartmentDTO dto) {
         error = new DepartmentError();
         boolean isValid = validateTitle(dto.getTitle());
         isValid = isValid & validateCode(dto.getDepartmentCode());
@@ -26,7 +26,7 @@ public class DepartmentValidation {
         return error;
     }
 
-    public DepartmentError validateOnUpdate(DepartmentDTO dto){
+    public DepartmentError validateOnUpdate(DepartmentDTO dto) {
         error = new DepartmentError();
         boolean isValid = validateTitle(dto.getTitle());
         isValid = isValid & validateCode(dto.getDepartmentCode());
@@ -38,31 +38,31 @@ public class DepartmentValidation {
     }
 
     @Transactional
-    boolean validateUnique(String title, String code){
+    boolean validateUnique(String title, String code) {
         PersistentDepartmentEntity departmentEntity = departmentRepository.findByTitleOrDepartmentCode(title, code);
 
-        if (departmentEntity == null){
+        if (departmentEntity == null) {
             return true;
         }
 
-        if (departmentEntity.getTitle().equals(title)){
+        if (departmentEntity.getTitle().equals(title)) {
             error.setTitle("Please provide the unique title");
         }
 
-        if (departmentEntity.getDepartmentCode().equals(code)){
+        if (departmentEntity.getDepartmentCode().equals(code)) {
             error.setDepartmentCode("Please provide the unique code");
         }
 
         return false;
     }
 
-    private boolean validateTitle(String title){
-        if (title == null || title.trim().isEmpty()){
+    private boolean validateTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
             error.setTitle("Title is required");
             return false;
         }
 
-        if (title.length() > 51){
+        if (title.length() > 51) {
             error.setTitle("Title must be less than 50 characters");
             return false;
         }
@@ -70,27 +70,27 @@ public class DepartmentValidation {
         return true;
     }
 
-    private boolean validateCode(String code){
-        if (code == null || code.trim().isEmpty()){
+    private boolean validateCode(String code) {
+        if (code == null || code.trim().isEmpty()) {
             error.setDepartmentCode("Code is required");
             return false;
         }
 
-        if (code.length() > 10){
-            error.setDepartmentCode( "Code must be less than 10 characters");
+        if (code.length() > 10) {
+            error.setDepartmentCode("Code must be less than 10 characters");
             return false;
         }
 
         return true;
     }
 
-    private boolean validateDetails(String details){
-        if (details == null || details.trim().isEmpty()){
+    private boolean validateDetails(String details) {
+        if (details == null || details.trim().isEmpty()) {
             error.setDetail("Details is required");
             return false;
         }
 
-        if (details.length() > 500){
+        if (details.length() > 500) {
             error.setDetail("Details must be less than 500 characters");
             return false;
         }

@@ -33,7 +33,7 @@ public class EmployeeValidation {
 
 
     private final EmployeeRepository employeeRepository;
-    private  static EmployeeError error;
+    private static EmployeeError error;
 
     public EmployeeError validateOnSave(EmployeeDTO dto) {
         error = new EmployeeError();
@@ -98,14 +98,15 @@ public class EmployeeValidation {
     }
 
     @Transactional
-    boolean validateUniqueOnUpdate(EmployeeDTO employeeDTO){
+    boolean validateUniqueOnUpdate(EmployeeDTO employeeDTO) {
         PersistentEmployeeEntity employeeEntity = employeeRepository.findByEmail(employeeDTO.getEmail());
-        if( employeeEntity != null && !employeeEntity.getId().equals(employeeDTO.getId())){
-                error.setEmail("Email already used");
-                return false;
+        if (employeeEntity != null && !employeeEntity.getId().equals(employeeDTO.getId())) {
+            error.setEmail("Email already used");
+            return false;
         }
         return true;
     }
+
     private boolean validateFullName(String name) {
         if (name == null || name.trim().isEmpty()) {
             error.setFullname("Name is required");
@@ -124,7 +125,7 @@ public class EmployeeValidation {
         if (email == null || email.trim().isEmpty()) {
             error.setEmail("Email is required");
             return false;
-        }else {
+        } else {
             Matcher matcher = EMAIL_PATTERN.matcher(email);
             if (!matcher.matches()) {
                 error.setEmail("Incorrect email format");
@@ -152,16 +153,16 @@ public class EmployeeValidation {
         return true;
     }
 
-    private boolean validatePosition(UUID positionId){
-        if(positionId == null){
+    private boolean validatePosition(UUID positionId) {
+        if (positionId == null) {
             error.setPosition("Position is required");
             return false;
         }
         return true;
     }
 
-    private boolean validateDepartment(UUID departmentId){
-        if(departmentId == null){
+    private boolean validateDepartment(UUID departmentId) {
+        if (departmentId == null) {
             error.setDepartment("Department is required");
             return false;
         }
@@ -173,7 +174,7 @@ public class EmployeeValidation {
         if (email == null || email.trim().isEmpty()) {
             error.setContactEmail("Email is required");
             return false;
-        }else {
+        } else {
             Matcher matcher = EMAIL_PATTERN.matcher(email);
             if (!matcher.matches()) {
                 error.setContactEmail("Incorrect email format");
@@ -188,7 +189,7 @@ public class EmployeeValidation {
             error.setContactPhone("Phone number is required");
             return false;
         }
-        if(!phone.chars().allMatch(Character::isDigit)){
+        if (!phone.chars().allMatch(Character::isDigit)) {
             error.setContactPhone("Phone number can only have numerical value");
             return false;
         }
@@ -210,19 +211,19 @@ public class EmployeeValidation {
         }
         return true;
     }
+
     private boolean validateDob(String dob) throws ParseException {
-        if(dob == null || dob.trim().isEmpty()){
+        if (dob == null || dob.trim().isEmpty()) {
             error.setDob("Date of birth is required");
             return false;
-        }
-        else{
+        } else {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             Date birthDate = dateFormat.parse(dob);
             Calendar cal = Calendar.getInstance();
             Date currentDate = cal.getTime();
             int compare = birthDate.compareTo(currentDate);
 
-            if(compare > 0){
+            if (compare > 0) {
                 error.setDob("Date of birth must be less than current date");
                 return false;
             }
@@ -231,29 +232,29 @@ public class EmployeeValidation {
     }
 
 
-    private boolean validateGender(String gender){
-        if(gender == null || gender.trim().isEmpty()){
+    private boolean validateGender(String gender) {
+        if (gender == null || gender.trim().isEmpty()) {
             error.setGender("Gender is required");
             return false;
         }
         return true;
     }
-    private boolean validateMaritalStatus(String maritalStatus){
-        if(maritalStatus == null || maritalStatus.trim().isEmpty()){
+
+    private boolean validateMaritalStatus(String maritalStatus) {
+        if (maritalStatus == null || maritalStatus.trim().isEmpty()) {
             error.setMaritalStatus("Marital status is required");
             return false;
         }
         return true;
     }
 
-    private boolean validateJoinDate(String joinDate){
-        if(joinDate == null  || joinDate.trim().isEmpty()){
+    private boolean validateJoinDate(String joinDate) {
+        if (joinDate == null || joinDate.trim().isEmpty()) {
             error.setJoinDate("Join date is required");
             return false;
         }
         return true;
     }
-
 
 
 }

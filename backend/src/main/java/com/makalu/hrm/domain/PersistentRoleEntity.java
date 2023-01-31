@@ -12,8 +12,8 @@ import javax.persistence.Table;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
-public class PersistentRoleEntity extends AbstractEntity{
+@EqualsAndHashCode(callSuper = false)
+public class PersistentRoleEntity extends AbstractEntity {
 
     @Column(name = "authority", nullable = false, unique = true, length = 50)
     private String authority;

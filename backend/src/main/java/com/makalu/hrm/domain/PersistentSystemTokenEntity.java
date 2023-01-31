@@ -18,8 +18,8 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
-public class PersistentSystemTokenEntity extends AbstractEntity{
+@EqualsAndHashCode(callSuper = false)
+public class PersistentSystemTokenEntity extends AbstractEntity {
 
     @Column(unique = true, nullable = false)
     private String token;

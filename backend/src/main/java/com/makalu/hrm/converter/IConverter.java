@@ -1,6 +1,6 @@
 package com.makalu.hrm.converter;
 
-public interface IConverter <E,D>{
+public interface IConverter<E, D> {
 
     /***
      * Convert DTO to Entity
@@ -26,6 +26,6 @@ public interface IConverter <E,D>{
      */
 
     E copyConvertToEntity(D dto, E entity);
-  
+
 
 }

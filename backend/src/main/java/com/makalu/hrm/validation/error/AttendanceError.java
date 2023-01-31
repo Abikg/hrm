@@ -6,5 +6,6 @@ import lombok.Data;
 public class AttendanceError {
 
     String datetimeRange;
+
     private boolean valid;
 }

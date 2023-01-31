@@ -40,8 +40,8 @@ public class PositionServiceImpl implements PositionService {
 
             PositionError error = positionValidation.validateOnSave(positionDTO);
 
-            if(!error.isValid()){
-                return RestResponseDto.INSTANCE().validationError().detail(Map.of("error",error,"data",positionDTO));
+            if (!error.isValid()) {
+                return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", positionDTO));
             }
 
             return RestResponseDto
@@ -51,7 +51,7 @@ public class PositionServiceImpl implements PositionService {
                             positionRepository.saveAndFlush(positionConverter.convertToEntity(positionDTO))));
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Error while creating position", e);
             return RestResponseDto
                     .INSTANCE()
@@ -65,7 +65,7 @@ public class PositionServiceImpl implements PositionService {
 
         PersistentPositionEntity positionEntity = positionRepository.findById(positionId).orElse(null);
 
-        if(positionEntity ==  null){
+        if (positionEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Not found");
         }
         return RestResponseDto
@@ -93,7 +93,7 @@ public class PositionServiceImpl implements PositionService {
                     .detail(positionConverter.convertToDto(
                             positionRepository.saveAndFlush(positionConverter.copyConvertToEntity(positionDTO, positionEntity))
                     ));
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Error while creating position", e);
             return RestResponseDto.INSTANCE()
                     .internalServerError()
@@ -112,7 +112,7 @@ public class PositionServiceImpl implements PositionService {
             }
             positionRepository.delete(position);
             return RestResponseDto.INSTANCE().success();
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Error while creating department", e);
             return RestResponseDto.INSTANCE()
                     .internalServerError();

@@ -12,7 +12,7 @@ public class DepartmentDTO {
 
     private UUID id;
 
-    private  String title;
+    private String title;
 
     private String detail;
 

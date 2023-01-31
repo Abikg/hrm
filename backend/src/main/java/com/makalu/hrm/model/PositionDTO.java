@@ -1,6 +1,7 @@
 package com.makalu.hrm.model;
 
 import lombok.Data;
+
 import java.util.UUID;
 
 @Data

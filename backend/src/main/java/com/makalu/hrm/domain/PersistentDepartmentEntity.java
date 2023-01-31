@@ -10,15 +10,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "department")
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class PersistentDepartmentEntity extends AbstractEntity {
-    @Column(nullable = false,unique = true)
-    private  String title;
+    @Column(nullable = false, unique = true)
+    private String title;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String detail;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String departmentCode;
 
 }

@@ -52,7 +52,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                     .detail(departmentConverter.convertToDto(
                             departmentRepository.saveAndFlush(departmentConverter.convertToEntity(departmentDTO))
                     ));
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Error while creating department", ex);
             return RestResponseDto
                     .INSTANCE()
@@ -64,7 +64,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public RestResponseDto getResponseById(@NotNull UUID departmentId) {
         PersistentDepartmentEntity departmentEntity = departmentRepository.findById(departmentId).orElse(null);
-        if (departmentEntity == null){
+        if (departmentEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Department not found");
         }
         return RestResponseDto.INSTANCE().success().detail(departmentConverter.convertToDto(departmentEntity));
@@ -105,14 +105,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public RestResponseDto delete(UUID departmentId) {
         try {
-           PersistentDepartmentEntity departmentEntity = departmentRepository.findById(departmentId).orElse(null);
+            PersistentDepartmentEntity departmentEntity = departmentRepository.findById(departmentId).orElse(null);
 
-           if (departmentEntity == null){
-               return RestResponseDto.INSTANCE().notFound().message("Department not found");
-           }
-           departmentRepository.delete(departmentEntity);
-           return RestResponseDto.INSTANCE().success();
-        }catch (Exception ex){
+            if (departmentEntity == null) {
+                return RestResponseDto.INSTANCE().notFound().message("Department not found");
+            }
+            departmentRepository.delete(departmentEntity);
+            return RestResponseDto.INSTANCE().success();
+        } catch (Exception ex) {
             log.error("Error while creating department", ex);
             return RestResponseDto.INSTANCE().internalServerError();
         }

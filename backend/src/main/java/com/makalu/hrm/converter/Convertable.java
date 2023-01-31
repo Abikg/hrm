@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Convertable <E,D> implements IConverter<E , D>, IListConvertable<E , D>{
+public class Convertable<E, D> implements IConverter<E, D>, IListConvertable<E, D> {
 
     private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    public String formatDate(Date date){
-        if (date == null){
+    public String formatDate(Date date) {
+        if (date == null) {
             return "";
         }
         return sdf.format(date);
@@ -37,7 +37,7 @@ public class Convertable <E,D> implements IConverter<E , D>, IListConvertable<E 
     @Override
     public List<D> convertToDtoList(List<E> entities) {
 
-        if (entities == null||entities.isEmpty()){
+        if (entities == null || entities.isEmpty()) {
             return List.of();
         }
 
@@ -47,18 +47,18 @@ public class Convertable <E,D> implements IConverter<E , D>, IListConvertable<E 
     @Override
     public List<E> convertToEntityList(List<D> dtoList) {
 
-        if (dtoList == null || dtoList.isEmpty()){
+        if (dtoList == null || dtoList.isEmpty()) {
             return List.of();
         }
 
         return dtoList.parallelStream().map(this::convertToEntity).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
-    protected String trimString(String value){
+    protected String trimString(String value) {
         return ParseUtils.trimString(value);
     }
 
-    protected double doubleFormatter(Double value){
+    protected double doubleFormatter(Double value) {
         return ParseUtils.doubleFormatter(value);
     }
 

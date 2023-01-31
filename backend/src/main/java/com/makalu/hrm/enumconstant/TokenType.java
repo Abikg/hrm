@@ -2,7 +2,7 @@ package com.makalu.hrm.enumconstant;
 
 public enum TokenType {
 
-    EMAIL_VERIFICATION("EmailVerification") , RESET_PASSWORD("ResetPassword");
+    EMAIL_VERIFICATION("EmailVerification"), RESET_PASSWORD("ResetPassword");
 
     private final String value;
 

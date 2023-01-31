@@ -10,7 +10,7 @@ public class DateUtils {
 
     private static SimpleDateFormat dfDay = new SimpleDateFormat("yyyy-MM-dd");
 
-    public static boolean hasSameDay(Date d1, Date d2){
+    public static boolean hasSameDay(Date d1, Date d2) {
         return dfDay.format(d1).equals(dfDay.format(d2));
     }
 

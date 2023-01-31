@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-//https://docs.spring.io/spring-security/reference/servlet/oauth2/client/index.html
+    //https://docs.spring.io/spring-security/reference/servlet/oauth2/client/index.html
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
@@ -32,25 +32,25 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/img/**","/css/**", "/js/**", "/auth/**")
+                .antMatchers("/img/**", "/css/**", "/js/**", "/auth/**")
                 .permitAll()
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
                 .and()
                 .userDetailsService(userDetailsService)
-                .formLogin(login->
+                .formLogin(login ->
                         login
                                 .defaultSuccessUrl("/")
                                 .failureHandler(
-                                        (request, response, exception)->
-                                                response.sendRedirect("/auth/login?error="+exception.getMessage())
+                                        (request, response, exception) ->
+                                                response.sendRedirect("/auth/login?error=" + exception.getMessage())
                                 )
                                 .usernameParameter("username")
                                 .passwordParameter("password")
                                 .loginPage("/auth/login")
                                 .permitAll()
                 )
-                .logout(logout->
+                .logout(logout ->
                         logout.
                                 logoutUrl("/auth/logout").
                                 invalidateHttpSession(true).
@@ -67,7 +67,7 @@ public class SecurityConfig {
     }*/
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

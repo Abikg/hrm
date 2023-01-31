@@ -9,26 +9,26 @@ import java.util.UUID;
 public class UUIDGenerator {
     private TimeBasedGenerator generator = null;
 
-    private UUIDGenerator(){
+    private UUIDGenerator() {
         this.generator = Generators.timeBasedGenerator(EthernetAddress.constructMulticastAddress());
     }
 
-    public UUID newUUID(){
-        if(generator == null){
+    public UUID newUUID() {
+        if (generator == null) {
             return null;
         }
         return generator.generate();
     }
 
-    public String newUUIDString(){
+    public String newUUIDString() {
         UUID id = newUUID();
-        if(id == null){
+        if (id == null) {
             return null;
         }
         return id.toString();
     }
 
-    public static UUIDGenerator INSTANCE(){
+    public static UUIDGenerator INSTANCE() {
         return new UUIDGenerator();
     }
 }

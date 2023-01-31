@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
+
     private final JavaMailSender javaMailSender;
 
     @Override
-
     public RestResponseDto sendMail(String to, String subject, String password) {
         try {
             SimpleMailMessage mail = new SimpleMailMessage();

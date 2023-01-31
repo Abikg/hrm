@@ -28,17 +28,17 @@ public class PositionController {
 
     @GetMapping("/")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public String index(){
+    public String index() {
         return "redirect:/position/list";
     }
 
     @GetMapping("/list")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public String list(ModelMap map){
-        try{
-            map.put(ParameterConstant.POSITION_LIST,positionService.list());
-        }catch (Exception e){
-            log.error("Error occurred in position" ,e);
+    public String list(ModelMap map) {
+        try {
+            map.put(ParameterConstant.POSITION_LIST, positionService.list());
+        } catch (Exception e) {
+            log.error("Error occurred in position", e);
         }
 
         return "position/list";
@@ -47,35 +47,35 @@ public class PositionController {
     @GetMapping("/api/list")
     @PreAuthorize("hasRole('AUTHENTICATED')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> list(){
+    public ResponseEntity<RestResponseDto> list() {
         return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(positionService.list()).column(fieldService.getPositionFields()));
     }
 
     @PostMapping("/save")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> save(@RequestBody PositionDTO positionDto){
+    public ResponseEntity<RestResponseDto> save(@RequestBody PositionDTO positionDto) {
         return ResponseEntity.ok(positionService.save(positionDto));
     }
 
     @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> getById(@PathVariable("id") UUID positionId){
+    public ResponseEntity<RestResponseDto> getById(@PathVariable("id") UUID positionId) {
         return ResponseEntity.ok(positionService.getResponseById(positionId));
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> update(@RequestBody PositionDTO positionDto, RedirectAttributes redirectAttributes){
+    public ResponseEntity<RestResponseDto> update(@RequestBody PositionDTO positionDto, RedirectAttributes redirectAttributes) {
         return ResponseEntity.ok(positionService.update(positionDto));
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @ResponseBody
-    public ResponseEntity<RestResponseDto> delete(@PathVariable("id") UUID positionId){
+    public ResponseEntity<RestResponseDto> delete(@PathVariable("id") UUID positionId) {
         return ResponseEntity.ok(positionService.delete(positionId));
     }
 
