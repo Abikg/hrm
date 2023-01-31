@@ -17,8 +17,8 @@ public class MailTemplateParserTest extends MvcBaseTest {
     @Test
     public void sendPasswordTemplate(){
         String password = UUID.randomUUID().toString();
-        String output = mailTemplateParser.sendPasswordTemplate(Map.of("name", "Test", "password", password));
+        String output = mailTemplateParser.sendPasswordTemplate(Map.of("user", "Test", "password", password));
         Assertions.assertTrue(output.contains("Test"));
-        Assertions.assertTrue(output.contains("password"));
+        Assertions.assertTrue(output.contains(password));
     }
 }
