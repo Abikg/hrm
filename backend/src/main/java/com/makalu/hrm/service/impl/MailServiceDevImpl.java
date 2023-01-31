@@ -4,7 +4,6 @@ import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,20 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Profile("prod")
-public class MailServiceImpl implements MailService {
-
-    private final JavaMailSender javaMailSender;
+@Profile({"dev", "test"})
+public class MailServiceDevImpl implements MailService {
 
     @Override
     public RestResponseDto sendMail(String to, String subject, String password) {
         try {
-            SimpleMailMessage mail = new SimpleMailMessage();
-            mail.setTo(to);
-            mail.setSubject(subject);
-            mail.setText("You have been registered to " +
-                    "MakaluHRM with username: " + to + " password: " + password);
-            javaMailSender.send(mail);
+            log.info("email has been sent to " + to);
             return RestResponseDto.INSTANCE().success();
         } catch (Exception ex) {
             log.error("Error sending mail", ex);
