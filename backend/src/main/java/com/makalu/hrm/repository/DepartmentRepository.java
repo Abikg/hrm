@@ -3,7 +3,6 @@ package com.makalu.hrm.repository;
 import com.makalu.hrm.domain.PersistentDepartmentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import java.util.List;
 import java.util.UUID;
 

@@ -4,29 +4,34 @@ import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.enumconstant.MeetingType;
 import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.MeetingMinutesDto;
+import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.MeetingMinuteService;
 import com.makalu.hrm.service.UserService;
 import com.makalu.hrm.utils.AuthenticationUtils;
+import com.makalu.hrm.utils.FieldService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.UUID;
 
 
+@Slf4j
 @RequestMapping("/meetingMinutes")
 @Controller
 @RequiredArgsConstructor
 public class MeetingMinuteController {
     private final MeetingMinuteService meetingMinuteMinuteService;
     private final UserService userService;
+    private final FieldService fieldService;
+
 
     @GetMapping("/employees/list")
     public String showEmployeesMeeting(ModelMap map) {
         map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.EMPLOYEE.name().toUpperCase());
-        map.addAttribute(ParameterConstant.MEETING_LIST, meetingMinuteMinuteService.findAll(MeetingType.EMPLOYEE));
         return "meetingMinute/list";
     }
 
@@ -36,6 +41,17 @@ public class MeetingMinuteController {
         map.addAttribute(ParameterConstant.MEETING_LIST, meetingMinuteMinuteService.findAll(MeetingType.BOD));
         map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.BOD.name().toUpperCase());
         return "meetingMinute/list";
+    }
+
+    @ResponseBody
+    @GetMapping("/allMinuteFetch")
+    public ResponseEntity<RestResponseDto> showEmployeeMeetig(@RequestParam String meetingType) {
+        if (meetingType.toUpperCase().equals(MeetingType.BOD.name().toUpperCase()) && AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
+            return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(meetingMinuteMinuteService.findAll(MeetingType.BOD)).column(fieldService.getMinuteFields()));
+
+        } else {
+            return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(meetingMinuteMinuteService.findAll(MeetingType.EMPLOYEE)).column(fieldService.getMinuteFields()));
+        }
     }
 
     @GetMapping("/employeeForm/{meetingtype}")
@@ -56,14 +72,22 @@ public class MeetingMinuteController {
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/bod/save")
     public String saveBod(MeetingMinutesDto meetingDto, ModelMap map) {
-        map.addAttribute(ParameterConstant.RESPONSE, meetingMinuteMinuteService.save(meetingDto));
-        return "meetingMinute/meetingForm";
+        try {
+            map.addAttribute(ParameterConstant.MINUTE, meetingMinuteMinuteService.save(meetingDto).getDetail());
+        } catch (Exception e) {
+            log.error("error creating minute", e);
+        }
+        return "meetingMinute/minute";
     }
 
     @PostMapping("/employee/save")
     public String saveEmployees(MeetingMinutesDto meetingDto, ModelMap map) {
-        map.addAttribute(ParameterConstant.RESPONSE, meetingMinuteMinuteService.save(meetingDto));
-        return "meetingMinute/meetingForm";
+        try {
+            map.addAttribute(ParameterConstant.MINUTE, meetingMinuteMinuteService.save(meetingDto).getDetail());
+        } catch (Exception e) {
+            log.error("error creating minute", e);
+        }
+        return "meetingMinute/minute";
     }
 
     @GetMapping("/showMinute/{id}")

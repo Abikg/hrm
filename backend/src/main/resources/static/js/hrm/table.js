@@ -25,6 +25,7 @@ function createTable(data, module, tableId) {
         actualData = []
     actualData = data.detail
     $.each(actualData, function (k, v) {
+        let drillUrl = window.location.origin + "/" + module + "/showMinute/" + v.id;
         var actionDataElement = '<div class="actionElements">' +
             '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm"' +
             'style="width: 50px;">' +
@@ -43,6 +44,10 @@ function createTable(data, module, tableId) {
                     '</a>' +
                     '</div>';
             }
+        if (module === "meetingMinutes") {
+            let drillElement = '<a href="' + drillUrl + '">'+v.title+'</a>';
+            v["title"] = drillElement
+        }
         v["action"] = actionDataElement.replaceAll("elementId",v.id).replaceAll("module",module);
 
     })

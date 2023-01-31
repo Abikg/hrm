@@ -26,24 +26,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
+                        <input type="hidden" id="meetingType" th:value="${MEETINGTYPE}">
                         <table class="table" id="meeting-table">
-                            <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Date</th>
-                                <th>CreatedBy</th>
 
-                            </tr>
-                            </thead>
-                            <tbody th:each="meeting: ${meetingList}">
-                            <input type="hidden" th:value="${MEETINGTYPE}">
-                            <tr th:id="${meeting.id} ">
-                                <td class="title"><a th:href="@{/meetingMinutes/showMinute/{id}(id=${meeting.id})}"
-                                                     th:text="${meeting.title}"></a></td>
-                                <td th:text="${meeting.meetingDate}" class="minuteDate"></td>
-                                <td th:utext="${meeting.createdBy.username}" class="departmentCode"></td>
-                            </tr>
-                            </tbody>
+
                         </table>
 
 
@@ -57,6 +43,7 @@
 </section>
 
 <script type="text/javascript" th:src="@{/js/ckeditor/ckeditor.js}"></script>
+<script type="text/javascript" th:src="@{/js/hrm/meeting.js}"></script>
 <script>
     CKEDITOR.replace('minute');
 </script>
