@@ -11,13 +11,46 @@
         <h1>Meeting Detail</h1>
         <div class="row">
             <div class="col-md-12">
-             <div class="card">
+                <div class="card">
                     <div class="card-body">
 
-                        <p class="card-text text-bold text-success" id="title" th:text="${minute.title}" ></p>
+                        <div class="form-group row ">
+                            <label for="title" style="color:#1d455b">Title:</label>
+                            <p class="card-text text-bold " id="title" th:text="${minute.title}"></p>
+                        </div>
 
-                        <label for="minute">Minute</label>
-                        <p class="card-text" id="minute" th:utext="${minute.minutes}"></p>
+
+                    </div>
+                    <div class="form-group row ml-1">
+                        <label for="meeting date" style="color:#1d455b">Date:</label>
+                        <p class="card-text" id="meeting date"
+                           th:text="${#dates.format(minute.meetingDate, 'dd/MM/yyyy')}"></p>
+                    </div>
+
+
+                    <div class=" form-group row ml-1">
+                        <label for="createdBy" style="color:#1d455b">CreatedBy:</label>
+                        <p class="card-text" id="createdBy" th:utext="${minute.createdBy.username}"></p>
+                    </div>
+
+
+                    <div class=" form-group ml-1">
+                        <label for="attendance-table" style="color:#1d455b">Attended By</label>
+                        <table class="table border" id="attendance-table" th:with="attendedby=${minute.attendedBy}">
+
+                            <tbody th:each="attendedby,iStat: ${attendedby}">
+                            <tr>
+                                <td th:text="${iStat.current.username}" class="cm-number"></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <div class="form-group custom-card-layout  ">
+                        <label for="minute" style="color:#1d455b">Minute</label>
+                        <p class="card-text   " id="minute" th:utext="${minute.minutes}"></p>
 
 
                     </div>
@@ -25,6 +58,7 @@
             </div>
         </div>
     </div>
+
 </section>
 
 <section></section>

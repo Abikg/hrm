@@ -25,10 +25,10 @@ public class AttendanceSpecification implements Specification<PersistentAttendan
         predicateList.add(criteriaBuilder.equal(root.get("user").get("id"),attendanceDto.getId()));
       }
         if(attendanceDto.getFromDate()!=null){
-            predicateList.add(criteriaBuilder.greaterThanOrEqualTo(root.get("punchInDate"),attendanceDto.getFromDate()));
+            predicateList.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdDate"),attendanceDto.getFromDate()));
         }
       if(attendanceDto.getToDate()!=null){
-          predicateList.add(criteriaBuilder.lessThanOrEqualTo(root.get("punchInDate"),attendanceDto.getToDate()));
+          predicateList.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdDate"),attendanceDto.getToDate()));
       }
         return criteriaBuilder.and(predicateList.toArray(new Predicate[]{}));
     }

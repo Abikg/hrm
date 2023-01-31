@@ -94,8 +94,7 @@ $("#attendanceTimeForm").submit(function (e) {
                 },
                 error: function(jqXHR, textStatus, errorThrown)
                 {
-                    //if fails
-                    alert('it didnt work');
+
                 }
             });
         e.preventDefault(); //STOP default action

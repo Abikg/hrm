@@ -2,7 +2,6 @@ package com.makalu.hrm.model;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +18,7 @@ public class RestResponseDto {
     private List<Object> column;
 
     private HashMap<String, String> response;
+
 
     public static RestResponseDto INSTANCE() {
         return new RestResponseDto();

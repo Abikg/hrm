@@ -6,12 +6,12 @@ import com.makalu.hrm.model.MeetingMinutesDto;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.repository.MeetingMinuteRepository;
 import com.makalu.hrm.service.MeetingMinuteService;
+import com.makalu.hrm.utils.FieldService;
 import com.makalu.hrm.validation.MeetingMinuteValidation;
 import com.makalu.hrm.validation.error.MeetingMinuteError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +24,7 @@ public class MeetingMinuteMinuteServiceImp implements MeetingMinuteService {
     private final MeetingMinuteConverter meetingMinuteConverter;
     private final MeetingMinuteRepository meetingMinuteRepository;
     private final MeetingMinuteValidation meetingMinuteValidation;
+    private final FieldService fieldService;
 
     @Override
     public RestResponseDto save(MeetingMinutesDto meetingDto) {
