@@ -19,13 +19,12 @@ public class MailServiceImpl implements MailService {
     private final JavaMailSender javaMailSender;
 
     @Override
-    public RestResponseDto sendMail(String to, String subject, String password) {
+    public RestResponseDto sendMail(String to, String subject, String body) {
         try {
             SimpleMailMessage mail = new SimpleMailMessage();
             mail.setTo(to);
             mail.setSubject(subject);
-            mail.setText("You have been registered to " +
-                    "MakaluHRM with username: " + to + " password: " + password);
+            mail.setText(body);
             javaMailSender.send(mail);
             return RestResponseDto.INSTANCE().success();
         } catch (Exception ex) {
