@@ -46,8 +46,8 @@ public class FieldService {
             fields.add(Map.of("name","user.username","displayName","User","orderable",false));
         }
         fields.add(Map.of("name","punchInDate","displayName","Punchin Date","orderable",true));
-        fields.add(Map.of("name","punchInIp","displayName","Punchin Ip","orderable",false));
-        fields.add(Map.of("name","punchOutDate","displayName","Punchout Ip","orderable",true));
+        fields.add(Map.of("name","punchInIp","displayName","Punchin IP","orderable",false));
+        fields.add(Map.of("name","punchOutDate","displayName","Punchout IP","orderable",true));
         fields.add(Map.of("name","punchOutIp","displayName","Punchout Date","orderable",false));
         fields.add(Map.of("name","totalWorkedHours","displayName","Worked Hours","orderable",true));
          return  fields;
