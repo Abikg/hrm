@@ -18,18 +18,30 @@
     <link rel="stylesheet" th:href="@{/lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
     <!-- JQVMap -->
     <link rel="stylesheet" th:href="@{/lte/plugins/jqvmap/jqvmap.min.css}">
-    <!-- Theme style -->
-    <link rel="stylesheet" th:href="@{/lte/dist/css/adminlte.min.css}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" th:href="@{/lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
     <!-- Daterange picker -->
     <link rel="stylesheet" th:href="@{/lte/plugins/daterangepicker/daterangepicker.css}">
     <!-- summernote -->
     <link rel="stylesheet" th:href="@{/lte/plugins/summernote/summernote-bs4.min.css}">
-    <link rel="stylesheet" th:href="@{/css/branding.css}">
+    <link rel="stylesheet" th:href="@{/lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/lte/plugins/select2/css/select2.min.css}">
     <link rel="stylesheet" th:href="@{/bootstrap-datepicker/css/bootstrap-datepicker.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/lte/dist/css/adminlte.min.css}">
+    <link rel="stylesheet" th:href="@{/css/branding.css}">
+
     <link rel="stylesheet" th:href="@{/css/hrm.css}">
-    <script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
+
+    <!--error-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/lte/plugins/fontawesome-free/css/all.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/lte/dist/css/adminlte.min.css}">
+    <!-- error close-->
+
+  <script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
     <!-- jQuery UI 1.11.4 -->
     <script type="text/javascript" th:src="@{/lte/plugins/jquery-ui/jquery-ui.min.js}"></script>
 
@@ -44,8 +56,6 @@
         <div th:replace="fragments/header :: header"></div>
 
         <div th:replace="fragments/sidebar :: sidebar"></div>
-
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -53,17 +63,15 @@
                  class="content-header"></div>
             <!-- /.content-header -->
             <div layout:fragment="content" class="container"></div>
-
         </div>
         <div th:replace="fragments/footer :: footer"></div>
     </div>
-
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script type="text/javascript">
         $.widget.bridge('uibutton', $.ui.button)
     </script>
 
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/lte/plugins/datatables/jquery.dataTables.min.js}"></script>
     <!-- Bootstraplte/ 4 -->
     <script type="text/javascript" th:src="@{/lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <!-- ChartJS -->
@@ -79,16 +87,21 @@
     <script type="text/javascript" th:src="@{/lte/plugins/summernote/summernote-bs4.min.js}"></script>
     <!-- overlayScrollbars -->
     <script type="text/javascript" th:src="@{/lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
-    <!-- AdminLTE App -->
-    <script type="text/javascript" th:src="@{/lte/dist/js/adminlte.js}"></script>
+
     <!-- AdminLTE for demo purposes -->
-<!--    <script type="text/javascript" th:src="@{/lte/dist/js/demo.js}"></script>-->
+<!--   <script type="text/javascript" th:src="@{/lte/dist/js/demo.js}"></script>-->
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script type="text/javascript" th:src="@{/lte/dist/js/pages/dashboard.js}"></script>
+    <script type="text/javascript" th:src="@{/lte/plugins/select2/js/select2.full.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/hrm/table.js}"></script>
 
     <!-- table generator js -->
     <script type="text/javascript" th:src="@{/js/hrm/table.js}"></script>
+    <!-- AdminLTE App -->
+    <!-- notify.js-->
+    <script type="text/javascript" th:src="@{/lte/dist/js/adminlte.js}"></script>
+    <script type="text/javascript" th:src="@{/js/notify/notify.js}"></script>
+
 
     <%--for sidebar active--%>
     <script>
@@ -115,8 +128,13 @@
             autoclose: true,
             todayHighlight: true
         });
+
+        $(function () {
+            $('.select2').select2()
+        });
     </script>
 
-    <th:block layout:fragment="script"></th:block>
+    <th:block layout:fragment="script">
+
 </body>
 </html>

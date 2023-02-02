@@ -1,19 +1,21 @@
 package com.makalu.hrm.service.impl;
 
 import com.makalu.hrm.converter.MeetingMinuteConverter;
+import com.makalu.hrm.domain.PersistentMeetingMinutesEntity;
 import com.makalu.hrm.enumconstant.MeetingType;
+import com.makalu.hrm.enumconstant.UserType;
+import com.makalu.hrm.exceptions.DataNotFoundException;
 import com.makalu.hrm.model.MeetingMinutesDto;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.repository.MeetingMinuteRepository;
 import com.makalu.hrm.service.MeetingMinuteService;
-import com.makalu.hrm.utils.FieldService;
+import com.makalu.hrm.utils.AuthenticationUtils;
 import com.makalu.hrm.validation.MeetingMinuteValidation;
-import com.makalu.hrm.validation.error.MeetingMinuteError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -24,25 +26,10 @@ public class MeetingMinuteMinuteServiceImp implements MeetingMinuteService {
     private final MeetingMinuteConverter meetingMinuteConverter;
     private final MeetingMinuteRepository meetingMinuteRepository;
     private final MeetingMinuteValidation meetingMinuteValidation;
-    private final FieldService fieldService;
 
     @Override
     public RestResponseDto save(MeetingMinutesDto meetingDto) {
-
-        try {
-
-            MeetingMinuteError error = meetingMinuteValidation.validateOnSave(meetingDto);
-
-            if (!error.isValid()) {
-                return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", meetingDto));
-            }
-
-            return RestResponseDto.INSTANCE().success().detail(meetingMinuteConverter.convertToDto(meetingMinuteRepository.saveAndFlush(meetingMinuteConverter.convertToEntity(meetingDto))));
-        } catch (Exception ex) {
-            log.error("Error while creating meetiing", ex);
-            return RestResponseDto.INSTANCE().internalServerError().detail(meetingDto);
-        }
-
+        return RestResponseDto.INSTANCE().success().detail(meetingMinuteConverter.convertToDto(meetingMinuteRepository.saveAndFlush(meetingMinuteConverter.convertToEntity(meetingDto))));
     }
 
     @Override
@@ -51,11 +38,17 @@ public class MeetingMinuteMinuteServiceImp implements MeetingMinuteService {
     }
 
     @Override
-    public RestResponseDto findById(UUID id) {
-        try {
-            return RestResponseDto.INSTANCE().success().detail(meetingMinuteConverter.convertToDto(meetingMinuteRepository.findById(id).get()));
-        } catch (Exception ex) {
-            return RestResponseDto.INSTANCE().message("error occured fetching meeting with id" + id);
+    public MeetingMinutesDto findById(UUID id) throws DataNotFoundException {
+        Optional<PersistentMeetingMinutesEntity> meetingMinutes = meetingMinuteRepository.findById(id);
+        if (meetingMinutes.isEmpty()) {
+            throw new DataNotFoundException("meeting minute not found with id " + id);
         }
+        if (meetingMinutes.get().getMeetingType().equals(MeetingType.BOD) && AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
+            return meetingMinuteConverter.convertToDto(meetingMinutes.get());
+        }
+        if (meetingMinutes.get().getMeetingType().equals(MeetingType.EMPLOYEE)) {
+            return meetingMinuteConverter.convertToDto(meetingMinutes.get());
+        }
+        throw new DataNotFoundException("this meeting minute is not accessible to this user (id =>)" + id);
     }
 }

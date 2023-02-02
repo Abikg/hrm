@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Meeting</title>
+</head>
+<body layout:fragment="content">
+<section class="content">
+    <div class="container">
+
+        <h1 class="text-left">[[${minute.title}]]</h1>
+        <div class="row ">
+            <div class="col-md-12">
+                <div class="card ">
+                    <div class="card-body border ">
+                        <div class="form-group row ml-1">
+                            <label for="meetingdate">Date:</label>
+                            &nbsp&nbsp
+                            <p class="card-text " id="meetingdate"
+                               th:text="${#dates.format(minute.meetingDate, 'dd/MM/yyyy')}"></p>
+                        </div>
+                        <div class=" form-group row ml-1">
+                            <label for="createdBy">CreatedBy:</label>
+                            &nbsp&nbsp
+                            <p class="card-text" id="createdBy" th:utext="${minute.createdBy.username}"></p>
+                        </div>
+                        <div class=" form-group ml-1" th:with="attendedby=${minute.attendedBy}">
+                            <label>Attended By</label>
+                            <ul>
+                                <li th:each="attended: ${attendedby}" th:text="${attended.username}"></li>
+                            </ul>
+                        </div>
+                        <div class="form-group ">
+                            <label for="minute">Minute</label>
+                            <p class="card-text border" id="minute" th:utext="${minute.minutes}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section></section>
+</body>
+</html>

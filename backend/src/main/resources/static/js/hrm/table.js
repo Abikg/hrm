@@ -26,7 +26,7 @@ function createTable(data, module, tableId) {
     actualData = data.detail
     var columns = data.column;
     $.each(actualData, function (k, v) {
-        let drillUrl = window.location.origin + "/" + module + "/showMinute/" + v.id;
+        let drillUrl = window.location.origin + "/" + module + "/show/" + v.id;
         var actionDataElement = '<div class="actionElements">' +
             '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm"' +
             'style="width: 50px;">' +

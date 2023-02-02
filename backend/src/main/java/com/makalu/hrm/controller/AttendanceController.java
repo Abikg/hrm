@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -45,9 +44,8 @@ public class AttendanceController {
         } catch (Exception ex) {
             log.error("Error while punchOut", ex);
         }
-        return restResponseDto;
+        return restResponseDto.success();
     }
-
     @ResponseBody
     @PostMapping("/nextDayPunchout")
     public RestResponseDto nextDayPunchout(@RequestParam String time, HttpServletRequest request) {
@@ -58,7 +56,6 @@ public class AttendanceController {
             log.error("Error while punchout", ex);
         }
         return restResponseDto;
-
     }
 
     @GetMapping("/userList")
@@ -82,3 +79,4 @@ public class AttendanceController {
         }
     }
 }
+

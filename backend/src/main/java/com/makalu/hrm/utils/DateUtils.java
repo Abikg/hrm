@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
-import java.util.Formatter;
 
 public class DateUtils {
 
@@ -20,8 +19,13 @@ public class DateUtils {
         Double hours= (seconds.doubleValue())/3600*(-1);
         DecimalFormat df = new DecimalFormat("#.00000");
         hours = Double.valueOf(df.format(hours));
+        return hours;
 
-        return  hours;
+    }
 
+    public static String convertTimeToString(double workedHours) {
+        int hours = (int) workedHours;
+        int minutes = (int)((workedHours-hours) * 60);
+       return new String(String.valueOf(hours) + "\thours" + "\t\t"+String.valueOf(minutes)+"\tminutes");
     }
 }

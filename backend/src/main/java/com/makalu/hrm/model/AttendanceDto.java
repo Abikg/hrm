@@ -1,7 +1,6 @@
 package com.makalu.hrm.model;
 
 import lombok.Data;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,7 +11,7 @@ public class AttendanceDto {
     private Date punchOutDate;
     private String punchInIp;
     private String punchOutIp;
-    private Double totalWorkedHours;
+    private String totalWorkedHours;
     private UserDTO user;
     private Date fromDate;
     private Date toDate;

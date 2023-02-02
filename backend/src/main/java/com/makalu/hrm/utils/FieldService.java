@@ -2,7 +2,6 @@ package com.makalu.hrm.utils;
 
 import com.makalu.hrm.enumconstant.UserType;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 @Service
@@ -56,7 +55,7 @@ public class FieldService {
         List<Object> fields = new ArrayList<>();
         fields.add(Map.of("name", "title", "displayName", "Title", "type", "string", "orderable", false));
         fields.add(Map.of("name", "meetingDate", "displayName", "Date", "type", "date", "orderable", true));
-        fields.add(Map.of("name", "createdBy.username", "displayName", "type", "string", "Created By", "orderable", false));
+        fields.add(Map.of("name", "createdBy.username", "displayName", "Created By","type", "string",  "orderable", false));
         return fields;
     }
 

@@ -22,10 +22,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -75,7 +72,7 @@ public class AttendanceServiceImp implements AttendanceService {
     public RestResponseDto punchOut(String ip) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
         Date today = new Date();
-        double hours = DateUtils.getHours(today, previousAttendance.getPunchInDate());
+        double hours = DateUtils.getHours(today,previousAttendance.getPunchInDate());
         if (hours < NumericConstant.OFFICE_HOURS) {
             previousAttendance.setPunchOutIp(ip);
             previousAttendance.setPunchOutDate(today);
@@ -83,6 +80,7 @@ public class AttendanceServiceImp implements AttendanceService {
             attendanceRepository.saveAndFlush(previousAttendance);
             return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", false));
         } else {
+
             return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", true));
         }
 
@@ -131,12 +129,7 @@ public class AttendanceServiceImp implements AttendanceService {
         if (hours < NumericConstant.OFFICE_START || hours > NumericConstant.OFFICE_END) {
             return RestResponseDto.INSTANCE().success().detail(Map.of("notOfficeHours", true));
         } else {
-            Date punchoutDate = previousAttendance.getPunchInDate();
-            punchoutDate.setHours(Integer.parseInt(time.split(":")[0]));
-            punchoutDate.setMinutes(Integer.parseInt(time.split(":")[1]));
-            punchoutDate.setSeconds(Integer.parseInt("00"));
-
-            previousAttendance.setPunchOutDate(punchoutDate);
+            previousAttendance.setPunchOutDate(getPreviousPunchoutDate(time,previousAttendance.getPunchInDate()));
             double workHours = DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
             previousAttendance.setPunchOutIp(ips);
             previousAttendance.setTotalWorkedHours(workHours);
@@ -146,6 +139,17 @@ public class AttendanceServiceImp implements AttendanceService {
 
     }
 
+    private  Date getPreviousPunchoutDate(String time,Date punchindate){
+        Date tempDate = new Date();
+        tempDate.setYear(punchindate.getYear());
+        tempDate.setMonth(punchindate.getMonth());
+        tempDate.setDate(punchindate.getDate());
+        tempDate.setHours(Integer.parseInt(time.split(":")[0]));
+        tempDate.setMinutes(Integer.parseInt(time.split(":")[1]));
+        tempDate.setSeconds(Integer.parseInt("00"));
+        return tempDate;
+
+    }
     @Override
     public boolean isValidToPunchOut(UUID userId) {
         try {
