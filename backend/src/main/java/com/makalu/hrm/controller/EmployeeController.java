@@ -1,5 +1,4 @@
 package com.makalu.hrm.controller;
-
 import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.model.RestResponseDto;
@@ -16,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.UUID;
 
 @Controller
@@ -56,7 +54,7 @@ public class EmployeeController {
         map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
         map.put(ParameterConstant.POSITION_LIST, positionService.list());
         map.put(ParameterConstant.EMPLOYEE, employeeDTO);
-        return "employee/create";
+        return "employee/form";
     }
 
     @RequestMapping(path = "/save", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -66,7 +64,8 @@ public class EmployeeController {
         map.put(ParameterConstant.POSITION_LIST, positionService.list());
         map.put(ParameterConstant.EMPLOYEE, employeeDTO);
         map.put(ParameterConstant.RESPONSE, employeeService.save(employeeDTO));
-        return "employee/create";
+
+        return "employee/form";
     }
 
     @GetMapping("/edit/{id}")

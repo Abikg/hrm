@@ -24,14 +24,28 @@ $(document).ready(function(){
             "min-height": "100%"});
     }
 
-    if($("#joinDate").val()){
+    if($("input[name='joinDate']").val()){
         const format = "ddd MMM D HH:mm:ss z yyyy";
-        if (moment($("#joinDate").val(), format).isValid()) {
-            $("#joinDate").val(moment($("#joinDate").val(), format).format("YYYY/MM/DD"));
+        if (moment($("input[name='joinDate']").val(), format).isValid()) {
+            $("input[name='joinDate']").val(moment($("input[name='joinDate']").val(), format).format("YYYY/MM/DD"));
 
         } else {
-            $("#joinDate").val(moment($("#joinDate").val()).format("YYYY/MM/DD"));
+            $("input[name='joinDate']").val(moment($("input[name='joinDate']").val()).format("YYYY/MM/DD"));
         }
+    }
+
+    if($("#hiddenJoinDate").val()){
+        $(this).val(moment($(this).val()).format("YYYY/MM/DD"));
+    }
+
+});
+$("#employeeForm").submit(function(e) {
+    if ($("input[name='joinDate']").val() === ""){
+        e.preventDefault();
+        $("#joinDateError").removeClass("d-none");
+        $("#joinDateError p").text("Join date can't be empty.");
+    }else{
+        $("#joinDateError").addClass("d-none");
     }
 });
 
@@ -76,16 +90,16 @@ function  addWorkExperience(workExperienceCount){
 
     html +=  "<button class=\"btn btn-danger float-right mb-2\" type=\"button\" onclick='remove(count-1)'>Remove</button>";
     html += "<div class=\"form-group\">";
-    html += " <label for=\"prevCompany\" class=\"col-form-label\">Previous Company</label>\n" +
+    html += " <label for=\"prevCompany\" class=\"col-form-label font-weight-normal\">Previous Company</label>\n" +
             " <input type=\"text\" name=\"workExperienceDTO["+dtoCount+"\].previousCompany\" class=\"form-control\" id=\"prevCompany\" required>";
     html += "</div>";
     html += "<div class=\"form-inline\">";
     html += "<div class=\"form-group\">\n" +
-            "<label class=\"mr-3\">Job Title</label>\n" +
+            "<label class=\"mr-3 col-form-label font-weight-normal\">Job Title</label>\n" +
             " <input type=\"text\" class=\"form-control\" name=\"workExperienceDTO["+dtoCount+"\].jobTitle\"  placeholder=\"Job Title Eg.: Developer\" required>\n" +
             "</div>";
     html +=     "<div class=\"form-group ml-0 ml-sm-auto\">\n" +
-                " <label class=\"mr-3\">From</label>\n" +
+                " <label class=\"mr-3 col-form-label font-weight-normal\">From</label>\n" +
                 " <div class=\"input-group\">\n" +
                 " <div class=\"input-group-prepend\">\n" +
                 "  <span class=\"input-group-text bg-transparent dateIcon\" id=\"icon\"><i class=\"fas fa-calendar\"></i></span>\n" +
@@ -94,7 +108,7 @@ function  addWorkExperience(workExperienceCount){
                 "   </div>\n" +
                 "   </div>\n" +
                 "   <div class=\"form-group ml-0 ml-sm-auto\">\n" +
-                "   <label class=\"mr-3\">To</label>\n" +
+                "   <label class=\"mr-3 col-form-label font-weight-normal\">To</label>\n" +
                 "   <div class=\"input-group\">\n" +
                 "   <div class=\"input-group-prepend\">\n" +
                 "   <span class=\"input-group-text bg-transparent dateIcon\" id=\"icon\"><i class=\"fas fa-calendar\"></i></span>\n" +
@@ -105,7 +119,7 @@ function  addWorkExperience(workExperienceCount){
     html +=     "</div>";
 
     html +=     "<div class=\"form-group\">\n" +
-                "<label for=\"jobDesc\" class=\"col-form-label\">Job Description</label>\n" +
+                "<label for=\"jobDesc col-form-label font-weight-normal\" class=\"col-form-label\">Job Description</label>\n" +
                 "<textarea class=\"form-control\" name=\"workExperienceDTO["+dtoCount+"\].jobDesc\" id=\"jobDesc\" required></textarea>\n" +
                 "</div>";
 

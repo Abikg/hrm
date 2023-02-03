@@ -52,15 +52,9 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         dto.setContactDetailDTO(entity.getContactDetail());
         dto.setPersonalDetailDTO(entity.getPersonalDetail());
         dto.setWorkExperienceDTO(entity.getWorkExperience());
-        if (entity.getResignationReason() != null) {
-            dto.setResignationReason(entity.getResignationReason());
-        }
-        if (entity.getResignationDate() != null) {
-            dto.setResignationDate(entity.getResignationDate());
-        }
-        if (entity.getExitDate() != null) {
-            dto.setExitDate(entity.getExitDate());
-        }
+        dto.setResignationReason(entity.getResignationReason());
+        dto.setResignationDate(entity.getResignationDate());
+        dto.setExitDate(entity.getExitDate());
         if (entity.getApprovedBy() != null) {
             dto.setApprovedById(entity.getApprovedBy().getId());
         }
@@ -90,15 +84,9 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         entity.setContactDetail(dto.getContactDetailDTO());
         entity.setPersonalDetail(dto.getPersonalDetailDTO());
         entity.setWorkExperience(dto.getWorkExperienceDTO());
-        if (dto.getResignationReason() != null) {
-            entity.setResignationReason(dto.getResignationReason());
-        }
-        if (dto.getResignationDate() != null) {
-            entity.setResignationDate(dto.getResignationDate());
-        }
-        if (dto.getExitDate() != null) {
-            entity.setExitDate(dto.getExitDate());
-        }
+        entity.setResignationReason(dto.getResignationReason());
+        entity.setResignationDate(dto.getResignationDate());
+        entity.setExitDate(dto.getExitDate());
         if (dto.getApprovedById() != null) {
             entity.setApprovedBy(userRepository.findById(dto.getApprovedById()).orElse(null));
         }
