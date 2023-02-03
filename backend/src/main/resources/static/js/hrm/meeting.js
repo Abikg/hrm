@@ -3,11 +3,8 @@ $('#icon1').click(function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-
-    var meetingType = $('#meetingType').val();
-    listData("meetingMinutes", "allMinutes?meetingType=" + meetingType, "meeting-table");
+    listData("meetingMinutes", "allMinutes?meetingType=" + $('#meetingType').val(), "meeting-table");
 })
-
 $('#meetingForm').submit(function (e) {
     if ($('#date').val() === "") {
         $('#meetingDate-error p').text("Please Select Date");
@@ -17,13 +14,9 @@ $('#meetingForm').submit(function (e) {
 
     }
 })
-
 $("#attendanceTimeForm").submit(function (e) {
-
-
     var postData = $(this).serializeArray();
     var formURL = $(this).attr("action");
-
     $.ajax(
         {
             url: formURL,
@@ -42,7 +35,5 @@ $("#attendanceTimeForm").submit(function (e) {
         });
     e.preventDefault(); //STOP default action
     e.unbind();
-
-
 });
 

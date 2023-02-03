@@ -19,11 +19,7 @@ function filterByDateForAdmin() {
             listData("attendance", "filter?toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val() + "&id=" + $("#select-user").find(":selected").val(), "attendance-table");
         }
     } else {
-        if ($('#toDate').val() === "" || $('#fromDate').val() === "") {
-
-        } else {
-            alert("Please Select Filter Date less than year");
-        }
+        alert("Please Select Filter Date less than year");
     }
 }
 
@@ -32,32 +28,30 @@ function filterByDateForNormal() {
         listData("attendance", "filter?toDate=" + $('#toDate').val() + "&fromDate=" + $('#fromDate').val(), "attendance-table")
 
     } else {
-        if ($('#toDate').val() === "" || $('#fromDate').val() === "") {
+        alert("Please Select Filter Date less than year");
 
-        } else {
-            alert("Please Select Filter Date less than year");
-        }
 
     }
 }
 function validateDate() {
-
-    let date1 = new Date($('#toDate').val());
-    let date2 = new Date($('#fromDate').val());
+    let date1
+    let date2
     if ($('#toDate').val() === "") {
         $('#fromDate-error p').text("Please Select fromDate");
-
     } else {
         $('#fromDate-error p').text("");
+        date1 = new Date($('#toDate').val());
     }
     if ($('#toDate').val() === "") {
         $('#toDate-error p').text("Please Select toDate");
-
     } else {
         $('#toDate-error p').text("");
+        date2 = new Date($('#fromDate').val());
     }
-
-    let days = (date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24);
+    let days = 0
+    if ((date1 != undefined) && (date1 != undefined)) {
+        days = (date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24);
+    }
     if (days <= 365) {
         return true;
     } else {

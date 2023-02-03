@@ -13,19 +13,18 @@ public class DateUtils {
         return dfDay.format(d1).equals(dfDay.format(d2));
     }
 
-    public static double getHours(Date d1, Date d2){
-        Duration duration=Duration.between(d1.toInstant(), d2.toInstant());
-        Long seconds=new Long(duration.toSeconds());
-        Double hours= (seconds.doubleValue())/3600*(-1);
+    public static double getHours(Date d1, Date d2) {
+        Duration duration = Duration.between(d1.toInstant(), d2.toInstant());
+        Long seconds = new Long(duration.toSeconds());
+        Double hours = (seconds.doubleValue()) / 3600 * (-1);
         DecimalFormat df = new DecimalFormat("#.00000");
         hours = Double.valueOf(df.format(hours));
         return hours;
-
     }
 
     public static String convertTimeToString(double workedHours) {
         int hours = (int) workedHours;
-        int minutes = (int)((workedHours-hours) * 60);
-       return new String(String.valueOf(hours) + "\thours" + "\t\t"+String.valueOf(minutes)+"\tminutes");
+        int minutes = (int) ((workedHours - hours) * 60);
+        return new String(String.valueOf(hours) + "\thours" + "\t\t" + String.valueOf(minutes) + "\tminutes");
     }
 }

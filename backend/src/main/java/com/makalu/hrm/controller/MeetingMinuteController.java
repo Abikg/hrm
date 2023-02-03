@@ -37,7 +37,6 @@ public class MeetingMinuteController {
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/bod/list")
     public String List(ModelMap map) {
-       // map.addAttribute(ParameterConstant.MEETING_LIST, meetingMinuteMinuteService.findAll(MeetingType.BOD));
         map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.BOD.name().toUpperCase());
         return "meetingMinute/list";
     }
@@ -65,7 +64,7 @@ public class MeetingMinuteController {
             map.addAttribute(ParameterConstant.MEETIINGTYPEURL, "/meetingMinutes/bod/save");
             return "meetingMinute/form";
         } else {
-            return "error/403";
+            return "error/unauthorized";
         }
     }
 
@@ -101,10 +100,10 @@ public class MeetingMinuteController {
             map.addAttribute(ParameterConstant.MINUTE, meetingMinuteMinuteService.findById(id));
         } catch (DataNotFoundException ex) {
             log.debug("DataNotFoundException on meeting minute show page", ex);
-            return "error/403";
+            return "error/unauthorized";
         } catch (Exception ex) {
             log.error("error on meeting minute show page", ex);
-            return "error/500";
+            return "error/internalServer";
         }
         return "meetingMinute/view";
     }
