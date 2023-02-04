@@ -11,11 +11,10 @@ public interface AttendanceService {
 
     void punchIn(String ip);
 
-    RestResponseDto punchOut(String ip);
+    RestResponseDto punchOut(String time,String ip);
 
     boolean isValidToPunchIn(UUID userId);
 
-    RestResponseDto setPunchinAnotherDay(String time, String ip);
 
     boolean isValidToPunchOut(UUID userId);
 }

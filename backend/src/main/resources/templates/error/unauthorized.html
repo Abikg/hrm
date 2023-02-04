@@ -20,9 +20,9 @@
           Meanwhile, you may <a th:href="@{/}">return to dashboard</a> or try using the search form.
         </p>
 
-        <form class="search-form">
+        <form class="search-form" method="get" action="https://www.google.com/search">
           <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Search">
+            <input type="text" name="q" class="form-control" placeholder="Search">
 
             <div class="input-group-append">
               <button type="submit" name="submit" class="btn btn-warning"><i class="fas fa-search"></i>

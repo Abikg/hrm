@@ -4,6 +4,7 @@ import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.enumconstant.MeetingType;
 import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.exceptions.DataNotFoundException;
+import com.makalu.hrm.exceptions.UnauthorizedException;
 import com.makalu.hrm.model.MeetingMinutesDto;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.MeetingMinuteService;
@@ -17,6 +18,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.UUID;
 
 
@@ -34,6 +37,7 @@ public class MeetingMinuteController {
         map.addAttribute(ParameterConstant.MEETING_TYPE.toUpperCase(), MeetingType.EMPLOYEE.name().toUpperCase());
         return "meetingMinute/list";
     }
+
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/bod/list")
     public String List(ModelMap map) {
@@ -50,6 +54,7 @@ public class MeetingMinuteController {
             return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(meetingMinuteMinuteService.findAll(MeetingType.EMPLOYEE)).column(fieldService.getMinuteFields()));
         }
     }
+
     @GetMapping("/employeeForm/{meetingtype}")
     public String showform(@PathVariable MeetingType meetingtype, ModelMap map) {
         if (MeetingType.EMPLOYEE.name().equals(meetingtype.name())) {
@@ -81,6 +86,7 @@ public class MeetingMinuteController {
         }
         return "meetingMinute/form";
     }
+
     @PostMapping("/employee/save")
     public String saveEmployeeMinute(MeetingMinutesDto meetingDto, ModelMap map) {
         try {
@@ -95,12 +101,20 @@ public class MeetingMinuteController {
     }
 
     @GetMapping("/show/{id}")
-    public String show(@PathVariable UUID id, ModelMap map) {
+    public String show(@PathVariable UUID id, ModelMap map, RedirectAttributes redirectAttributes) {
         try {
             map.addAttribute(ParameterConstant.MINUTE, meetingMinuteMinuteService.findById(id));
+        } catch (UnauthorizedException ex) {
+            log.debug("UnauthorizedException on show page", ex);
+            return "error/unauthorized";
         } catch (DataNotFoundException ex) {
             log.debug("DataNotFoundException on meeting minute show page", ex);
-            return "error/unauthorized";
+            redirectAttributes.addFlashAttribute(ParameterConstant.ERROR, "Data Not Found");
+            if (AuthenticationUtils.hasRole(UserType.SUPER_ADMIN.name().toUpperCase())) {
+                return "redirect:/meetingMinutes/bod/list";
+            } else {
+                return "redirect:/meetingMinutes/employees/list";
+            }
         } catch (Exception ex) {
             log.error("error on meeting minute show page", ex);
             return "error/internalServer";

@@ -5,7 +5,7 @@
       layout:decorate="~{layout/main}">
 
 <meta charset="UTF-8">
-<title>Atte</title>
+<title>Attendance</title>
 
 <head>
 
@@ -17,9 +17,7 @@
             <div class="row mb-2 ">
                 <div class="col-sm-5">
                     <h1> Attendance </h1>
-
                 </div>
-
             </div>
             <div class="row mb-2">
                 <div class="card w-100 " style="height: 150px">
@@ -54,9 +52,8 @@
                                                 class="fas fa-calendar"></i></span>
                                     </div>
                                     <input type="text" class="form-control mydatepicker" data-date-format="yyyy/mm/dd"
-                                           id="toDate" name="toDate" autocomplete="off" readonly  >
+                                           id="toDate" name="toDate" autocomplete="off" readonly>
                                 </div>
-
                             </div>
                             <div class="row  ml-1" sec:authorize="hasRole('SUPER_ADMIN')">
 
@@ -75,10 +72,10 @@
 
                         </div>
 
-                        <div   id="fromDate-error">
+                        <div id="fromDate-error">
                             <p class="error"></p>
                         </div>
-                        <div   id="toDate-error">
+                        <div id="toDate-error">
                             <p class="error"></p>
                         </div>
 

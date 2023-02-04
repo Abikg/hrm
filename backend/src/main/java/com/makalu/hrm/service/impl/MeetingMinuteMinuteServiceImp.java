@@ -5,15 +5,16 @@ import com.makalu.hrm.domain.PersistentMeetingMinutesEntity;
 import com.makalu.hrm.enumconstant.MeetingType;
 import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.exceptions.DataNotFoundException;
+import com.makalu.hrm.exceptions.UnauthorizedException;
 import com.makalu.hrm.model.MeetingMinutesDto;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.repository.MeetingMinuteRepository;
 import com.makalu.hrm.service.MeetingMinuteService;
 import com.makalu.hrm.utils.AuthenticationUtils;
-import com.makalu.hrm.validation.MeetingMinuteValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,7 +26,7 @@ public class MeetingMinuteMinuteServiceImp implements MeetingMinuteService {
 
     private final MeetingMinuteConverter meetingMinuteConverter;
     private final MeetingMinuteRepository meetingMinuteRepository;
-    private final MeetingMinuteValidation meetingMinuteValidation;
+
 
     @Override
     public RestResponseDto save(MeetingMinutesDto meetingDto) {
@@ -38,7 +39,7 @@ public class MeetingMinuteMinuteServiceImp implements MeetingMinuteService {
     }
 
     @Override
-    public MeetingMinutesDto findById(UUID id) throws DataNotFoundException {
+    public MeetingMinutesDto findById(UUID id) throws DataNotFoundException, UnauthorizedException {
         Optional<PersistentMeetingMinutesEntity> meetingMinutes = meetingMinuteRepository.findById(id);
         if (meetingMinutes.isEmpty()) {
             throw new DataNotFoundException("meeting minute not found with id " + id);
@@ -49,6 +50,7 @@ public class MeetingMinuteMinuteServiceImp implements MeetingMinuteService {
         if (meetingMinutes.get().getMeetingType().equals(MeetingType.EMPLOYEE)) {
             return meetingMinuteConverter.convertToDto(meetingMinutes.get());
         }
-        throw new DataNotFoundException("this meeting minute is not accessible to this user (id =>)" + id);
+        throw new UnauthorizedException("this meeting minute is not accessible to this user (id =>)" + id);
+
     }
 }

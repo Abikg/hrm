@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     listData("attendance", "filter", "attendance-table");
 })
+
 function selectFunction() {
     $('#fromDate').val("");
     $('#toDate').val("");
@@ -11,6 +12,7 @@ function selectFunction() {
         listData("attendance", "filter?id=" + userId, "attendance-table");
     }
 }
+
 function filterByDateForAdmin() {
     if (validateDate()) {
         if ($("#select-user").val() == "ALL") {
@@ -33,6 +35,7 @@ function filterByDateForNormal() {
 
     }
 }
+
 function validateDate() {
     let date1
     let date2
@@ -58,6 +61,7 @@ function validateDate() {
         return false;
     }
 }
+
 $("#iconFromDate").click(function () {
     $('#fromDate').datepicker().datepicker("show");
 });
@@ -68,40 +72,41 @@ $('#punchout').click(function () {
     punchout('/attendance/punchOut');
 });
 $("#attendanceTimeForm").submit(function (e) {
+    if ($('#time').val() != "") {
+        var postData = $(this).serializeArray();
+        var formURL = $(this).attr("action");
 
-    var postData = $(this).serializeArray();
-    var formURL = $(this).attr("action");
-
-    $.ajax(
-        {
-            url: formURL,
-            type: "POST",
-            crossDomain: true,
-            data: postData,
-            dataType: "json",
-            success: function (data, textStatus, jqXHR) {
-                console.log("next day punhout called");
-
-                if (data.detail.notOfficeHours === true) {
-
-                    $('#error-attendancetTime').text("Please Enter officeHours");
-                } else {
-
-                    $('#attendanceModal').modal('toggle');
+        $.ajax(
+            {
+                url: formURL,
+                type: "POST",
+                crossDomain: true,
+                data: postData,
+                dataType: "json",
+                success: function (data, textStatus, jqXHR) {
+                    console.log("next day punhout called");
+                    if (data.status == 200) {
+                        window.location.href = "/";
+                    } else {
+                        $('#error-attendancetTime').text("Opps PunchinFailed please try again").removeClass('alert-warning').addClass('alert-danger');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
 
                 }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
+            });
+        e.preventDefault(); //STOP default action
 
-            }
-        });
-    e.preventDefault(); //STOP default action
-    e.unbind();
+
+    } else {
+        $('#error-attendancetTime').text("Please enter valid Hours");
+        e.preventDefault(); //STOP default action
+    }
 });
-function punchout(url) {
 
+function punchout(url) {
     var attendanceReq = $.ajax(window.location.origin + url, {
-        method: "GET",
+        method: "POST",
         dataType: 'json',
         timeout: 10000,
 
@@ -116,7 +121,6 @@ function punchout(url) {
                 showHourInput();
             } else {
                 showSuccessAlert();
-
             }
 
         }, error: function (jqXhr, textStatus, errorMessage) {
@@ -126,9 +130,13 @@ function punchout(url) {
         }
     });
 }
+
 function showHourInput() {
+    $('#error-attendancetTime').text("");
     $('#attendanceModal').modal('toggle');
-}function showSuccessAlert() {
+}
+
+function showSuccessAlert() {
     $.notify("Successfully punchout", "success");
 }
 

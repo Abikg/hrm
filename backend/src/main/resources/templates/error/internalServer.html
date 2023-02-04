@@ -14,9 +14,9 @@
                 We will work on fixing that right away.
                 Meanwhile, you may <a th:href="@{/}">return to dashboard</a> or try using the search form.
             </p>
-            <form class="search-form">
+            <form class="search-form" method="get" action="https://www.google.com/search">
                 <div class="input-group">
-                    <input type="text" name="search" class="form-control" placeholder="Search">
+                    <input type="text" name="q"  class="form-control" placeholder="Search">
 
                     <div class="input-group-append">
                         <button type="submit" name="submit" class="btn btn-danger"><i class="fas fa-search"></i>
@@ -29,6 +29,10 @@
     </div>
     <!-- /.error-page -->
 </section>
+<script type="text/javascript">
+    var search=$('')
+
+</script>
 
 <!-- /.content -->
 </body>

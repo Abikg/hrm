@@ -2,7 +2,6 @@ package com.makalu.hrm.service.impl;
 
 
 import com.makalu.hrm.Specification.AttendanceSpecification;
-import com.makalu.hrm.constant.NumericConstant;
 import com.makalu.hrm.converter.AttendanceConverter;
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.exceptions.AttendanceException;
@@ -69,19 +68,27 @@ public class AttendanceServiceImp implements AttendanceService {
 
     @Transactional
     @Override
-    public RestResponseDto punchOut(String ip) {
+    public RestResponseDto punchOut(String time, String ip) {
         PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
         Date today = new Date();
-        double hours = DateUtils.getHours(today, previousAttendance.getPunchInDate());
-        if (hours < NumericConstant.OFFICE_HOURS) {
+        if (DateUtils.hasSameDay(previousAttendance.getPunchInDate(), today)) {
+            double hours = DateUtils.getHours( previousAttendance.getPunchInDate(),today);
             previousAttendance.setPunchOutIp(ip);
             previousAttendance.setPunchOutDate(today);
             previousAttendance.setTotalWorkedHours(hours);
             attendanceRepository.saveAndFlush(previousAttendance);
             return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", false));
         } else {
-
-            return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", true));
+            if (time != null) {
+                previousAttendance.setPunchOutDate(getPreviousPunchoutDate(time, previousAttendance.getPunchInDate()));
+                double hours = DateUtils.getHours( previousAttendance.getPunchInDate(),previousAttendance.getPunchOutDate());
+                previousAttendance.setPunchOutIp(ip);
+                previousAttendance.setTotalWorkedHours(hours);
+                attendanceRepository.saveAndFlush(previousAttendance);
+                return RestResponseDto.INSTANCE().success();
+            } else {
+                return RestResponseDto.INSTANCE().success().detail(Map.of("dayPassed", true));
+            }
         }
 
     }
@@ -99,12 +106,9 @@ public class AttendanceServiceImp implements AttendanceService {
         if (previousAttendance == null) {
             throw new AttendanceException("There is no previous punch in record for this user " + AuthenticationUtils.getCurrentUser().getUsername());
         }
-
         if (previousAttendance.getPunchOutDate() == null || DateUtils.hasSameDay(previousAttendance.getPunchInDate(), new Date())) {
             return previousAttendance;
-
         }
-
         throw new AttendanceException("This user has already did the punch out " + AuthenticationUtils.getCurrentUser().getUsername());
     }
 
@@ -119,24 +123,6 @@ public class AttendanceServiceImp implements AttendanceService {
         }
 
         return false;
-    }
-
-    @Transactional
-    @Override
-    public RestResponseDto setPunchinAnotherDay(String time, String ips) {
-        PersistentAttendanceEntity previousAttendance = getEntityForPunchOut(AuthenticationUtils.getCurrentUser().getUserId());
-        int hours = Integer.parseInt(time.split(":")[0]);
-        if (hours < NumericConstant.OFFICE_START || hours > NumericConstant.OFFICE_END) {
-            return RestResponseDto.INSTANCE().success().detail(Map.of("notOfficeHours", true));
-        } else {
-            previousAttendance.setPunchOutDate(getPreviousPunchoutDate(time, previousAttendance.getPunchInDate()));
-            double workHours = DateUtils.getHours(previousAttendance.getPunchOutDate(), previousAttendance.getPunchInDate());
-            previousAttendance.setPunchOutIp(ips);
-            previousAttendance.setTotalWorkedHours(workHours);
-            attendanceRepository.saveAndFlush(previousAttendance);
-            return RestResponseDto.INSTANCE().detail(Map.of("notOfficeHours", false));
-        }
-
     }
 
     private Date getPreviousPunchoutDate(String time, Date punchindate) {
@@ -159,15 +145,5 @@ public class AttendanceServiceImp implements AttendanceService {
             return false;
         }
         return true;
-    }
-
-    private String getUserName(UUID userid) {
-
-        String userName = userService.findById(userid).getUsername();
-        if (userName != null)
-            return userName;
-
-        return "name not found";
-
     }
 }
