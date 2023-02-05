@@ -5,11 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title layout:title-pattern="$CONTENT_TITLE">Admin</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" th:href="@{/lte/plugins/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/DataTables/datatables.css}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
@@ -36,9 +36,6 @@
     <!--error-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
-    <link rel="stylesheet" th:href="@{/lte/plugins/fontawesome-free/css/all.min.css}">
-    <!-- Theme style -->
-    <link rel="stylesheet" th:href="@{/lte/dist/css/adminlte.min.css}">
     <!-- error close-->
 
   <script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
@@ -71,8 +68,7 @@
         $.widget.bridge('uibutton', $.ui.button)
     </script>
 
-    <script type="text/javascript" charset="utf8" th:src="@{/lte/plugins/datatables/jquery.dataTables.min.js}"></script>
-    <!-- Bootstraplte/ 4 -->
+    <script type="text/javascript" charset="utf8" th:src="@{/DataTables/datatables.js}"></script>
     <script type="text/javascript" th:src="@{/lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <!-- ChartJS -->
     <script type="text/javascript" th:src="@{/lte/plugins/chart.js/Chart.min.js}"></script>
