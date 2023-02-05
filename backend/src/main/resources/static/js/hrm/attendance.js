@@ -84,7 +84,6 @@ $("#attendanceTimeForm").submit(function (e) {
                 data: postData,
                 dataType: "json",
                 success: function (data, textStatus, jqXHR) {
-                    console.log("next day punhout called");
                     if (data.status == 200) {
                         window.location.href = "/";
                     } else {

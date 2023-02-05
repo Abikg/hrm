@@ -25,8 +25,6 @@ $("#attendanceTimeForm").submit(function (e) {
             data: postData,
             dataType: "json",
             success: function (data, textStatus, jqXHR) {
-                console.log("next day punhout called");
-
                 alert("success");
             },
             error: function (jqXHR, textStatus, errorThrown) {
