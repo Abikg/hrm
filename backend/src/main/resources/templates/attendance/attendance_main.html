@@ -5,7 +5,7 @@
       layout:decorate="~{layout/main}">
 
 <meta charset="UTF-8">
-<title>Atte</title>
+<title>Attendance</title>
 
 <head>
 
@@ -17,9 +17,7 @@
             <div class="row mb-2 ">
                 <div class="col-sm-5">
                     <h1> Attendance </h1>
-
                 </div>
-
             </div>
             <div class="row mb-2">
                 <div class="card w-100 " style="height: 150px">
@@ -44,6 +42,7 @@
                                     <input type="text" class="form-control mydatepicker" id="fromDate" name="fromDate"
                                            data-date-format="yyyy/mm/dd" autocomplete="off" readonly>
                                 </div>
+
                             </div>
                             <div class="col-3 datetime2">
                                 <label for="todate">To:</label>
@@ -52,13 +51,13 @@
                                         <span class="input-group-text bg-transparent" id="iconToDate"><i
                                                 class="fas fa-calendar"></i></span>
                                     </div>
-                                    <input type="text" class="form-control mydatepicker " data-date-format="yyyy/mm/dd"
-                                           id="toDate" name="toDate" readonly>
+                                    <input type="text" class="form-control mydatepicker" data-date-format="yyyy/mm/dd"
+                                           id="toDate" name="toDate" autocomplete="off" readonly>
                                 </div>
                             </div>
                             <div class="row  ml-1" sec:authorize="hasRole('SUPER_ADMIN')">
 
-                                <button type="button" class="btn btn-primary mt-auto" id="dateFilterButton"
+                                <button type="button" class="btn btn-primary mt-auto " id="dateFilterButton"
                                         onclick="filterByDateForAdmin()">Filter
                                 </button>
                             </div>
@@ -67,9 +66,19 @@
                                 <button type="button" class="btn btn-primary mt-auto" id="dateFilterButton2"
                                         onclick="filterByDateForNormal()">Filter
                                 </button>
+
                             </div>
 
+
                         </div>
+
+                        <div id="fromDate-error">
+                            <p class="error"></p>
+                        </div>
+                        <div id="toDate-error">
+                            <p class="error"></p>
+                        </div>
+
 
                     </div>
                 </div>

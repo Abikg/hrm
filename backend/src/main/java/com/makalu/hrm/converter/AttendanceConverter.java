@@ -2,9 +2,9 @@ package com.makalu.hrm.converter;
 
 import com.makalu.hrm.domain.PersistentAttendanceEntity;
 import com.makalu.hrm.model.AttendanceDto;
+import com.makalu.hrm.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
 
 @Component
 @RequiredArgsConstructor
@@ -24,9 +24,7 @@ public class AttendanceConverter extends Convertable<PersistentAttendanceEntity,
 
     @Override
     public AttendanceDto convertToDto(PersistentAttendanceEntity entity) {
-
-        if (entity == null)
-            return null;
+        if (entity == null) return null;
 
         AttendanceDto dto = new AttendanceDto();
         dto.setId(entity.getId());
@@ -34,10 +32,8 @@ public class AttendanceConverter extends Convertable<PersistentAttendanceEntity,
         dto.setPunchInIp(entity.getPunchInIp());
         dto.setPunchOutDate(entity.getPunchOutDate());
         dto.setPunchOutIp(entity.getPunchOutIp());
-        dto.setTotalWorkedHours((entity.getTotalWorkedHours()));
+        dto.setTotalWorkedHours(DateUtils.convertTimeToString(entity.getTotalWorkedHours()));
         dto.setUser(userConverter.convertToDto(entity.getUser()));
-
         return dto;
     }
-
 }
