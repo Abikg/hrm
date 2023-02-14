@@ -83,7 +83,7 @@ public class PersistentEmployeeEntity extends AbstractEntity {
 
 
     public String getEmployeeId() {
-        return new StringBuilder().append("MS").append(employeeId).toString();
+        return "MS"+this.employeeId;
     }
 
 }

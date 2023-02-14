@@ -1,11 +1,13 @@
 package com.makalu.hrm.validation;
 
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
+import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.model.DepartmentDTO;
 import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.model.PositionDTO;
 import com.makalu.hrm.model.WorkExperienceDTO;
 import com.makalu.hrm.repository.EmployeeRepository;
+import com.makalu.hrm.repository.UserRepository;
 import com.makalu.hrm.validation.error.EmployeeError;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -33,6 +35,7 @@ public class EmployeeValidation {
 
 
     private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
     private static EmployeeError error;
 
     public EmployeeError validateOnSave(EmployeeDTO dto) {
@@ -53,7 +56,8 @@ public class EmployeeValidation {
         }
         isValid = isValid & validateGender(dto.getPersonalDetailDTO().getGender());
         isValid = isValid & validateMaritalStatus(dto.getPersonalDetailDTO().getMaritalStatus());
-        isValid = isValid && validateUniqueEmail(dto.getEmail());
+        isValid = isValid & validateUniqueEmailOnEmployee(dto.getEmail());
+        isValid = isValid && validateUniqueEmailOnUser(dto.getEmail());
         error.setValid(isValid);
         return error;
     }
@@ -83,25 +87,38 @@ public class EmployeeValidation {
     }
 
     @Transactional
-    boolean validateUniqueEmail(String email) {
-        PersistentEmployeeEntity employeeEntity = employeeRepository.findByEmail(email);
+    boolean validateUniqueEmailOnEmployee(String email) {
+        List<PersistentEmployeeEntity> employeeEntityList = employeeRepository.findAll();
 
-        if (employeeEntity == null) {
-            return true;
-        }
-
-        if (employeeEntity.getEmail().equals(email)) {
+        if (employeeEntityList.stream().anyMatch(e->e.getEmail().equals(email))) {
             error.setEmail("Please provide a unique email address");
+            return false;
+        }
+        return true;
+    }
+
+    @Transactional
+    boolean validateUniqueEmailOnUser(String email) {
+        List<PersistentUserEntity> userEntityList = userRepository.findAll();
+        if (userEntityList.stream().anyMatch(u->u.getUsername().equals(email))) {
+            error.setEmail("User already registered with given email. Please provide a unique email address");
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     @Transactional
     boolean validateUniqueOnUpdate(EmployeeDTO employeeDTO) {
         PersistentEmployeeEntity employeeEntity = employeeRepository.findByEmail(employeeDTO.getEmail());
+        PersistentUserEntity userEntity = userRepository.findByUsername(employeeDTO.getEmail()).orElse(null);
+
         if (employeeEntity != null && !employeeEntity.getId().equals(employeeDTO.getId())) {
             error.setEmail("Email already used");
+            return false;
+        }
+        if(userEntity != null && employeeDTO.getUserId()!= null && !employeeDTO.getUserId().equals(userEntity.getId())){
+            error.setEmail("User already registered with given email. Please provide a unique email address");
             return false;
         }
         return true;

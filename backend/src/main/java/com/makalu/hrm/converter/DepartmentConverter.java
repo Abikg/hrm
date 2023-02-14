@@ -2,9 +2,11 @@ package com.makalu.hrm.converter;
 
 import com.makalu.hrm.domain.PersistentDepartmentEntity;
 import com.makalu.hrm.model.DepartmentDTO;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 public class DepartmentConverter extends Convertable<PersistentDepartmentEntity, DepartmentDTO> {
 
     @Override

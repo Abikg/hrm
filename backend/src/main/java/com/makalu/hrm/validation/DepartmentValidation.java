@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class DepartmentValidation {
@@ -32,28 +34,47 @@ public class DepartmentValidation {
         isValid = isValid & validateCode(dto.getDepartmentCode());
         isValid = isValid & validateDetails(dto.getDetail());
         //todo validate unique constraints
-
+        isValid = isValid && validateUniqueOnUpdate(dto);
         error.setValid(isValid);
         return error;
     }
 
     @Transactional
     boolean validateUnique(String title, String code) {
-        PersistentDepartmentEntity departmentEntity = departmentRepository.findByTitleOrDepartmentCode(title, code);
+        List<PersistentDepartmentEntity> departmentEntityList = departmentRepository.findByTitleOrDepartmentCode(title, code);
 
-        if (departmentEntity == null) {
+        if (departmentEntityList.size() == 0) {
             return true;
         }
 
-        if (departmentEntity.getTitle().equals(title)) {
+        if (departmentEntityList.stream().anyMatch(d->d.getTitle().equals(title))) {
             error.setTitle("Please provide the unique title");
+
         }
 
-        if (departmentEntity.getDepartmentCode().equals(code)) {
+        if (departmentEntityList.stream().anyMatch(d->d.getDepartmentCode().equals(code))) {
             error.setDepartmentCode("Please provide the unique code");
         }
 
         return false;
+    }
+
+    @Transactional
+    boolean validateUniqueOnUpdate(DepartmentDTO dto){
+        List<PersistentDepartmentEntity> departmentEntityList = departmentRepository.findByTitleOrDepartmentCode(dto.getTitle(), dto.getDepartmentCode());
+        if (departmentEntityList.size() > 0){
+            return true;
+        }
+        if(departmentEntityList.stream().anyMatch(d->(d.getTitle().equals(dto.getTitle()) && !d.getId().equals(dto.getId())))){
+            error.setTitle("Please provide the unique title");
+            return false;
+        }
+        if(departmentEntityList.stream().anyMatch(d->(d.getDepartmentCode().equals(dto.getDepartmentCode()) && !d.getId().equals(dto.getId())))){
+            error.setDepartmentCode("Please provide the unique title");
+            return false;
+        }
+
+        return true;
     }
 
     private boolean validateTitle(String title) {

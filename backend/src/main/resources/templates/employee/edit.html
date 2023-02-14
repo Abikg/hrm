@@ -11,10 +11,6 @@
             <div class="col-sm-10">
                 <h1>Employee Edit</h1>
             </div>
-            <div class="col-sm-2">
-                <a th:href="@{/employee/list}">
-                    <button id="add-new-position" class="btn btn-primary btn-sm pull-right">Back</button></a>
-            </div>
         </div>
     </div>
     <div class="row mb-2  alertSuccess" th:if="${#ctx.containsVariable('response')} and ${response.status == 200}">
@@ -48,11 +44,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="email" class="col-form-label">Email</label>
-                                <input type="email" th:field="*{email}" class="form-control" id="email">
-                                <div th:if="${#ctx.containsVariable('response')}">
-                                    <p th:if="${response.status == 400  and response.detail.get('error').email != null}"
-                                       class="error"  th:text="${response.detail.get('error').email}"></p>
-                                </div>
+                                <input type="email" th:field="*{email}" class="form-control bg-transparent" id="email" disabled>
+                                <input type="hidden" th:field="*{email}">
                             </div>
                             <div class="form-group">
                                 <label for="department"  class="col-form-label">Select Department</label>
@@ -84,12 +77,9 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-transparent dateIcon" id="icon"><i class="fas fa-calendar"></i></span>
                                     </div>
-                                    <input class="form-control mydatepicker bg-transparent" th:field="*{joinDate}"
-                                            data-date-format="yyyy/mm/dd" required readonly>
-                                </div>
-                                <div th:if="${#ctx.containsVariable('response')}">
-                                    <p th:if="${response.status == 400  and response.detail.get('error').joinDate != null}"
-                                       class="error"  th:text="${response.detail.get('error').joinDate}"></p>
+                                    <input class="form-control mydatepicker bg-transparent" th:field="*{joinDate}" disabled
+                                            data-date-format="yyyy/mm/dd">
+                                    <input type="hidden" th:field="*{joinDate}" id="hiddenJoinDate">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -105,27 +95,22 @@
                             </div>
                             <div class="form-group">
                                 <label>Contact Details</label>
-                                <div class="mt-2" th:if="${#ctx.containsVariable('response')}">
-                                    <p th:if="${response.status == 400  and response.detail.get('error').contactPhone != null}"
-                                       class="error"  th:text="${response.detail.get('error').contactPhone}"></p>
-                                    <p th:if="${response.status == 400  and response.detail.get('error').contactEmail != null}"
-                                       class="error"  th:text="${response.detail.get('error').contactEmail}"></p>
-                                    <p th:if="${response.status == 400  and response.detail.get('error').contactAddress != null}"
-                                       class="error"  th:text="${response.detail.get('error').contactAddress}"></p>
-                                </div>
                                 <div class="form-group custom-card-layout">
                                     <div class="form-inline">
                                     <div class="form-group">
                                         <label class="mr-3">Phone</label>
-                                        <input type="text" class="form-control" th:field="*{contactDetailDTO.contactPhone}"  placeholder="Phone Eg.: 98XXXXXXXX">
+                                        <input type="text" class="form-control bg-transparent" th:field="*{contactDetailDTO.contactPhone}"  placeholder="Phone Eg.: 98XXXXXXXX" disabled>
+                                        <input type="hidden" th:field="*{contactDetailDTO.contactPhone}">
                                     </div>
                                     <div class="form-group ml-0 ml-sm-auto">
                                         <label class="mr-3">Email</label>
-                                        <input type="text" class="form-control ml-auto" th:field="*{contactDetailDTO.contactEmail}"  placeholder="Email Eg.: abc@email.com">
+                                        <input type="text" class="form-control ml-auto bg-transparent" th:field="*{contactDetailDTO.contactEmail}"  placeholder="Email Eg.: abc@email.com" disabled>
+                                        <input type="hidden" th:field="*{contactDetailDTO.contactEmail}">
                                     </div>
                                     <div class="form-group ml-0 ml-sm-auto">
                                         <label class="mr-3">Address</label>
-                                        <input type="text" class="form-control ml-auto" th:field="*{contactDetailDTO.contactAddress}"  placeholder="Address. Eg.: Kathmandu">
+                                        <input type="text" class="form-control ml-auto bg-transparent" th:field="*{contactDetailDTO.contactAddress}"  placeholder="Address. Eg.: Kathmandu" disabled>
+                                        <input type="hidden" th:field="*{contactDetailDTO.contactAddress}">
                                     </div>
 
                                 </div>
@@ -154,7 +139,7 @@
                                     </div>
                                     <div class="form-group ml-0 ml-sm-auto">
                                         <label class="mr-3">Age</label>
-                                        <input type="text" class="form-control ml-auto age" th:field="*{personalDetailDTO.age}" readonly>
+                                        <input type="text" class="form-control ml-auto age bg-transparent" th:field="*{personalDetailDTO.age}" disabled>
                                     </div>
                                     <div class="form-group ml-0 ml-sm-auto">
                                         <label class="mr-0 mr-sm-2">Gender</label>

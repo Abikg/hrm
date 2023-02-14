@@ -5,6 +5,7 @@ import com.makalu.hrm.controller.MvcBaseTest;
 import com.makalu.hrm.model.PositionDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.PositionService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -84,7 +85,11 @@ public class PositionServiceTest extends MvcBaseTest {
 
         positionDTO.setId(UUID.fromString("67428b0e-8f2b-4291-b390-9bc4d9bc5ec"));
         persistentPositionEntity = positionService.update(positionDTO);
-        assert persistentPositionEntity.getStatus() == 404;
+        Assertions.assertEquals(400, persistentPositionEntity.getStatus());
+
+        positionDTO.setTitle("This is rock");
+        persistentPositionEntity = positionService.update(positionDTO);
+        Assertions.assertEquals(404, persistentPositionEntity.getStatus());
 
     }
 

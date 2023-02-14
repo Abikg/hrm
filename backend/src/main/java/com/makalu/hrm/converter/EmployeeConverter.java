@@ -64,7 +64,11 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         if (entity.getApprovedBy() != null) {
             dto.setApprovedById(entity.getApprovedBy().getId());
         }
-
+        if(entity.getUser() != null){
+            boolean isManager= (entity.getUser().getUserType().toString().equals("Manager"))? true: false;
+            dto.setManager(isManager);
+            dto.setUserId(entity.getUser().getId());
+        }
         return dto;
     }
 

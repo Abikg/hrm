@@ -117,7 +117,6 @@ function saveData(data, url) {
                 }
             },
             success: function (data) {
-                console.log("saved");
                 if (data.status === 200) {
                     listData("department","api/list", "department-table")
                     $('#departmentModal').modal('toggle');

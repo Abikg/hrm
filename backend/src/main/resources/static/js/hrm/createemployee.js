@@ -24,14 +24,28 @@ $(document).ready(function(){
             "min-height": "100%"});
     }
 
-    if($("#joinDate").val()){
+    if($("input[name='joinDate']").val()){
         const format = "ddd MMM D HH:mm:ss z yyyy";
-        if (moment($("#joinDate").val(), format).isValid()) {
-            $("#joinDate").val(moment($("#joinDate").val(), format).format("YYYY/MM/DD"));
+        if (moment($("input[name='joinDate']").val(), format).isValid()) {
+            $("input[name='joinDate']").val(moment($("input[name='joinDate']").val(), format).format("YYYY/MM/DD"));
 
         } else {
-            $("#joinDate").val(moment($("#joinDate").val()).format("YYYY/MM/DD"));
+            $("input[name='joinDate']").val(moment($("input[name='joinDate']").val()).format("YYYY/MM/DD"));
         }
+    }
+
+    if($("#hiddenJoinDate").val()){
+        $(this).val(moment($(this).val()).format("YYYY/MM/DD"));
+    }
+
+});
+$("#employeeForm").submit(function(e) {
+    if ($("input[name='joinDate']").val() === ""){
+        e.preventDefault();
+        $("#joinDateError").removeClass("d-none");
+        $("#joinDateError p").text("Join date can't be empty.");
+    }else{
+        $("#joinDateError").addClass("d-none");
     }
 });
 

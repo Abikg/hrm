@@ -135,7 +135,6 @@ function approveResignation(id){
             success: function (data) {
                 if (data.status === 200) {
                     viewEmployee(data.detail.id,"employee");
-                    console.log("saved");
                 }
             },
             error: function (jqXhr, textStatus, errorMessage) {
@@ -158,7 +157,28 @@ function exitResignation(id){
             success: function (data) {
                 if (data.status === 200) {
                     viewEmployee(data.detail.id,"employee");
-                    console.log("saved");
+                }
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
+            }
+        });
+}
+function createReportingManager(id){
+    const url = window.location.origin + "/employee/createReportingManager/"+ id;
+    employeeReq = $.ajax(url,
+        {
+            method: "POST",
+            beforeSend: function () {
+                if (employeeReq !== undefined && employeeReq != null) {
+                    employeeReq.abort();
+                }
+            },
+            success: function (data) {
+                if (data.status === 200) {
+                    viewEmployee(data.detail.id,"employee");
                 }
             },
             error: function (jqXhr, textStatus, errorMessage) {

@@ -1,6 +1,7 @@
 package com.makalu.hrm.controller;
 
 import com.makalu.hrm.constant.ParameterConstant;
+import com.makalu.hrm.exceptions.EmployeeException;
 import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.DepartmentService;
@@ -72,11 +73,16 @@ public class EmployeeController {
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public String editEmployee(@PathVariable("id") UUID employeeId, ModelMap map) {
-        RestResponseDto rdto = employeeService.getResponseById(employeeId);
-        map.put(ParameterConstant.POSITION_LIST, positionService.list());
-        map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
-        map.put("imageUtil", new ImageUtil());
-        map.put(ParameterConstant.EMPLOYEE, rdto.getDetail());
+        try {
+            RestResponseDto rdto = employeeService.getResponseByIdForUpdate(employeeId);
+            map.put(ParameterConstant.POSITION_LIST, positionService.list());
+            map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
+            map.put("imageUtil", new ImageUtil());
+            map.put(ParameterConstant.EMPLOYEE, rdto.getDetail());
+
+        }catch (EmployeeException e){
+            return "employee/list";
+        }
         return "employee/edit";
     }
 
@@ -133,4 +139,5 @@ public class EmployeeController {
     public ResponseEntity<RestResponseDto> exitResignation(@PathVariable("id") UUID employeId) {
         return ResponseEntity.ok(employeeService.employeeExitResignation(employeId));
     }
+
 }
