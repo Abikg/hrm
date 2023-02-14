@@ -17,7 +17,7 @@ public class EmployeeDTO {
 
     private String employeeId;
 
-    private long entityEmployeeId;
+    private String entityEmployeeId;
 
     private EmployeeStatus employeeStatus;
 

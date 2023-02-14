@@ -103,7 +103,7 @@ databaseChangeLog:
                         defaultValue: 0
                   - column:
                       name: title
-                      type: varchar(255)
+                      type: varchar(50)
                       constraints:
                         nullable: false
                         unique: true
@@ -156,7 +156,7 @@ databaseChangeLog:
                         nullable: false
                   - column:
                       name: department_code
-                      type: varchar(10)
+                      type: varchar(20)
                       constraints:
                         nullable: false
                         unique: true
@@ -196,58 +196,9 @@ databaseChangeLog:
                       type: varchar(255)
                       constraints:
                         nullable: false
-                        unique: true
                   - column:
                       name: type
-                      type: varchar(255)
-                      constraints:
-                        nullable: false
-                  - column:
-                      name: image
-                      type: bytea
-                      constraints:
-                        nullable: false
-                        defaultValue: false
-
-      - changeSet:
-          id: 2023-01-13-employee_image-create-table
-          author: suvam
-          changes:
-            - createTable:
-                tableName: employee_image
-                columns:
-                  - column:
-                      name: id
-                      type: varchar(36)
-                      constraints:
-                        primaryKey: true
-                        nullable: false
-                  - column:
-                      name: created_date
-                      type: date
-                      constraints:
-                        nullable: false
-                        defaultValue: null
-                  - column:
-                      name: last_modified_date
-                      type: date
-                      constraints:
-                        defaultValue: null
-                  - column:
-                      name: version
-                      type: int
-                      constraints:
-                        nullable: false
-                        defaultValue: 0
-                  - column:
-                      name: name
-                      type: varchar(255)
-                      constraints:
-                        nullable: false
-                        unique: true
-                  - column:
-                      name: type
-                      type: varchar(255)
+                      type: varchar(20)
                       constraints:
                         nullable: false
                   - column:
@@ -290,13 +241,13 @@ databaseChangeLog:
                         defaultValue: 0
                   - column:
                       name: employee_id
-                      type: bigint
+                      type: varchar(50)
                       constraints:
                         nullable: false
                         unique: false
                   - column:
                       name: employee_status
-                      type: varchar(255)
+                      type: varchar(50)
                       constraints:
                         nullable: false
                         defaultValue: 'ACTIVE'
@@ -308,7 +259,7 @@ databaseChangeLog:
                         unique: false
                   - column:
                       name: email
-                      type: varchar(255)
+                      type: varchar(100)
                       constraints:
                         nullable: false
                   - column:

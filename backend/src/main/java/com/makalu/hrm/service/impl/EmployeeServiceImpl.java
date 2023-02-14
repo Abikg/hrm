@@ -11,8 +11,13 @@ import com.makalu.hrm.validation.EmployeeValidation;
 import com.makalu.hrm.validation.error.EmployeeError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +34,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeImageService employeeImageService;
     private final UserService userService;
     private final UserRepository userRepository;
+    private final EntityManager entityManager;
 
     @Override
     public List<EmployeeDTO> list() {
@@ -40,7 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public RestResponseDto save(@NotNull EmployeeDTO employeeDTO) {
         try {
-            long entityCount;
 
             EmployeeError error = employeeValidation.validateOnSave(employeeDTO);
 
@@ -70,8 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     employeeDTO.setUserId(userDTO.getId());
                 }
             }
-            entityCount = employeeRepository.count();
-            employeeDTO.setEntityEmployeeId(entityCount + 1);
+            employeeDTO.setEntityEmployeeId("Test");
             employeeDTO.setEmployeeStatus(EmployeeStatus.ACTIVE);
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeConverter.convertToDto(
@@ -239,4 +243,38 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    @Override
+    public List<EmployeeDTO> search(EmployeeFilterDTO employeeFilterDTO){
+
+        SearchResult<PersistentEmployeeEntity> searchResult = Search.session(entityManager).search(PersistentEmployeeEntity.class)
+                .where(f-> f.bool(b->
+                        {
+                            if (StringUtils.hasText(employeeFilterDTO.getEmployeeId())) {
+                                b.should (s -> s.match().field("employeeId_key").matching(employeeFilterDTO.getEmployeeId()));
+                            }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getFullName())) {
+                                b.should (s -> s.match().field("fullname_key").matching(employeeFilterDTO.getFullName()));
+                            }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getEmail())) {
+                                b.should (s -> s.match().field("email_key").matching(employeeFilterDTO.getEmail()));
+                            }
+
+                            if (employeeFilterDTO.getId() != null) {
+                                b.should (s -> s.match().field("id").matching(employeeFilterDTO.getId()));
+                            }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getDepartment())) {
+                                b.should (s -> s.match().fields("department.title_key", "department.departmentCode_key").matching(employeeFilterDTO.getDepartment()));
+                            }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getPosition())) {
+                                b.should (s -> s.match().fields("position.title_key").matching(employeeFilterDTO.getPosition()));
+                            }
+                        }
+                        )).fetchAll();
+
+        return employeeConverter.convertToDtoList(searchResult.hits());
+    }
 }

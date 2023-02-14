@@ -1,6 +1,7 @@
 package com.makalu.hrm.service;
 
 import com.makalu.hrm.model.EmployeeDTO;
+import com.makalu.hrm.model.EmployeeFilterDTO;
 import com.makalu.hrm.model.RestResponseDto;
 
 import javax.validation.constraints.NotNull;
@@ -27,4 +28,5 @@ public interface EmployeeService {
 
     RestResponseDto employeeExitResignation(UUID employeeId);
 
+    List<EmployeeDTO> search(EmployeeFilterDTO employeeFilterDTO);
 }

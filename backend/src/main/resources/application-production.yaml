@@ -13,3 +13,11 @@ management:
 logging:
   file:
     name: /tmp/malau_hrm.log
+
+hibernate:
+  search:
+    backend:
+      directory:
+        root: /opt/hs/index/
+        filesystem_access:
+          strategy: auto

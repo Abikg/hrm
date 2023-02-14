@@ -3,6 +3,7 @@ package com.makalu.hrm.controller;
 import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.exceptions.EmployeeException;
 import com.makalu.hrm.model.EmployeeDTO;
+import com.makalu.hrm.model.EmployeeFilterDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.DepartmentService;
 import com.makalu.hrm.service.EmployeeService;
@@ -48,6 +49,13 @@ public class EmployeeController {
     @ResponseBody
     public ResponseEntity<RestResponseDto> list() {
         return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(employeeService.list()).column(fieldService.getEmployeeFields()));
+    }
+
+    @GetMapping("/api/search")
+    @PreAuthorize("permitAll()")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> search(@RequestBody EmployeeFilterDTO filterDTO) {
+        return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(employeeService.search(filterDTO)).column(fieldService.getEmployeeFields()));
     }
 
     @GetMapping("/create")
