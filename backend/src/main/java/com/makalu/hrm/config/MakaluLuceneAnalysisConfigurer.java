@@ -14,14 +14,10 @@ public class MakaluLuceneAnalysisConfigurer implements LuceneAnalysisConfigurer 
     public void configure(LuceneAnalysisConfigurationContext context) {
 
         context.analyzer("ngram").custom()
-                .tokenizer( StandardTokenizerFactory.class )
-                .tokenFilter( LowerCaseFilterFactory.class )
-                .tokenFilter( ShingleFilterFactory.class )
-                .param( "maxShingleSize", "2" )
-                .param( "tokenSeparator", " " )
-                .tokenFilter(NGramFilterFactory.class)
+                .tokenizer( NGramTokenizerFactory.class )
                 .param( "minGramSize", "1" )
-                .param( "maxGramSize", "15" );
+                .param( "maxGramSize", "15" )
+                .tokenFilter(LowerCaseFilterFactory.class);
 
         context.analyzer("query").custom()
                 .tokenizer(StandardTokenizerFactory.class)
