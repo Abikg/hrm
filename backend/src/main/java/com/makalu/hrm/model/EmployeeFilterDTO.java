@@ -13,4 +13,6 @@ public class EmployeeFilterDTO {
     private String department;
     private String position;
     private String query;
+    private int offset = 0;
+    private int max = 100;
 }

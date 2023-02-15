@@ -52,7 +52,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/api/search")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('AUTHENTICATED')")
     @ResponseBody
     public ResponseEntity<RestResponseDto> search(@RequestBody EmployeeFilterDTO filterDTO) {
         return ResponseEntity.ok(RestResponseDto.INSTANCE().success().detail(employeeService.search(filterDTO)).column(fieldService.getEmployeeFields()));
