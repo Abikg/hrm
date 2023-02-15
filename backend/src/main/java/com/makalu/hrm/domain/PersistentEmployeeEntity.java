@@ -34,7 +34,7 @@ public class PersistentEmployeeEntity{
     @Id
     @NonNull
     @Type(type = "uuid-char")
-    @KeywordField(normalizer="lowercase")
+    @KeywordField
     private UUID id;
 
     @Basic(optional = false)
@@ -57,7 +57,7 @@ public class PersistentEmployeeEntity{
 
     @Column(nullable = false)
     @FullTextField(analyzer = "ngram")
-    @KeywordField(normalizer = "lowercase", name="employeeId_key",sortable= Sortable.YES)
+    //@KeywordField(normalizer = "lowercase", name="employeeId_key",sortable= Sortable.YES)
     private String employeeId;
 
     @Column(nullable = false)
@@ -66,15 +66,14 @@ public class PersistentEmployeeEntity{
 
     @Column(nullable = false)
     @FullTextField(analyzer = "ngram")
-    @KeywordField(normalizer = "lowercase", name="fullname_key",sortable= Sortable.YES)
+   // @KeywordField(normalizer = "lowercase", name="fullname_key",sortable= Sortable.YES)
     private String fullname;
 
     @Column(nullable = false)
     @FullTextField(analyzer = "ngram")
-    @KeywordField(normalizer = "lowercase", name="email_key",sortable= Sortable.YES)
+   // @KeywordField(normalizer = "lowercase", name="email_key",sortable= Sortable.YES)
     private String email;
 
-    @Basic(optional = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "join_date")
     private Date joinDate;

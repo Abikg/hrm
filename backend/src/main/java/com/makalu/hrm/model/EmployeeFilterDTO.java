@@ -12,4 +12,5 @@ public class EmployeeFilterDTO {
     private String employeeId;
     private String department;
     private String position;
+    private String query;
 }

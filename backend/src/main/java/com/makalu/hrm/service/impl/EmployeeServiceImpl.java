@@ -250,15 +250,15 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .where(f-> f.bool(b->
                         {
                             if (StringUtils.hasText(employeeFilterDTO.getEmployeeId())) {
-                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().field("employeeId_key").matching(employeeFilterDTO.getEmployeeId()))));
+                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().field("employeeId").matching(employeeFilterDTO.getEmployeeId()))));
                             }
 
                             if (StringUtils.hasText(employeeFilterDTO.getFullName())) {
-                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().field("fullname_key").matching(employeeFilterDTO.getFullName()))));
+                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().field("fullname").matching(employeeFilterDTO.getFullName()).analyzer("query"))));
                             }
 
                             if (StringUtils.hasText(employeeFilterDTO.getEmail())) {
-                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().field("email_key").matching(employeeFilterDTO.getEmail()).analyzer("query"))));
+                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().field("email").matching(employeeFilterDTO.getEmail()))));
                             }
 
                             if (employeeFilterDTO.getId() != null) {
@@ -266,12 +266,19 @@ public class EmployeeServiceImpl implements EmployeeService {
                             }
 
                             if (StringUtils.hasText(employeeFilterDTO.getDepartment())) {
-                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().fields("department.title_key", "department.departmentCode_key").matching(employeeFilterDTO.getDepartment()))));
+                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().fields("department.title", "department.departmentCode").matching(employeeFilterDTO.getDepartment()))));
                             }
 
                             if (StringUtils.hasText(employeeFilterDTO.getPosition())) {
-                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().fields("position.title_key").matching(employeeFilterDTO.getPosition()))));
+                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().fields("position.title").matching(employeeFilterDTO.getPosition()))));
                             }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getQuery())) {
+                                b.filter(ff->ff.bool(fb->fb.should(q->q.match().fields("employeeId","fullname","email","department.title","department.departmentCode", "position.title").matching(employeeFilterDTO.getQuery()))));
+                            }
+
+
+
                         }
                         )).fetchAll();
 

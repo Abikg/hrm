@@ -22,7 +22,7 @@ public class PersistentPositionEntity {
     @Id
     @NonNull
     @Type(type = "uuid-char")
-    @KeywordField(normalizer="lowercase")
+    @KeywordField
     private UUID id;
 
     @Basic(optional = false)
@@ -41,7 +41,7 @@ public class PersistentPositionEntity {
 
     @Column(nullable = false, unique = true)
     @FullTextField(analyzer = "ngram")
-    @KeywordField(normalizer = "lowercase", name="title_key",sortable= Sortable.YES)
+   // @KeywordField(normalizer = "lowercase", name="title_key",sortable= Sortable.YES)
     private String title;
 
     @Column(nullable = false)

@@ -15,7 +15,7 @@ public class MakaluLuceneAnalysisConfigurer implements LuceneAnalysisConfigurer 
 
         context.analyzer("ngram").custom()
                 .tokenizer( NGramTokenizerFactory.class )
-                .param( "minGramSize", "1" )
+                .param( "minGramSize", "3" )
                 .param( "maxGramSize", "15" )
                 .tokenFilter(LowerCaseFilterFactory.class);
 
