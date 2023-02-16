@@ -41,7 +41,7 @@ public class PersistentPositionEntity {
 
     @Column(nullable = false, unique = true)
     @FullTextField(analyzer = "ngram")
-   // @KeywordField(normalizer = "lowercase", name="title_key",sortable= Sortable.YES)
+    @KeywordField(normalizer = "lowercase", name="title_key",sortable= Sortable.YES)
     private String title;
 
     @Column(nullable = false)

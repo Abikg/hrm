@@ -57,7 +57,7 @@ public class PersistentEmployeeEntity{
 
     @Column(nullable = false)
     @FullTextField(analyzer = "ngram")
-    //@KeywordField(normalizer = "lowercase", name="employeeId_key",sortable= Sortable.YES)
+    @KeywordField(normalizer = "lowercase", name="employeeId_key",sortable= Sortable.YES)
     private String employeeId;
 
     @Column(nullable = false)
@@ -66,12 +66,12 @@ public class PersistentEmployeeEntity{
 
     @Column(nullable = false)
     @FullTextField(analyzer = "ngram")
-   // @KeywordField(normalizer = "lowercase", name="fullname_key",sortable= Sortable.YES)
+    @KeywordField(normalizer = "lowercase", name="fullname_key",sortable= Sortable.YES)
     private String fullname;
 
     @Column(nullable = false)
     @FullTextField(analyzer = "ngram")
-   // @KeywordField(normalizer = "lowercase", name="email_key",sortable= Sortable.YES)
+    @KeywordField(normalizer = "lowercase", name="email_key",sortable= Sortable.YES)
     private String email;
 
     @Temporal(TemporalType.TIMESTAMP)

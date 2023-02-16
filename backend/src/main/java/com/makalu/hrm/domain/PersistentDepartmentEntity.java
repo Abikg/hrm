@@ -41,7 +41,7 @@ public class PersistentDepartmentEntity {
 
     @Column(nullable = false, unique = true)
     @FullTextField(analyzer = "ngram")
-    //@KeywordField(normalizer = "lowercase", name="title_key",sortable= Sortable.YES)
+    @KeywordField(normalizer = "lowercase", name="title_key",sortable= Sortable.YES)
     private String title;
 
     @Column(nullable = false, unique = true)
@@ -49,7 +49,7 @@ public class PersistentDepartmentEntity {
 
     @Column(nullable = false, unique = true)
     @FullTextField(analyzer = "ngram")
-    //@KeywordField(normalizer = "lowercase", name="departmentCode_key",sortable= Sortable.YES)
+    @KeywordField(normalizer = "lowercase", name="departmentCode_key",sortable= Sortable.YES)
     private String departmentCode;
 
     public PersistentDepartmentEntity() {
