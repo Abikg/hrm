@@ -1,4 +1,4 @@
-let dataTable = ''
+let dataTable;
 
 
 function listData(module, listApi, tableId) {

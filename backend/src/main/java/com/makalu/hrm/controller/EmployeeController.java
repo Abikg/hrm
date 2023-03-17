@@ -54,7 +54,7 @@ public class EmployeeController {
         map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
         map.put(ParameterConstant.POSITION_LIST, positionService.list());
         map.put(ParameterConstant.EMPLOYEE, employeeDTO);
-        return "employee/form";
+        return "employee/create";
     }
 
     @RequestMapping(path = "/save", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -64,8 +64,7 @@ public class EmployeeController {
         map.put(ParameterConstant.POSITION_LIST, positionService.list());
         map.put(ParameterConstant.EMPLOYEE, employeeDTO);
         map.put(ParameterConstant.RESPONSE, employeeService.save(employeeDTO));
-
-        return "employee/form";
+        return "employee/create";
     }
 
     @GetMapping("/edit/{id}")
