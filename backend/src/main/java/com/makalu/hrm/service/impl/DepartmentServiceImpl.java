@@ -1,10 +1,14 @@
 package com.makalu.hrm.service.impl;
 
 import com.makalu.hrm.converter.DepartmentConverter;
+import com.makalu.hrm.converter.EmployeeConverter;
 import com.makalu.hrm.domain.PersistentDepartmentEntity;
+import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.model.DepartmentDTO;
+import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.repository.DepartmentRepository;
+import com.makalu.hrm.repository.EmployeeRepository;
 import com.makalu.hrm.service.DepartmentService;
 import com.makalu.hrm.validation.DepartmentValidation;
 import com.makalu.hrm.validation.error.DepartmentError;
@@ -28,6 +32,10 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentConverter departmentConverter;
 
     private final DepartmentValidation departmentValidation;
+
+    private final EmployeeRepository employeeRepository;
+
+    private final EmployeeConverter employeeConverter;
 
     private final ServletContext context;
 
@@ -66,6 +74,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         PersistentDepartmentEntity departmentEntity = departmentRepository.findById(departmentId).orElse(null);
         if (departmentEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Department not found");
+        }
+        RestResponseDto  rdto = this.getEmployeeListByDepartment(departmentId);
+        if(rdto.getStatus() != 200){
+
         }
         return RestResponseDto.INSTANCE().success().detail(departmentConverter.convertToDto(departmentEntity));
     }
@@ -118,4 +130,29 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
+    @Override
+    public RestResponseDto employeeSetDepartmentManager(@NotNull UUID employeeId, UUID departmentId) {
+        try{
+        PersistentEmployeeEntity employee = employeeRepository.findById(employeeId).orElse(null);
+        PersistentDepartmentEntity department = departmentRepository.findById(departmentId).orElse(null);
+
+        department.setManager(employee);
+        departmentRepository.saveAndFlush(department);
+        return RestResponseDto.INSTANCE().success();
+        }catch (Exception e){
+            log.error("Error while setting department manager",e);
+            return RestResponseDto.INSTANCE().internalServerError();
+        }
+
+    }
+
+    @Override
+    public RestResponseDto getEmployeeListByDepartment(UUID departmentId) {
+        try {
+            List<EmployeeDTO> employeeDTOList = employeeConverter.convertToDtoList(employeeRepository.findAllByDepartment(departmentId));
+            return RestResponseDto.INSTANCE().success().detail(employeeDTOList);
+        }catch (Exception e){
+            return RestResponseDto.INSTANCE().notFound();
+        }
+    }
 }

@@ -18,4 +18,6 @@ public class DepartmentDTO {
 
     private String departmentCode;
 
+    private EmployeeDTO manager;
+
 }

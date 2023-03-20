@@ -78,4 +78,10 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentService.delete(departmentId));
     }
 
+    @GetMapping("/getDepartmentEmployee")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> getEmployeeListByDepartment(@PathVariable("id") UUID departmentId){
+        return ResponseEntity.ok(departmentService.getEmployeeListByDepartment(departmentId));
+    }
 }

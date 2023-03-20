@@ -1,26 +1,19 @@
 package com.makalu.hrm.service.impl;
-
 import com.makalu.hrm.converter.EmployeeConverter;
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.enumconstant.EmployeeStatus;
-import com.makalu.hrm.enumconstant.UserType;
+import com.makalu.hrm.exceptions.EmployeeException;
 import com.makalu.hrm.model.*;
 import com.makalu.hrm.repository.*;
 import com.makalu.hrm.service.*;
-import com.makalu.hrm.utils.AuthenticationUtils;
 import com.makalu.hrm.validation.EmployeeValidation;
 import com.makalu.hrm.validation.error.EmployeeError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.validation.constraints.NotNull;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -98,6 +91,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElse(null);
         if (employeeEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Employee not found");
+        }
+
+        return RestResponseDto.INSTANCE()
+                .success()
+                .detail(employeeConverter.convertToDto(employeeEntity));
+    }
+
+    @Override
+    public RestResponseDto getResponseByIdForUpdate(UUID employeeId) {
+        PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElse(null);
+        if (employeeEntity == null) {
+            return RestResponseDto.INSTANCE().notFound().message("Employee not found");
+        }
+        if(employeeEntity.getEmployeeStatus().equals(EmployeeStatus.RESIGNED)){
+            throw new EmployeeException("Can't update resigned employee");
         }
 
         return RestResponseDto.INSTANCE()
@@ -230,4 +238,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             return RestResponseDto.INSTANCE().internalServerError();
         }
     }
+
+
 }

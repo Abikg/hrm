@@ -9,8 +9,10 @@ import java.util.UUID;
 public interface DepartmentRepository extends JpaRepository<PersistentDepartmentEntity, UUID> {
 
     @Query("from PersistentDepartmentEntity where title = ?1 or departmentCode =?2")
-    PersistentDepartmentEntity findByTitleOrDepartmentCode(String title, String code);
+    List<PersistentDepartmentEntity> findByTitleOrDepartmentCode(String title, String code);
+
 
     @Override
     List<PersistentDepartmentEntity> findAllById(Iterable<UUID> uuids);
+
 }

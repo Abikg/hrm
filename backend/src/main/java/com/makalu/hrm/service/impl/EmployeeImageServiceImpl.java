@@ -35,6 +35,7 @@ public class EmployeeImageServiceImpl implements EmployeeImageService {
         EmployeeImageDTO employeeImageDTO = new EmployeeImageDTO();
         try {
             String fileName = file.getOriginalFilename();
+            fileName += fileName + System.nanoTime();
             String fileType = file.getContentType();
             byte[] data = file.getBytes();
 

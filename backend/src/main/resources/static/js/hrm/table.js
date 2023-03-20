@@ -24,6 +24,7 @@ function createTable(data, module, tableId) {
     var tableColumns = [],
         actualData = []
     actualData = data.detail
+    var columns = data.column;
     $.each(actualData, function (k, v) {
         let drillUrl = window.location.origin + "/" + module + "/showMinute/" + v.id;
         var actionDataElement = '<div class="actionElements">' +
@@ -48,10 +49,16 @@ function createTable(data, module, tableId) {
             let drillElement = '<a href="' + drillUrl + '">'+v.title+'</a>';
             v["title"] = drillElement
         }
+        $.each(columns.filter(field => field.type == "date"), function (index, field) {
+            if (v[field.name] != null) {
+                v[field.name] = moment(v[field.name]).format("yyyy/MM/DD hh:mm:ss a")
+            } else {
+                v[field.name] = " - - "
+            }
+        })
         v["action"] = actionDataElement.replaceAll("elementId",v.id).replaceAll("module",module);
 
     })
-    var columns = data.column;
     $.each(columns, function (key, val) {
         if (val.width) {
             tableColumns[key] = {

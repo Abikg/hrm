@@ -21,7 +21,6 @@ function filterByDateForAdmin() {
         } else {
             listData("attendance","filter?toDate="+$('#toDate').val()+"&fromDate="+$('#fromDate').val()+"&id="+$("#select-user").find(":selected").val(),"attendance-table");
         }
-        getAttendanceData(url);
     } else {
         alert("Please Select Filter Date less than year");
 

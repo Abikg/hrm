@@ -81,9 +81,15 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     @OneToOne
     private PersistentEmployeeImageEntity image;
 
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private PersistentEmployeeEntity manager;
+
+    @OneToMany(mappedBy = "manager")
+    private List<PersistentEmployeeEntity> subordinates;
 
     public String getEmployeeId() {
-        return new StringBuilder().append("MS").append(employeeId).toString();
+        return "MS"+this.employeeId;
     }
 
 }

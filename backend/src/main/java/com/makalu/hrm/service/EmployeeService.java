@@ -15,6 +15,8 @@ public interface EmployeeService {
 
     RestResponseDto getResponseById(@NotNull UUID employeeId);
 
+    RestResponseDto getResponseByIdForUpdate(@NotNull UUID employeeId);
+
     RestResponseDto update(EmployeeDTO employeeDTO);
 
     RestResponseDto employeeResignationCreate(EmployeeDTO employeeDTO);
@@ -24,4 +26,6 @@ public interface EmployeeService {
     RestResponseDto employeeApproveResignation(UUID employeeId);
 
     RestResponseDto employeeExitResignation(UUID employeeId);
+
+
 }

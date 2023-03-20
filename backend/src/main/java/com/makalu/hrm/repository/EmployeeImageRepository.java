@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface EmployeeImageRepository extends JpaRepository<PersistentEmployeeImageEntity, UUID> {
 
+    PersistentEmployeeImageEntity findByName(String name);
 }

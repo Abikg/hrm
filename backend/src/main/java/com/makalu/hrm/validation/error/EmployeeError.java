@@ -17,12 +17,31 @@ public class EmployeeError {
 
     private String empImage;
 
+    private String position;
+
+    private String department;
+
+    private String contactAddress;
+
     private String contactPhone;
 
     private String contactEmail;
 
-    private String contactAddress;
-
     private String dob;
+
+    private String gender;
+
+    private String maritalStatus;
+
+    private String previousCompany;
+
+    private String jobTitle;
+
+    private String joinDate;
+
+    private String leftDate;
+
+    private String jobDesc;
+
 
 }

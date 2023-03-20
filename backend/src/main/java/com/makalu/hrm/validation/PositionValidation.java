@@ -28,6 +28,7 @@ public class PositionValidation {
         positionError = new PositionError();
         boolean isValid = validateTitle(positionDTO.getTitle());
         isValid = isValid & validateDetails(positionDTO.getDetail());
+        isValid = isValid && validateUniqueOnUpdate(positionDTO);
 
         positionError.setValid(isValid);
         return positionError;
@@ -44,7 +45,18 @@ public class PositionValidation {
         }
         return false;
     }
-
+    @Transactional
+    boolean validateUniqueOnUpdate(PositionDTO dto) {
+        PersistentPositionEntity positionEntity = positionRepository.findByTitle(dto.getTitle());
+        if (positionEntity == null) {
+            return true;
+        }
+        if (positionEntity.getTitle().equals(dto.getTitle()) && !positionEntity.getId().equals(dto.getId())) {
+            positionError.setTitle("Unique title is required");
+            return false;
+        }
+        return true;
+    }
     private boolean validateTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
             positionError.setTitle("Title is required");

@@ -23,6 +23,8 @@ public class EmployeeDTO {
 
     private String fullname;
 
+    private boolean isManager = false;
+
     private String email;
 
     private Date joinDate;
@@ -58,6 +60,8 @@ public class EmployeeDTO {
     private PersonalDetailDTO personalDetailDTO = new PersonalDetailDTO();
 
     private List<WorkExperienceDTO> workExperienceDTO = new ArrayList<>();
+
+    private EmployeeDTO manager;
 
     public EmployeeDTO() {
         this.workExperienceDTO.add(new WorkExperienceDTO());
