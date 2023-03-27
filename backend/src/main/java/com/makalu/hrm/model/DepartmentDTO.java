@@ -18,6 +18,10 @@ public class DepartmentDTO {
 
     private String departmentCode;
 
-    private EmployeeDTO manager;
+    private String managerName;
+
+    private UUID managerId;
+
+    private List<EmployeeDTO> departmentEmployeeList;
 
 }

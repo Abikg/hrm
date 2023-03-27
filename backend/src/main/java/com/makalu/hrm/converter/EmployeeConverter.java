@@ -3,6 +3,7 @@ package com.makalu.hrm.converter;
 import com.makalu.hrm.domain.PersistentDepartmentEntity;
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentPositionEntity;
+import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,9 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         if (entity.getApprovedBy() != null) {
             dto.setApprovedById(entity.getApprovedBy().getId());
         }
-
+        if(entity.getUser().getUserType().equals(UserType.MANAGER)){
+            dto.setManager(true);
+        }
         return dto;
     }
 

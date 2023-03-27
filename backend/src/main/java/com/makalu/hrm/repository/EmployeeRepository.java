@@ -14,6 +14,9 @@ public interface EmployeeRepository extends JpaRepository<PersistentEmployeeEnti
     @Override
     long count();
 
-    @Query("select  e from PersistentEmployeeEntity e where e.department.id =?1")
-    List<PersistentEmployeeEntity> findAllByDepartment(UUID departmentId);
+    @Query("select e from PersistentEmployeeEntity e where e.employeeStatus = 'ACTIVE' and e.user is not null")
+    List<PersistentEmployeeEntity> findAllByActiveEmployees();
+
+    @Query("select e from PersistentEmployeeEntity e where e.manager.id =?1")
+    List<PersistentEmployeeEntity> findAllByManager(UUID managerId);
 }

@@ -84,8 +84,7 @@ public class PositionControllerTest extends MvcBaseTest {
                 .andExpect(jsonPath("$.status", is(HttpStatus.OK.value())))
                 .andExpect(jsonPath("$.detail.title", is("Sr Accountant")))
                 .andDo(print())
-                .andRetur
-    n();
+                .andReturn();
     }
 
     @Test

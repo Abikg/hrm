@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 });
 function viewEmployee(id, module){
     window.location.href = "/"+module+"/view/" + id;
+    getEmployeeSubordinates(id);
 }
 function editEmployee(id,module) {
     window.location.href = "/"+module+"/edit/" + id;
@@ -167,4 +168,33 @@ function exitResignation(id){
                 console.log(errorMessage)
             }
         });
+}
+function  getEmployeeSubordinates(id){
+    const url = $("#base-url").val() + "employee/" + id + "/subordinates";
+    employeeReq = $.ajax(url,
+        {
+            method: "GET",
+            dataType: 'json',
+            timeout: 500,
+            beforeSend: function () {
+                if (employeeReq !== undefined && employeeReq != null) {
+                    employeeReq.abort();
+                }
+            },
+            success: function (data, status, xhr) {
+                console.log("saved");
+                if (data.status === 200) {
+                    setSubordinates(data.detail);
+                }
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
+            }
+        });
+}
+function setSubordinates(data){
+
 }

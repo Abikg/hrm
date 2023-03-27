@@ -219,9 +219,10 @@ public class EmployeeValidation {
 
             if (compare > 0) {
                 error.setDob("Date of birth must be less than current date");
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
 

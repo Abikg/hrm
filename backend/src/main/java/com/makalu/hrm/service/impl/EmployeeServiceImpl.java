@@ -3,6 +3,7 @@ import com.makalu.hrm.converter.EmployeeConverter;
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.enumconstant.EmployeeStatus;
+import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.exceptions.EmployeeException;
 import com.makalu.hrm.model.*;
 import com.makalu.hrm.repository.*;
@@ -239,5 +240,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-
+    @Override
+    public RestResponseDto employeeManagerGetSubordinates(UUID manager) {
+        List<PersistentEmployeeEntity> employeeEntities = employeeRepository.findAllByManager(manager);
+        return RestResponseDto.INSTANCE().success().detail(employeeEntities);
+    }
 }

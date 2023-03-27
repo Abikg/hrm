@@ -30,6 +30,10 @@
                         </option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="departmentManager"  class="col-form-label font-weight-normal ">Department</label>
+                    <input type="text" id="departmentManager" th:value="">
+                </div>
                 <div class="form-group ">
                     <label for="position" class="col-form-label font-weight-normal ">Position</label><span class="ml-1 text-danger text-bold">*</span>
                     <select class="form-control custom-form-control" id="position" th:field="*{positionId}" required>

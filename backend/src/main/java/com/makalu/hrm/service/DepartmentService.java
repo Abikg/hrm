@@ -1,5 +1,6 @@
 package com.makalu.hrm.service;
 
+import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.model.DepartmentDTO;
 import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.model.PositionDTO;
@@ -21,7 +22,10 @@ public interface DepartmentService {
 
     RestResponseDto delete(UUID departmentId);
 
-    RestResponseDto getEmployeeListByDepartment(UUID departmentId);
+    RestResponseDto getEmployeeList();
 
-    RestResponseDto employeeSetDepartmentManager(@NotNull UUID employeeId,UUID departmentId);
+    RestResponseDto departmentSetManager(PersistentEmployeeEntity employee);
+
+    RestResponseDto removeExistingManager(String email);
+
 }

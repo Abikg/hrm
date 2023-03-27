@@ -1,5 +1,6 @@
 package com.makalu.hrm.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.makalu.hrm.enumconstant.EmployeeStatus;
 import com.makalu.hrm.model.ContactDetailDTO;
 import com.makalu.hrm.model.PersonalDetailDTO;
@@ -15,6 +16,7 @@ import javax.persistence.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -70,6 +72,8 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     private PersistentPositionEntity position;
 
     @OneToOne
+    @JoinColumn(name = "department_id")
+    @JsonIgnore
     private PersistentDepartmentEntity department;
 
     @OneToOne
@@ -85,11 +89,21 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     @JoinColumn(name = "manager_id")
     private PersistentEmployeeEntity manager;
 
-    @OneToMany(mappedBy = "manager")
-    private List<PersistentEmployeeEntity> subordinates;
-
     public String getEmployeeId() {
         return "MS"+this.employeeId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PersistentEmployeeEntity)) return false;
+        if (!super.equals(o)) return false;
+        PersistentEmployeeEntity employee = (PersistentEmployeeEntity) o;
+        return getEmployeeId() == employee.getEmployeeId() && getEmployeeStatus() == employee.getEmployeeStatus() && getFullname().equals(employee.getFullname()) && getEmail().equals(employee.getEmail()) && getJoinDate().equals(employee.getJoinDate()) && Objects.equals(getContactDetail(), employee.getContactDetail()) && Objects.equals(getPersonalDetail(), employee.getPersonalDetail()) && Objects.equals(getWorkExperience(), employee.getWorkExperience()) && Objects.equals(getResignationReason(), employee.getResignationReason()) && Objects.equals(getResignationDate(), employee.getResignationDate()) && Objects.equals(getExitDate(), employee.getExitDate()) && getPosition().equals(employee.getPosition()) && Objects.equals(getUser(), employee.getUser()) && Objects.equals(getApprovedBy(), employee.getApprovedBy()) && Objects.equals(getImage(), employee.getImage()) && Objects.equals(getManager(), employee.getManager());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getEmployeeId(), getEmployeeStatus(), getFullname(), getEmail(), getJoinDate(), getContactDetail(), getPersonalDetail(), getWorkExperience(), getResignationReason(), getResignationDate(), getExitDate(), getPosition(), getUser(), getApprovedBy(), getImage(), getManager());
+    }
 }
