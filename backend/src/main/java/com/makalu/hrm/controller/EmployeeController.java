@@ -5,6 +5,7 @@ import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.DepartmentService;
 import com.makalu.hrm.service.EmployeeService;
+import com.makalu.hrm.service.ManagerService;
 import com.makalu.hrm.service.PositionService;
 import com.makalu.hrm.utils.FieldService;
 import com.makalu.hrm.utils.ImageUtil;
@@ -28,6 +29,7 @@ public class EmployeeController {
     private final DepartmentService departmentService;
     private final PositionService positionService;
     private final FieldService fieldService;
+    private final ManagerService managerService;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
@@ -136,5 +138,12 @@ public class EmployeeController {
     @ResponseBody
     public ResponseEntity<RestResponseDto> exitResignation(@PathVariable("id") UUID employeId) {
         return ResponseEntity.ok(employeeService.employeeExitResignation(employeId));
+    }
+
+    @GetMapping(path = "/getActiveEmployees")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> getAllEmployee(){
+        return ResponseEntity.ok(managerService.getEmployeeList());
     }
 }

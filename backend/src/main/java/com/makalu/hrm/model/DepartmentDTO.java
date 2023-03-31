@@ -22,6 +22,5 @@ public class DepartmentDTO {
 
     private UUID managerId;
 
-    private List<EmployeeDTO> departmentEmployeeList;
 
 }

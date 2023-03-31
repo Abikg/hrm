@@ -30,9 +30,12 @@
                         </option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="departmentManager"  class="col-form-label font-weight-normal ">Department</label>
-                    <input type="text" id="departmentManager" th:value="">
+                <div class="form-group reportingManager">
+                    <label for="reportingManger"  class="col-form-label font-weight-normal ">Reporting To</label>
+                    <input type="hidden" id="selectedManagerId" th:value="*{managerId}">
+                    <select id="reportingManager" class="form-control custom-form-control select-2-form-control" name="managerId">
+                        <option value="">Select Reporting Manager</option>
+                    </select>
                 </div>
                 <div class="form-group ">
                     <label for="position" class="col-form-label font-weight-normal ">Position</label><span class="ml-1 text-danger text-bold">*</span>

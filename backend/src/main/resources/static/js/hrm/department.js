@@ -1,6 +1,9 @@
-let employeeList = [];
+let departmentReq;
+let employeeListForDepartment = [];
 $(document).ready(function (){
-   getEmployeeList();
+    getEmployeeList().then(result =>{
+        console.log("Active employees fetched");
+    });
 });
 
 $("#add-new-department").click(function () {
@@ -24,10 +27,10 @@ function populateDataInForm(data) {
     $('#departmentModal').find("#title").val(data.title);
     $('#departmentModal').find("#code").val(data.departmentCode);
     $('#departmentModal').find("#details").text(data.detail);
-    setupDepartmentMangerList(employeeList[0],data.managerId);
+    setupDepartmentMangerList(employeeListForDepartment[0],data.managerId);
 }
 
-let departmentReq = null;
+
 
 function deleteDepartment(id, module) {
     const url = window.location.origin + "/" + module + "/delete/" + id;
@@ -92,7 +95,7 @@ function setupForCreateForm() {
     $("#departmentModalLabel").text("Create New Department");
     const formBaseUrl = $("#departmentForm").data("action-base-url");
     $("#departmentForm").attr("action", formBaseUrl + "save");
-    setupDepartmentMangerList(employeeList[0],null);
+    setupDepartmentMangerList(employeeListForDepartment[0],null);
     resetFormError();
 }
 
@@ -197,7 +200,7 @@ function getEmployeeList(){
             },
             success: function (data, status, xhr) {
                 if (data.status === 200) {
-                    employeeList.push(data.detail);
+                    employeeListForDepartment.push(data.detail);
                     // setupDepartmentMangerList(data.detail);
                 }
 
@@ -208,6 +211,7 @@ function getEmployeeList(){
                 console.log(errorMessage)
             }
         });
+    return departmentReq.then(() => employeeListForDepartment);
 }
 
 

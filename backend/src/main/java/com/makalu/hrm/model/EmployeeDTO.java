@@ -61,7 +61,9 @@ public class EmployeeDTO {
 
     private List<WorkExperienceDTO> workExperienceDTO = new ArrayList<>();
 
-    private EmployeeDTO manager;
+    private UUID managerId;
+
+    private String reportingManagerName;
 
     public EmployeeDTO() {
         this.workExperienceDTO.add(new WorkExperienceDTO());

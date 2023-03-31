@@ -59,8 +59,12 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         if (entity.getApprovedBy() != null) {
             dto.setApprovedById(entity.getApprovedBy().getId());
         }
-        if(entity.getUser().getUserType().equals(UserType.MANAGER)){
+        if(entity.getUser()!= null && entity.getUser().getUserType().equals(UserType.MANAGER)){
             dto.setManager(true);
+        }
+        if(entity.getManager() != null){
+            dto.setManagerId(entity.getManager().getId());
+            dto.setReportingManagerName(entity.getManager().getFullname());
         }
         return dto;
     }
@@ -92,6 +96,9 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         entity.setExitDate(dto.getExitDate());
         if (dto.getApprovedById() != null) {
             entity.setApprovedBy(userRepository.findById(dto.getApprovedById()).orElse(null));
+        }
+        if(dto.getManagerId() != null) {
+            entity.setManager(employeeRepository.findById(dto.getManagerId()).orElse(null));
         }
         return entity;
     }

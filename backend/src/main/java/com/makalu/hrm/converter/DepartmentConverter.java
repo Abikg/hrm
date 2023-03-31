@@ -2,12 +2,15 @@ package com.makalu.hrm.converter;
 
 import com.makalu.hrm.domain.PersistentDepartmentEntity;
 import com.makalu.hrm.model.DepartmentDTO;
+import com.makalu.hrm.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
 public class DepartmentConverter extends Convertable<PersistentDepartmentEntity, DepartmentDTO> {
+
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public PersistentDepartmentEntity convertToEntity(DepartmentDTO dto) {
@@ -24,6 +27,9 @@ public class DepartmentConverter extends Convertable<PersistentDepartmentEntity,
         entity.setDetail(trimString(dto.getDetail()));
         entity.setTitle(trimString(dto.getTitle()));
         entity.setDepartmentCode(trimString(dto.getDepartmentCode()));
+        if(dto.getManagerId() != null) {
+            entity.setManager(employeeRepository.findById(dto.getManagerId()).orElse(null));
+        }
 
         return entity;
     }

@@ -1,3 +1,4 @@
+let employeeReq = null;
 window.addEventListener('DOMContentLoaded', (event) => {
     listData("employee","api/list", "employee-table")
 });
@@ -52,7 +53,7 @@ $("#employeeResignationForm").submit(function (event) {
     saveData(url)
 })
 
-let employeeReq = null;
+
 function saveData(url) {
     employeeReq = $.ajax(url,
         {

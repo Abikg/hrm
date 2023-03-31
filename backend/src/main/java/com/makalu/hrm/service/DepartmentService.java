@@ -22,10 +22,5 @@ public interface DepartmentService {
 
     RestResponseDto delete(UUID departmentId);
 
-    RestResponseDto getEmployeeList();
-
-    RestResponseDto departmentSetManager(PersistentEmployeeEntity employee);
-
-    RestResponseDto removeExistingManager(String email);
 
 }

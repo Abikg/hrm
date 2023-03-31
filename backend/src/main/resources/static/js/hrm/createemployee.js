@@ -1,25 +1,41 @@
-$(document).ready(function(){
-
+let employeeListForManager;
+let departmentListForEmployee;
+let departmentRequest;
+let employeeRequest;
+window.addEventListener('DOMContentLoaded', (event) => {
+    getDepartmentListForEmployee().then(result => {
+        console.log("Department list fetched");
+    });
+    getActiveEmployeeList().then(result => {
+        console.log("Active employee  list fetched");
+        $('#reportingManager').empty().select2({
+            allowClear: true,
+            data: getEmployeeData(employeeListForManager)
+        });
+        setTimeout(() => {
+            setupSelectManagerList($("#selectedManagerId").val());
+        }, 2000);
+    });
     if($(".alertSuccess").length){
-            $('#employeeForm input').attr('readonly', 'readonly');
-            $('#position').attr("disabled",true);
-            $('#department').attr("disabled",true);
-            window.setTimeout(function() {
-                    window.location.href = "/employee/list";
-            }, 3000);
+        $('#employeeForm input').attr('readonly', 'readonly');
+        $('#position').attr("disabled",true);
+        $('#department').attr("disabled",true);
+        window.setTimeout(function() {
+            window.location.href = "/employee/list";
+        }, 3000);
     }
 
     const imageCard = $(".imageCard");
     if(imageCard.length){
-            $(".imageCard").css({
-                    "width": "200px",
-                    "height": "200px",
-                    "display": "flex",
-                    "justify-content": "center",
-                   "align-items": "center",
-                    "overflow": "hidden"
-            });
-            $(".imageCard img").css({  "flex-shrink": "0",
+        $(".imageCard").css({
+            "width": "200px",
+            "height": "200px",
+            "display": "flex",
+            "justify-content": "center",
+            "align-items": "center",
+            "overflow": "hidden"
+        });
+        $(".imageCard img").css({  "flex-shrink": "0",
             "min-width": "100%",
             "min-height": "100%"});
     }
@@ -37,6 +53,9 @@ $(document).ready(function(){
     if($("#hiddenJoinDate").val()){
         $(this).val(moment($(this).val()).format("YYYY/MM/DD"));
     }
+});
+$(document).ready(function(){
+
 
 });
 $("#employeeForm").submit(function(e) {
@@ -141,4 +160,129 @@ function  addWorkExperience(workExperienceCount){
 }
 function remove(countValue){
     $(".work-experience-content_"+countValue).remove();
+}
+
+function getDepartmentListForEmployee(){
+    const url = window.location.origin + "/department/api/list";
+    departmentRequest = $.ajax(url,
+        {
+            method: "GET",
+            dataType: 'json',
+            timeout: 3000,
+            beforeSend: function () {
+                if (departmentRequest !== undefined && departmentRequest != null) {
+                    departmentRequest.abort();
+                }
+            },
+            success: function (data, status, xhr) {
+                if (data.status === 200) {
+                    departmentListForEmployee = data.detail;
+                }
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
+            }
+        });
+        return departmentRequest.then(() => departmentListForEmployee);
+}
+
+function getActiveEmployeeList(){
+    const url = window.location.origin + "/employee/getActiveEmployees";
+    employeeRequest = $.ajax(url,
+        {
+            method: "GET",
+            dataType: 'json',
+            timeout: 3000,
+            beforeSend: function () {
+                if (employeeRequest !== undefined && employeeRequest != null) {
+                    employeeRequest.abort();
+                }
+            },
+            success: function (data, status, xhr) {
+                if (data.status === 200) {
+                    employeeListForManager = data.detail;
+                }
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
+            }
+        });
+
+        return employeeRequest.then(() => employeeListForManager);
+}
+$("#department").on("change",function(){
+    if(this.value != null) {
+        setDepartmentManager(this.value);
+    }
+});
+function getEmployeeData(data){
+    let employees=[];
+    let manager;
+    if(data.length <= 0  ) {
+        $(".reportingManager").addClass("d-none");
+    }else {
+        for (let i = 0; i < data.length; i++) {
+            let employee = {
+                id: data[i].id,
+                text: data[i].fullname
+            }
+            employees.push(employee);
+        }
+    }
+    return employees;
+}
+function getSelectedDepartmentManager(departmentId){
+    let selectedManagerId = null;
+    let selectedManager = departmentListForEmployee.find(e => e.id == departmentId);
+    if(selectedManager.managerId != null || selectedManager.managerId !== undefined){
+        selectedManagerId = selectedManager.managerId;
+    }
+    return selectedManagerId;
+}
+function setDepartmentManager(selectedDepId){
+    let employees=[];
+    let manager;
+    let selectedDeptManagerId = getSelectedDepartmentManager(selectedDepId);
+    if(employeeListForManager.length <= 0  ) {
+        $(".reportingManager").addClass("d-none");
+    }else{
+        for (let i = 0; i < employeeListForManager.length; i++) {
+            let employee = {
+                id: employeeListForManager[i].id,
+                text: employeeListForManager[i].fullname
+            }
+            employees.push(employee);
+        }
+
+        if(selectedDeptManagerId != null || selectedDeptManagerId !== undefined){
+            manager = employees.find(e=>e.id == selectedDeptManagerId)
+        }
+
+        $('#reportingManager').empty().select2({
+            placeholder: 'Select Manager',
+            allowClear: true,
+            data: employees
+        });
+        if(manager != null || manager !== undefined) {
+            $('#reportingManager').val(manager.id).trigger('change');
+        }
+
+    }
+
+}
+function setupSelectManagerList(managerId){
+    if(employeeListForManager.length <= 0  ) {
+        $(".reportingManager").addClass("d-none");
+    }else{
+        if(managerId != null || managerId !== undefined) {
+            $('#reportingManager').val(managerId).trigger('change');
+        }
+
+    }
 }

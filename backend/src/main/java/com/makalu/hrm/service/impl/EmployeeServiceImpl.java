@@ -3,7 +3,6 @@ import com.makalu.hrm.converter.EmployeeConverter;
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
 import com.makalu.hrm.enumconstant.EmployeeStatus;
-import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.exceptions.EmployeeException;
 import com.makalu.hrm.model.*;
 import com.makalu.hrm.repository.*;
@@ -30,6 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeImageService employeeImageService;
     private final UserService userService;
     private final UserRepository userRepository;
+    private final ManagerService managerService;
 
     @Override
     public List<EmployeeDTO> list() {
@@ -70,6 +70,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                     UserDTO userDTO = (UserDTO) userResponseDto.getDetail();
                     employeeDTO.setUserId(userDTO.getId());
                 }
+            }
+            if(employeeDTO.getManagerId() != null) {
+                PersistentEmployeeEntity manager = employeeRepository.findById(employeeDTO.getManagerId()).orElse(null);
+                RestResponseDto setNewManager = managerService.convertToManager(manager);
+                if(setNewManager.getStatus() != 200){
+                    return RestResponseDto.INSTANCE().internalServerError().message("Error creating manager");
+                }
+
             }
             entityCount = employeeRepository.count();
             employeeDTO.setEntityEmployeeId(entityCount + 1);
@@ -241,8 +249,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public RestResponseDto employeeManagerGetSubordinates(UUID manager) {
-        List<PersistentEmployeeEntity> employeeEntities = employeeRepository.findAllByManager(manager);
+    public RestResponseDto employeeManagerGetSubordinates(UUID managerId) {
+        List<PersistentEmployeeEntity> employeeEntities = employeeRepository.findAllByManager(managerId);
         return RestResponseDto.INSTANCE().success().detail(employeeEntities);
     }
 }

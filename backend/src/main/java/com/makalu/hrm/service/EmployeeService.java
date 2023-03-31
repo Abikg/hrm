@@ -28,5 +28,6 @@ public interface EmployeeService {
 
     RestResponseDto employeeExitResignation(UUID employeeId);
 
-    RestResponseDto employeeManagerGetSubordinates(UUID manager);
+    RestResponseDto employeeManagerGetSubordinates(UUID managerId);
+
 }
