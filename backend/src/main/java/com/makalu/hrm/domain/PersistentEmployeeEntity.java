@@ -23,7 +23,7 @@ import java.util.Objects;
 @Table(name = "employee")
 @EqualsAndHashCode(callSuper = false)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-@ToString(exclude = {"employeeId"})
+@ToString(exclude = {"employeeId","subordinates"})
 public class PersistentEmployeeEntity extends AbstractEntity {
 
     @Column(nullable = false)
@@ -88,6 +88,10 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "manager_id")
     private PersistentEmployeeEntity manager;
+
+    @Transient
+    @OneToMany(mappedBy = "manager")
+    private List<PersistentEmployeeEntity> subordinates;
 
     public String getEmployeeId() {
         return "MS"+this.employeeId;

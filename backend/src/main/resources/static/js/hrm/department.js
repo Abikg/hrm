@@ -1,10 +1,6 @@
 let departmentReq;
 let employeeListForDepartment = [];
-$(document).ready(function (){
-    getEmployeeList().then(result =>{
-        console.log("Active employees fetched");
-    });
-});
+
 
 $("#add-new-department").click(function () {
     setupForCreateForm();
@@ -14,6 +10,9 @@ $("#add-new-department").click(function () {
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed');
     listData("department","api/list", "department-table")
+    getEmployeeList().then(result =>{
+        console.log("Employee List Fetched");
+    });
 
 });
 function editDepartment(id, module) {
@@ -192,7 +191,7 @@ function getEmployeeList(){
         {
             method: "GET",
             dataType: 'json',
-            timeout: 500,
+            timeout: 3000,
             beforeSend: function () {
                 if (departmentReq !== undefined && departmentReq != null) {
                     departmentReq.abort();
@@ -236,8 +235,6 @@ function setupDepartmentMangerList(data,managerId){
             }
         }
         $('#manager').empty().select2({
-            placeholder: 'Select Department Manager',
-            allowClear: true,
             data: employees
         });
         $('#manager').val(manager.id).trigger('change');

@@ -33,6 +33,13 @@
                         <span  th:unless="${employee.employeeStatus.name() == 'ACTIVE'}" class="badge badge-danger">Resigned</span>
                         <p class="text-muted mb-1" th:text="${employee.positionName}"></p>
                         <p class="text-muted mb-4" th:text="${employee.contactDetailDTO.contactAddress}"></p>
+                        <p>Reporting To: <span class="text-muted mb-4" th:text="${employee.reportingManagerName != null ? employee.reportingManagerName : ''}"></span></p>
+                        <div th:if="${#lists.size(employee.subordinates) > 0}">
+                            <p>Subordinates</p>
+                            <div th:each="subordinate: ${employee.subordinates}">
+                                <p class="text-muted md-4" th:text="${subordinate}"></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card" th:if="${employee.resignationReason == null}">

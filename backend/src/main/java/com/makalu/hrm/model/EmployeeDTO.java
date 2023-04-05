@@ -65,6 +65,8 @@ public class EmployeeDTO {
 
     private String reportingManagerName;
 
+    private List<String> subordinates;
+
     public EmployeeDTO() {
         this.workExperienceDTO.add(new WorkExperienceDTO());
     }

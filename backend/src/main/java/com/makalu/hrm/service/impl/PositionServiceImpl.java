@@ -78,16 +78,16 @@ public class PositionServiceImpl implements PositionService {
     @Transactional
     public RestResponseDto update(PositionDTO positionDTO) {
         try {
-            PositionError error = positionValidation.validateOnUpdate(positionDTO);
-            if (!error.isValid()) {
-                return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", positionDTO));
-            }
-
             PersistentPositionEntity positionEntity = positionRepository.findById(positionDTO.getId()).orElse(null);
             if (positionEntity == null) {
                 return RestResponseDto.INSTANCE()
                         .notFound().message("Position not found").detail(positionDTO);
             }
+            PositionError error = positionValidation.validateOnUpdate(positionDTO);
+            if (!error.isValid()) {
+                return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", positionDTO));
+            }
+
             return RestResponseDto.INSTANCE()
                     .success()
                     .detail(positionConverter.convertToDto(

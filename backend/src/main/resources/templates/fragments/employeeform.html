@@ -23,24 +23,22 @@
                 </div>
                 <div class="form-group ">
                     <label for="department"  class="col-form-label font-weight-normal ">Department</label><span class="ml-1 text-danger text-bold">*</span>
-                    <select class="form-control custom-form-control" id="department" th:field="*{departmentId}" required>
-                        <option value="">Select Department</option>
+                    <select class="form-control custom-form-control d-block" id="department" th:field="*{departmentId}" required >
                         <option  th:unless="*{departmentId != null}" th:each="department : ${departmentList}" th:value="${department.id}" th:text="${department.title}"></option>
                         <option th:if="*{departmentId!= null}" th:each="department : ${departmentList}" th:selected="${department.id == departmentId}" th:value="${department.id}" th:text="${department.title}">
                         </option>
                     </select>
                 </div>
                 <div class="form-group reportingManager">
-                    <label for="reportingManger"  class="col-form-label font-weight-normal ">Reporting To</label>
+                    <label for="reportingManger"  class="col-form-label font-weight-normal d-block">Reporting To</label>
                     <input type="hidden" id="selectedManagerId" th:value="*{managerId}">
-                    <select id="reportingManager" class="form-control custom-form-control select-2-form-control" name="managerId">
-                        <option value="">Select Reporting Manager</option>
+                    <select title="Selected department manager will be selected as default reporting manager" id="reportingManager" class="form-control custom-form-control"
+                            name="managerId" data-placeholder="Select Reporting Manager">
                     </select>
                 </div>
                 <div class="form-group ">
                     <label for="position" class="col-form-label font-weight-normal ">Position</label><span class="ml-1 text-danger text-bold">*</span>
-                    <select class="form-control custom-form-control" id="position" th:field="*{positionId}" required>
-                        <option value="">Select Position</option>
+                    <select class="form-control custom-form-control d-block" id="position" th:field="*{positionId}" data-placeholder="Select Position" required>
                         <option  th:unless="*{positionId != null}" th:each="position : ${positionList}" th:value="${position.id}" th:text="${position.title}"></option>
                         <option th:if="*{positionId!= null}" th:each="position : ${positionList}" th:selected="${position.id == positionId}" th:value="${position.id}" th:text="${position.title}">
                         </option>
@@ -67,8 +65,10 @@
                            class="error"  th:text="${response.detail.get('error').empImage}"></p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="checkbox-inline font-weight-normal"><input class="checkUser mr-2" type="checkbox" th:field="*{createUser}" th:checked="*{createUser}" th:value="false">Create User</label>
+                <div class="form-group" >
+                    <label class="checkbox-inline font-weight-normal">
+                        <input class="checkUser mr-2" type="checkbox" th:field="*{createUser}"
+                               th:checked="*{createUser}" th:value="false" th:disabled="*{id != null}">Create User</label>
                 </div>
             </div>
         </div>

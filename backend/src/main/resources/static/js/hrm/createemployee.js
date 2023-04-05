@@ -1,5 +1,5 @@
-let employeeListForManager;
-let departmentListForEmployee;
+let employeeListForManager='';
+let departmentListForEmployee='';
 let departmentRequest;
 let employeeRequest;
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -9,7 +9,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     getActiveEmployeeList().then(result => {
         console.log("Active employee  list fetched");
         $('#reportingManager').empty().select2({
-            allowClear: true,
             data: getEmployeeData(employeeListForManager)
         });
         setTimeout(() => {
@@ -53,10 +52,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
     if($("#hiddenJoinDate").val()){
         $(this).val(moment($(this).val()).format("YYYY/MM/DD"));
     }
-});
-$(document).ready(function(){
-
-
+    $('#position').select2({
+        placeholder:'Select Department',
+    });
+    $('#department').select2({
+        placeholder:'Select Position',
+    });
 });
 $("#employeeForm").submit(function(e) {
     if ($("input[name='joinDate']").val() === ""){
@@ -240,46 +241,25 @@ function getEmployeeData(data){
 function getSelectedDepartmentManager(departmentId){
     let selectedManagerId = null;
     let selectedManager = departmentListForEmployee.find(e => e.id == departmentId);
-    if(selectedManager.managerId != null || selectedManager.managerId !== undefined){
+    if(selectedManager.managerId != null){
         selectedManagerId = selectedManager.managerId;
     }
     return selectedManagerId;
 }
 function setDepartmentManager(selectedDepId){
-    let employees=[];
-    let manager;
     let selectedDeptManagerId = getSelectedDepartmentManager(selectedDepId);
     if(employeeListForManager.length <= 0  ) {
         $(".reportingManager").addClass("d-none");
     }else{
-        for (let i = 0; i < employeeListForManager.length; i++) {
-            let employee = {
-                id: employeeListForManager[i].id,
-                text: employeeListForManager[i].fullname
-            }
-            employees.push(employee);
-        }
-
-        if(selectedDeptManagerId != null || selectedDeptManagerId !== undefined){
-            manager = employees.find(e=>e.id == selectedDeptManagerId)
-        }
-
-        $('#reportingManager').empty().select2({
-            placeholder: 'Select Manager',
-            allowClear: true,
-            data: employees
-        });
-        if(manager != null || manager !== undefined) {
-            $('#reportingManager').val(manager.id).trigger('change');
+        if(selectedDeptManagerId != null) {
+            $('#reportingManager').val(selectedDeptManagerId).trigger('change');
         }
 
     }
 
 }
 function setupSelectManagerList(managerId){
-    if(employeeListForManager.length <= 0  ) {
-        $(".reportingManager").addClass("d-none");
-    }else{
+    if(employeeListForManager.length > 0  ) {
         if(managerId != null || managerId !== undefined) {
             $('#reportingManager').val(managerId).trigger('change');
         }

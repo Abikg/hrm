@@ -38,6 +38,7 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
 
         EmployeeDTO dto = new EmployeeDTO();
 
+
         dto.setId(entity.getId());
         dto.setEmployeeId(entity.getEmployeeId());
         dto.setEntityEmployeeId(employeeRepository.findAll().indexOf(entity) + 1);
@@ -60,11 +61,14 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
             dto.setApprovedById(entity.getApprovedBy().getId());
         }
         if(entity.getUser()!= null && entity.getUser().getUserType().equals(UserType.MANAGER)){
-            dto.setManager(true);
+           dto.setSubordinates(employeeRepository.findAllByManager(entity.getId()).stream().map(PersistentEmployeeEntity :: getFullname).collect(Collectors.toList()));
+        }
+        if(entity.getUser() != null){
+            dto.setCreateUser(true);
         }
         if(entity.getManager() != null){
-            dto.setManagerId(entity.getManager().getId());
             dto.setReportingManagerName(entity.getManager().getFullname());
+            dto.setManagerId(entity.getManager().getId());
         }
         return dto;
     }
