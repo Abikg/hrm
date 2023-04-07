@@ -35,7 +35,7 @@ public class FieldService {
         fields.add(Map.of("name", "positionName", "displayName", "Position", "type", "string", "orderable", true));
         fields.add(Map.of("name", "contactDetailDTO.contactPhone", "displayName", "Phone", "string", "Phone", "orderable", true));
         fields.add(Map.of("name", "email", "displayName", "Email Address", "type", "string", "orderable", true));
-        fields.add(Map.of("name", "employeeStatus", "displayName", "Status", "type", "string", "orderable", true));
+        fields.add(Map.of("name", "employeeStatus", "displayName", "Status", "type", "string", "orderable", false));
         fields.add(Map.of("name", "action", "displayName", "Action", "type", "string", "orderable", false, "width", "120px"));
         return fields;
     }
@@ -58,6 +58,16 @@ public class FieldService {
         fields.add(Map.of("name", "title", "displayName", "Title", "type", "string", "orderable", false));
         fields.add(Map.of("name", "meetingDate", "displayName", "Date", "type", "date", "orderable", true));
         fields.add(Map.of("name", "createdBy.username", "displayName", "type", "string", "Created By", "orderable", false));
+        return fields;
+    }
+
+    public List<Object> getUserManagementFields() {
+        List<Object> fields = new ArrayList<>();
+        fields.add(Map.of("name", "fullName", "displayName", "Name", "type", "string", "orderable", true));
+        fields.add(Map.of("name", "username", "displayName", "Username", "type", "string", "orderable", true));
+        fields.add(Map.of("name", "userType", "displayName", "User Type", "type", "string", "orderable", true));
+        fields.add(Map.of("name", "enabled", "displayName", "Status", "type", "boolean", "orderable", false));
+        fields.add(Map.of("name", "action", "displayName", "Action", "type", "string", "orderable", false, "width", "120px"));
         return fields;
     }
 

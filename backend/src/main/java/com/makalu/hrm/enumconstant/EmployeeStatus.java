@@ -3,6 +3,7 @@ package com.makalu.hrm.enumconstant;
 
 public enum EmployeeStatus {
     ACTIVE("active"),
+    INACTIVE("inactive"),
     RESIGNED("resigned");
 
     private final String value;

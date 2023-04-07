@@ -31,6 +31,8 @@ public class PublicController {
 
         } else if (AuthenticationUtils.hasRole(UserType.EMPLOYEE.name().toUpperCase())) {
             return "adminDashboard";
+        }else if (AuthenticationUtils.hasRole(UserType.MANAGER.name().toUpperCase())) {
+            return "adminDashboard";
         }
         return "auth/login";
     }

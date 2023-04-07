@@ -23,4 +23,11 @@ public class MailTemplateParserImpl implements MailTemplateParser {
         context.forEach(ctx::setVariable);
         return templateEngine.process("/mail/password.html",ctx);
     }
+
+    @Override
+    public String sendResetPasswordTemplate(Map<String, Object> context){
+        Context ctx = new Context();
+        context.forEach(ctx::setVariable);
+        return templateEngine.process("/mail/resetPassword.html",ctx);
+    }
 }

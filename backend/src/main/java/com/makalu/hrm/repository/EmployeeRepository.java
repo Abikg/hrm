@@ -19,4 +19,7 @@ public interface EmployeeRepository extends JpaRepository<PersistentEmployeeEnti
 
     @Query("select e from PersistentEmployeeEntity e where e.manager.id =?1")
     List<PersistentEmployeeEntity> findAllByManager(UUID managerId);
+
+    @Query("select e from PersistentEmployeeEntity e where e.user.id =?1")
+    PersistentEmployeeEntity findEmployeeByUser(UUID userId);
 }

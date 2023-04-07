@@ -17,9 +17,10 @@ public class ParameterConstant {
     public static final String MEETING_LIST="meetingList";
     public static final String MINUTE= "minute";
     public static final String MEETIINGTYPEURL= "meetingtypeurl";
-    public  static  final String  ATTENDEDBY= "attendedBy";
-    public static  final String  USER_LIST="userList";
-    public static  final  String ADMIN_FLAG = "adminFlag";
+    public static final String  ATTENDEDBY= "attendedBy";
+    public static final String  USER_LIST="userList";
+    public static final String ADMIN_FLAG = "adminFlag";
+    public static final String User ="user";
 
 
 }

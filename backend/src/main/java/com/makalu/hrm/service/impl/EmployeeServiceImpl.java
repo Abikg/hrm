@@ -113,13 +113,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employeeEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Employee not found");
         }
-        if(employeeEntity.getEmployeeStatus().equals(EmployeeStatus.RESIGNED)){
-            throw new EmployeeException("Can't update resigned employee");
+        if(! employeeEntity.getEmployeeStatus().equals(EmployeeStatus.ACTIVE)){
+            throw new EmployeeException("Can't update "+employeeEntity.getEmployeeStatus()+" employee");
         }
 
         return RestResponseDto.INSTANCE()
-                .success()
-                .detail(employeeConverter.convertToDto(employeeEntity));
+                .success();
     }
 
     @Override
@@ -136,9 +135,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (employeeEntity == null) {
                 return RestResponseDto.INSTANCE().notFound().message("Employee not found");
             }
-            if (employeeEntity.getUser() != null) {
-                employeeDTO.setUserId(employeeEntity.getUser().getId());
-            }
             if (employeeEntity.getImage() != null) {
                 employeeDTO.setEmployeeImageId(employeeEntity.getImage().getId());
             }
@@ -146,7 +142,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 //employee update garda email update garna mildaina hai so user ni update garna bhayana
                 //userService.updateEmployeeUser(employeeDTO.getEmail(), employeeDTO.getUserId());
             }
-            if (!employeeDTO.getEmpImage().isEmpty()) {
+            if (employeeDTO.getEmpImage() != null && !employeeDTO.getEmpImage().isEmpty()) {
                 if (employeeEntity.getImage() != null) {
                     employeeImageService.update(employeeDTO.getEmpImage(), employeeDTO.getEmployeeImageId());
                 } else {
@@ -172,6 +168,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (employeeEntity == null) {
                 return RestResponseDto.INSTANCE().notFound();
             }
+            if(! employeeEntity.getEmployeeStatus().equals(EmployeeStatus.ACTIVE)){
+                return RestResponseDto.INSTANCE().internalServerError();
+            }
             employeeEntity.setResignationReason(employeeDTO.getResignationReason());
             employeeEntity.setResignationDate(employeeDTO.getResignationDate());
             employeeEntity.setExitDate(employeeDTO.getExitDate());
@@ -191,6 +190,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeDTO.getId()).orElse(null);
             if (employeeEntity == null) {
                 return RestResponseDto.INSTANCE().notFound();
+            }
+            if(! employeeEntity.getEmployeeStatus().equals(EmployeeStatus.ACTIVE)){
+                return RestResponseDto.INSTANCE().internalServerError();
             }
             employeeEntity.setResignationReason(employeeDTO.getResignationReason());
             employeeEntity.setResignationDate(employeeDTO.getResignationDate());

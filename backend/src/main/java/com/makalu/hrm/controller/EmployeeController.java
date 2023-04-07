@@ -70,19 +70,25 @@ public class EmployeeController {
         return "employee/create";
     }
 
+    @GetMapping("/isValid/{id}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> isValidEmployeeRequest(@PathVariable("id") UUID employeeId){
+        try{
+            return ResponseEntity.ok(employeeService.getResponseByIdForUpdate(employeeId));
+        }catch (EmployeeException e){
+            return ResponseEntity.ok(RestResponseDto.INSTANCE().validationError().message(e.getMessage()));
+        }
+    }
+
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public String editEmployee(@PathVariable("id") UUID employeeId, ModelMap map) {
-        try {
-            RestResponseDto rdto = employeeService.getResponseByIdForUpdate(employeeId);
-            map.put(ParameterConstant.POSITION_LIST, positionService.list());
-            map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
-            map.put("imageUtil", new ImageUtil());
-            map.put(ParameterConstant.EMPLOYEE, rdto.getDetail());
-
-        }catch (EmployeeException e){
-            return "redirect:/employee/list";
-        }
+        RestResponseDto rdto = employeeService.getResponseById(employeeId);
+        map.put(ParameterConstant.POSITION_LIST, positionService.list());
+        map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
+        map.put("imageUtil", new ImageUtil());
+        map.put(ParameterConstant.EMPLOYEE, rdto.getDetail());
         return "employee/edit";
     }
 
