@@ -38,6 +38,7 @@ public class PersistentDepartmentEntity extends AbstractEntity {
         return Objects.equals(getTitle(), that.getTitle()) && getDetail().equals(that.getDetail()) && getDepartmentCode().equals(that.getDepartmentCode());
     }
 
+
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getTitle(), getDetail(), getDepartmentCode());
