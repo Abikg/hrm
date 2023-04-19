@@ -5,18 +5,12 @@
     <title>Meeting</title>
 </head>
 <body layout:fragment="content">
-
 <section class="content-header">
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-10">
-
-            </div>
-        </div>
-        <div class="row mb-2  alertSuccess" th:if="${#ctx.containsVariable('response')} and ${response.status == 200}">
+        <div class="row mb-2  alertSuccess" th:if="${#ctx.containsVariable('error')}">
             <div class="col-sm-12">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Meeting Created</strong>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>[[${error}]]</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -26,26 +20,22 @@
     </div>
 </section>
 
-
 <section class="content">
     <div class="container-fluid">
-        <h>Meeting</h>
+        <h2>Meeting</h2>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
 
-                    <form id="employeeForm" method="post" th:action="@{${meetingtypeurl}}"
+                    <form id="meetingForm" method="post" th:action="@{${meetingtypeurl}}"
                           enctype="multipart/form-data">
                         <div class="card-body">
-
                             <input type="hidden" th:value="${MEETINGTYPE}" name="meetingType" id="meetingType">
                             <div class="form-group">
                                 <label for="title" class="col-form-label">Title</label>
                                 <input type="text" class="form-control" id="title" name="title" required>
                                 <p class="error" id="error-fullname"></p>
                             </div>
-
-
                             <div class=" datetime1">
                                 <label for="date">Meeting Date:</label>
                                 <div class="input-group">
@@ -54,31 +44,28 @@
                                                 class="fas fa-calendar"></i></span>
                                     </div>
                                     <input type="text" class="form-control mydatepicker" id="date" name="meetingDate"
-                                           required readonly data-date-format="yyyy/mm/dd" autocomplete="off">
+                                           data-date-format="yyyy/mm/dd" autocomplete="off" readonly required>
+                                </div>
+                                <div id="meetingDate-error">
+                                    <p class="error"></p>
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label value="select present Minutes" for="select"></label>
-
-                                <select class="custom-select" name="attendedByIdsFromView" id="select" multiple>
-
+                                <label value="select present Minutes" for="selectAttendedBy">Attended By</label>
+                                <select name="attendedByIdsFromView" id="selectAttendedBy" class="select2"
+                                        multiple="multiple" data-placeholder="Select Any Attendee" style="width: 100%;"
+                                        required>
                                     <option th:each="attend : ${attendedBy}"
                                             th:text="${attend.username}"
                                             th:value="${attend.id}"></option>
-                                    <option></option>
-
                                 </select>
                             </div>
-
-
                             <div class="form-group">
                                 <label class="col-form-label">Minutes</label>
                                 <textarea class="form-control" id="minutes" name="minutes" required></textarea>
                                 <p class="error" id="error-minute"></p>
                             </div>
                         </div>
-
                         <div class="card-footer">
                             <button type="submit" id="btn-save-minutes" class="btn btn-primary">Save Changes</button>
                         </div>

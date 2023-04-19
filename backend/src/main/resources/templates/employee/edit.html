@@ -10,6 +10,7 @@
         <div class="row mb-2">
             <div class="col-sm-10">
                 <h1>Employee Create</h1>
+                <h1>Employee Edit</h1>
             </div>
         </div>
         <div class="row mb-2  alertSuccess" th:if="${#ctx.containsVariable('response')} and ${response.status == 200}">
@@ -31,6 +32,209 @@
         <input type="hidden" th:field="*{entityEmployeeId}">
             <div th:replace="fragments/employeeform :: form"></div>
     </form>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <form id="employeeForm" method="post" th:action="@{/employee/update}" th:object="${employee}" enctype="multipart/form-data">
+                        <input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{employeeStatus}">
+                        <input type="hidden" th:field="*{entityEmployeeId}">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="fullname" class="col-form-label">Fullname</label>
+                                <input type="text" th:field="*{fullname}" class="form-control" id="fullname">
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').fullname != null}"
+                                       class="error" th:text="${response.detail.get('error').fullname}"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-form-label">Email</label>
+                                <input type="email" th:field="*{email}" class="form-control bg-transparent" id="email" disabled>
+                                <input type="hidden" th:field="*{email}">
+                            </div>
+                            <div class="form-group">
+                                <label for="department"  class="col-form-label">Select Department</label>
+                                <select class="form-control" id="department" th:field="*{departmentId}" >
+                                    <option  th:unless="*{departmentId != null}" th:each="department : ${departmentList}" th:value="${department.id}" th:text="${department.title}"></option>
+                                    <option th:if="*{departmentId!= null}" th:each="department : ${departmentList}" th:selected="${department.id == departmentId}" th:value="${department.id}" th:text="${department.title}">
+                                    </option>
+                                </select>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').department != null}"
+                                       class="error"  th:text="${response.detail.get('error').department}"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="position" class="col-form-label">Select Position</label>
+                                <select class="form-control" id="position" th:field="*{positionId}">
+                                    <option  th:unless="*{positionId != null}" th:each="position : ${positionList}" th:value="${position.id}" th:text="${position.title}"></option>
+                                    <option th:if="*{positionId!= null}" th:each="position : ${positionList}" th:selected="${position.id == positionId}" th:value="${position.id}" th:text="${position.title}">
+                                    </option>
+                                </select>
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').position != null}"
+                                       class="error"  th:text="${response.detail.get('error').position}"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Join Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-transparent dateIcon" id="icon"><i class="fas fa-calendar"></i></span>
+                                    </div>
+                                    <input class="form-control mydatepicker bg-transparent" th:field="*{joinDate}" disabled
+                                            data-date-format="yyyy/mm/dd">
+                                    <input type="hidden" th:field="*{joinDate}" id="hiddenJoinDate">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="empImg" class="form-label">Choose image</label>
+                                <input class="form-control form-control-sm" name="empImage" id="empImg" type="file">
+                                <div th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').empImage != null}"
+                                       class="error"  th:text="${response.detail.get('error').empImage}"></p>
+                                </div>
+                                <div class="card imageCard mt-2" style="width: 18rem;" th:if="*{employeeImage != null}" th:with="imageData=*{employeeImage.image}">
+                                    <img class="card-img-top" th:src="'data:'+*{employeeImage.type}+';base64,' + ${imageUtil.getImageData(imageData)}" alt="image">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact Details</label>
+                                <div class="form-group custom-card-layout">
+                                    <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="mr-3">Phone</label>
+                                        <input type="text" class="form-control bg-transparent" th:field="*{contactDetailDTO.contactPhone}"  placeholder="Phone Eg.: 98XXXXXXXX" disabled>
+                                        <input type="hidden" th:field="*{contactDetailDTO.contactPhone}">
+                                    </div>
+                                    <div class="form-group ml-0 ml-sm-auto">
+                                        <label class="mr-3">Email</label>
+                                        <input type="text" class="form-control ml-auto bg-transparent" th:field="*{contactDetailDTO.contactEmail}"  placeholder="Email Eg.: abc@email.com" disabled>
+                                        <input type="hidden" th:field="*{contactDetailDTO.contactEmail}">
+                                    </div>
+                                    <div class="form-group ml-0 ml-sm-auto">
+                                        <label class="mr-3">Address</label>
+                                        <input type="text" class="form-control ml-auto bg-transparent" th:field="*{contactDetailDTO.contactAddress}"  placeholder="Address. Eg.: Kathmandu" disabled>
+                                        <input type="hidden" th:field="*{contactDetailDTO.contactAddress}">
+                                    </div>
+
+                                </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Personal Details</label>
+                                <div class="mt-2" th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').dob != null}"
+                                       class="error"  th:text="${response.detail.get('error').dob}"></p>
+                                    <p th:if="${response.status == 400  and response.detail.get('error').gender != null}"
+                                       class="error"  th:text="${response.detail.get('error').gender}"></p>
+                                    <p th:if="${response.status == 400  and response.detail.get('error').maritalStatus != null}"
+                                       class="error"  th:text="${response.detail.get('error').maritalStatus}"></p>
+                                </div>
+                                <div class="form-group custom-card-layout">
+                                    <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="mr-3">Date of birth</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text bg-transparent" id="icon"><i class="fas fa-calendar"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control mydatepicker inputDobDate" th:field="*{personalDetailDTO.dob}" data-date-format="yyyy/mm/dd">
+                                        </div>
+                                    </div>
+                                    <div class="form-group ml-0 ml-sm-auto">
+                                        <label class="mr-3">Age</label>
+                                        <input type="text" class="form-control ml-auto age bg-transparent" th:field="*{personalDetailDTO.age}" disabled>
+                                    </div>
+                                    <div class="form-group ml-0 ml-sm-auto">
+                                        <label class="mr-0 mr-sm-2">Gender</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" th:field="*{personalDetailDTO.gender}" id="option1" value="male">
+                                            <label class="form-check-label" for="option1">Male</label>
+                                        </div>
+                                        <div class="form-check ml-0 ml-sm-2">
+                                            <input class="form-check-input" type="radio" th:field="*{personalDetailDTO.gender}" id="option2" value="female">
+                                            <label class="form-check-label" for="option2">Female</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ml-0 ml-sm-auto">
+                                        <label class="mr-0 mr-sm-2">Married</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" th:field="*{personalDetailDTO.maritalStatus}" id="option1" value="married" checked>
+                                            <label class="form-check-label" for="option1">Yes</label>
+                                        </div>
+                                        <div class="form-check ml-0 ml-sm-2">
+                                            <input class="form-check-input" type="radio" th:field="*{personalDetailDTO.maritalStatus}" id="option2" value="unmarried">
+                                            <label class="form-check-label" for="option2">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Work Experience</label>
+                                <div class="mt-2" th:if="${#ctx.containsVariable('response')}">
+                                    <p th:if="${response.status == 400  and response.detail.get('error').previousCompany != null}"
+                                       class="error"  th:text="${response.detail.get('error').previousCompany}"></p>
+                                    <p th:if="${response.status == 400  and response.detail.get('error').jobTitle != null}"
+                                       class="error"  th:text="${response.detail.get('error').jobTitle}"></p>
+                                    <p th:if="${response.status == 400  and response.detail.get('error').joinDate != null}"
+                                       class="error"  th:text="${response.detail.get('error').joinDate}"></p>
+                                    <p th:if="${response.status == 400  and response.detail.get('error').leftDate != null}"
+                                       class="error"  th:text="${response.detail.get('error').leftDate}"></p>
+                                    <p th:if="${response.status == 400  and response.detail.get('error').jobDesc != null}"
+                                       class="error"  th:text="${response.detail.get('error').jobDesc}"></p>
+                                </div>
+                            </div>
+                            <div class="form-group" id="work-experience-wrapper" th:each="we, itemStat: *{workExperienceDTO}">
+                                <div class="form-group work-experience-content p-3 custom-card-layout">
+                                    <button th:if="${itemStat.index == 0}" class="btn btn-warning float-right mb-2 add-new-div"
+                                            type="button" th:onclick="'addWorkExperience(' + *{workExperienceDTO.size()-1} + ')'">Add</button>
+                                    <div class="form-group">
+                                        <label for="prevCompany" class="col-form-label">Previous Company</label>
+                                        <input type="text" th:field="*{workExperienceDTO[__${itemStat.index}__].previousCompany}" class="form-control" id="prevCompany">
+                                    </div>
+                                    <div class="form-inline">
+                                        <div class="form-group">
+                                            <label class="mr-3">Job Title</label>
+                                            <input type="text" class="form-control" th:field="*{workExperienceDTO[__${itemStat.index}__].jobTitle}"  placeholder="Job Title Eg.: Developer">
+                                        </div>
+                                        <div class="form-group ml-0 ml-sm-auto">
+                                            <label class="mr-3">From</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-transparent dateIcon" id="icon"><i class="fas fa-calendar"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control mydatepicker bg-transparent" th:field="*{workExperienceDTO[__${itemStat.index}__].joinDate}" data-date-format="yyyy/mm/dd" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ml-0 ml-sm-auto">
+                                            <label class="mr-3">To</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-transparent dateIcon" id="icon"><i class="fas fa-calendar"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control mydatepicker bg-transparent" th:field="*{workExperienceDTO[__${itemStat.index}__].leftDate}" data-date-format="yyyy/mm/dd" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jobDesc" class="col-form-label">Job Description</label>
+                                        <textarea class="form-control" th:field="*{workExperienceDTO[__${itemStat.index}__].jobDesc}" id="jobDesc"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" id="btn-save-employee" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <script type="text/javascript" th:src="@{/js/hrm/createemployee.js}"></script>
 </body>

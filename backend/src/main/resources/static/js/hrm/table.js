@@ -1,4 +1,6 @@
+
 let dataTable;
+let table = ''
 
 
 function listData(module, listApi, tableId) {
@@ -26,6 +28,7 @@ function createTable(data, module, tableId) {
     actualData = data.detail
     var columns = data.column;
     $.each(actualData, function (k, v) {
+
         let drillUrl = window.location.origin + "/" + module + "/showMinute/" + v.id;
         var actionDataElement='';
             if(module !== "user"){
@@ -36,6 +39,14 @@ function createTable(data, module, tableId) {
                     '</a>' ;
             }
             if(module === "employee" || module === "user"){
+        let drillUrl = window.location.origin + "/" + module + "/show/" + v.id;
+        var actionDataElement = '<div class="actionElements">' +
+            '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm"' +
+            'style="width: 50px;">' +
+            '<i class="fa fa-edit" style="font-size:14px;color:white"></i>' +
+            '</a>' ;
+            if(module === "employee"){
+
                 actionDataElement += '<a href="#" onclick="viewRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-warning btn-sm ml-2" ' +
                     'style="width: 50px;">' +
                                     '<i class="fa fa-info-circle" style="font-size:14px;color:white"></i>' +
@@ -103,7 +114,7 @@ function createTable(data, module, tableId) {
             tableColumns[key] = {"data": val.name, "title": val.displayName + "<span></span>", orderable: val.orderable}
         }
     });
-    dataTable = $('#' + tableId).DataTable({
+    table = $('#' + tableId).DataTable({
         pageLength: 10,
         scrollX: true,
         destroy: true,
@@ -124,7 +135,7 @@ function createTable(data, module, tableId) {
     $('.dataTables_scrollHeadInner').find(".dataTable ").find("thead").find("th").css("white-space", "nowrap");
     $('.dataTables_scrollHeadInner').css("background-color","#1479c4");
     $('.dataTables_scrollHeadInner table').find("thead").css("color", "white")
-    dataTable.columns.adjust().draw();
+    table.columns.adjust().draw();
 }
 
 function editRecord(id,module){

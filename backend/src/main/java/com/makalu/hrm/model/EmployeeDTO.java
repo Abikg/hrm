@@ -17,7 +17,7 @@ public class EmployeeDTO {
 
     private String employeeId;
 
-    private long entityEmployeeId;
+    private String entityEmployeeId;
 
     private EmployeeStatus employeeStatus;
 
@@ -66,6 +66,10 @@ public class EmployeeDTO {
     private String reportingManagerName;
 
     private List<String> subordinates;
+
+    public void setManager(boolean manager) {
+        isManager = manager;
+    }
 
     public EmployeeDTO() {
         this.workExperienceDTO.add(new WorkExperienceDTO());

@@ -103,7 +103,7 @@ databaseChangeLog:
                         defaultValue: 0
                   - column:
                       name: title
-                      type: varchar(255)
+                      type: varchar(50)
                       constraints:
                         nullable: false
                         unique: true
@@ -112,7 +112,9 @@ databaseChangeLog:
                       type: varchar(255)
                       constraints:
                         nullable: false
+
       - changeSet:
+
           id: 2022-12-29-department-create-table
           author: suvam
           changes:
@@ -155,7 +157,7 @@ databaseChangeLog:
                         nullable: false
                   - column:
                       name: department_code
-                      type: varchar(10)
+                      type: varchar(20)
                       constraints:
                         nullable: false
                         unique: true
@@ -195,10 +197,9 @@ databaseChangeLog:
                       type: varchar(255)
                       constraints:
                         nullable: false
-                        unique: true
                   - column:
                       name: type
-                      type: varchar(255)
+                      type: varchar(20)
                       constraints:
                         nullable: false
                   - column:
@@ -207,6 +208,7 @@ databaseChangeLog:
                       constraints:
                         nullable: false
                         defaultValue: false
+
 
       - changeSet:
           id: 2022-12-29-employee-create-table
@@ -240,13 +242,13 @@ databaseChangeLog:
                         defaultValue: 0
                   - column:
                       name: employee_id
-                      type: bigint
+                      type: varchar(50)
                       constraints:
                         nullable: false
                         unique: false
                   - column:
                       name: employee_status
-                      type: varchar(255)
+                      type: varchar(50)
                       constraints:
                         nullable: false
                         defaultValue: 'ACTIVE'
@@ -258,7 +260,7 @@ databaseChangeLog:
                         unique: false
                   - column:
                       name: email
-                      type: varchar(255)
+                      type: varchar(100)
                       constraints:
                         nullable: false
                   - column:

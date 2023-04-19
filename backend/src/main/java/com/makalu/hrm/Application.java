@@ -37,32 +37,30 @@ public class Application {
 			createDefaultUsers();
 		}
 
-		void createDefaultUsers(){
-			if (userRepository.findByUsername("dhirajbadu50@gmail.com").isEmpty()){
+		void createDefaultUsers() {
+			if (userRepository.findByUsername("dhirajbadu50@gmail.com").isEmpty()) {
 				userRepository.saveAndFlush(new PersistentUserEntity("dhirajbadu50@gmail.com", passwordEncoder.encode("dhirajbadu50@gmail.com"), true, false, false, false, UserType.SUPER_ADMIN));
+			}
+		}
+
+		@Component
+		@Profile("dev")
+		class BootStrapDev implements CommandLineRunner {
+
+			private final UserRepository userRepository;
+
+			public BootStrapDev(UserRepository userRepository) {
+				this.userRepository = userRepository;
+			}
+
+			@Override
+			public void run(String... args) {
+
+				log.info("---inside bootstrap dev----");
+
 
 			}
 		}
 
 	}
-
-	@Component
-	@Profile("dev")
-	class BootStrapDev implements CommandLineRunner {
-
-		private final UserRepository userRepository;
-
-		public BootStrapDev(UserRepository userRepository) {
-			this.userRepository = userRepository;
-		}
-
-		@Override
-		public void run(String... args) {
-
-			log.info("---inside bootstrap dev----");
-
-
-		}
-	}
-
 }
