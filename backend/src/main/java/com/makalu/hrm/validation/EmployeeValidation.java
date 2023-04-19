@@ -51,6 +51,10 @@ public class EmployeeValidation {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        isValid = isValid & validateGender(dto.getPersonalDetailDTO().getGender());
+        isValid = isValid & validateMaritalStatus(dto.getPersonalDetailDTO().getMaritalStatus());
+
         isValid = isValid & validateUniqueEmailOnEmployee(dto.getEmail());
         isValid = isValid && validateUniqueEmailOnUser(dto.getEmail());
         error.setValid(isValid);
@@ -92,6 +96,8 @@ public class EmployeeValidation {
         List<PersistentUserEntity> userEntityList = userRepository.findAll();
         if (userEntityList.stream().anyMatch(u->u.getUsername().equals(email))) {
             error.setEmail("Please provide a unique email address");
+            error.setEmail("User already registered with given email. Please provide a unique email address");
+
             return false;
         }
 
@@ -113,6 +119,10 @@ public class EmployeeValidation {
         }
         if(userEntity != null && employeeDTO.getUserId() == null){
             error.setEmail("Please provide a unique email address");
+            return false;
+        }
+        if(userEntity != null && employeeDTO.getUserId()!= null && !employeeDTO.getUserId().equals(userEntity.getId())){
+            error.setEmail("User already registered with given email. Please provide a unique email address");
             return false;
         }
         return true;

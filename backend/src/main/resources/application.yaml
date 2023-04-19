@@ -14,6 +14,12 @@ spring:
         order_inserts: true
         jdbc:
           batch_size: 100
+        search:
+          backend:
+            directory:
+              root: ".makalu_hrm_index"
+            analysis:
+              configurer: "com.makalu.hrm.config.MakaluLuceneAnalysisConfigurer"
     hibernate:
       ddl-auto: none
 

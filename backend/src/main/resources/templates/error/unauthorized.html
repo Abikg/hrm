@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en"   xmlns:th ="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Error</title>
+</head>
+<body layout:fragment="content">
+
+<section class="content ">
+    <div class="error-page">
+      <h2 class="headline text-warning"> 403</h2>
+
+      <div class="error-content">
+        <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Page not found.</h3>
+
+        <p>
+          We could not find the page you were looking for.
+          Meanwhile, you may <a th:href="@{/}">return to dashboard</a> or try using the search form.
+        </p>
+
+        <form class="search-form" method="get" action="https://www.google.com/search">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search">
+
+            <div class="input-group-append">
+              <button type="submit" name="submit" class="btn btn-warning"><i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <!-- /.input-group -->
+        </form>
+      </div>
+      <!-- /.error-content -->
+    </div>
+    <!-- /.error-page -->
+  </section>
+  <!-- /.content -->
+</body>
+</html>

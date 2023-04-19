@@ -57,7 +57,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
     $('#department').select2({
         placeholder:'Select Position',
-    });
+
 });
 $("#employeeForm").submit(function(e) {
     if ($("input[name='joinDate']").val() === ""){

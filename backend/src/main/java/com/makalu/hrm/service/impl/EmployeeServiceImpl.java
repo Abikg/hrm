@@ -13,6 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.mapper.orm.Search;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final UserService userService;
     private final UserRepository userRepository;
     private final ManagerService managerService;
+    private final EntityManager entityManager;
 
     @Override
     public List<EmployeeDTO> list() {
@@ -41,7 +48,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public RestResponseDto save(@NotNull EmployeeDTO employeeDTO) {
         try {
-            long entityCount;
 
             EmployeeError error = employeeValidation.validateOnSave(employeeDTO);
 
@@ -70,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     UserDTO userDTO = (UserDTO) userResponseDto.getDetail();
                     employeeDTO.setUserId(userDTO.getId());
                 }
-            }
+
             if(employeeDTO.getManagerId() != null) {
                 PersistentEmployeeEntity manager = employeeRepository.findById(employeeDTO.getManagerId()).orElse(null);
                 RestResponseDto setNewManager = managerService.convertToManager(manager);
@@ -81,6 +87,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
             entityCount = employeeRepository.count();
             employeeDTO.setEntityEmployeeId(entityCount + 1);
+            employeeDTO.setEntityEmployeeId("Test");
             employeeDTO.setEmployeeStatus(EmployeeStatus.ACTIVE);
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeConverter.convertToDto(
@@ -112,13 +119,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElse(null);
         if (employeeEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Employee not found");
-        }
+
         if(! employeeEntity.getEmployeeStatus().equals(EmployeeStatus.ACTIVE)){
             throw new EmployeeException("Can't update "+employeeEntity.getEmployeeStatus()+" employee");
         }
 
         return RestResponseDto.INSTANCE()
                 .success();
+        if(employeeEntity.getEmployeeStatus().equals(EmployeeStatus.RESIGNED)){
+            throw new EmployeeException("Can't update resigned employee");
+        }
+
+        return RestResponseDto.INSTANCE()
+                .success()
+                .detail(employeeConverter.convertToDto(employeeEntity));
     }
 
     @Override
@@ -254,5 +268,54 @@ public class EmployeeServiceImpl implements EmployeeService {
     public RestResponseDto employeeManagerGetSubordinates(UUID managerId) {
         List<PersistentEmployeeEntity> employeeEntities = employeeRepository.findAllByManager(managerId);
         return RestResponseDto.INSTANCE().success().detail(employeeEntities);
+    public EmployeeSearchDTO search(EmployeeFilterDTO employeeFilterDTO) {
+
+        int offset = 0;
+        int limit = 100;
+
+        if (employeeFilterDTO.getOffset() > 0) {
+            offset = employeeFilterDTO.getOffset();
+        }
+
+        if (employeeFilterDTO.getMax() >= 10 && employeeFilterDTO.getMax() <= 500) {
+            limit = employeeFilterDTO.getMax();
+        }
+
+        SearchResult<PersistentEmployeeEntity> searchResult = Search.session(entityManager).search(PersistentEmployeeEntity.class)
+                .where(f -> f.bool(b ->
+                        {
+                            if (StringUtils.hasText(employeeFilterDTO.getEmployeeId())) {
+                                b.filter(ff -> ff.bool(fb -> fb.should(q -> q.match().field("employeeId_key").matching(employeeFilterDTO.getEmployeeId()))));
+                            }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getFullName())) {
+                                b.filter(ff -> ff.bool(fb -> fb.should(q -> q.match().field("fullname_key").matching(employeeFilterDTO.getFullName()))));
+                            }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getEmail())) {
+                                b.filter(ff -> ff.bool(fb -> fb.should(q -> q.match().field("email_key").matching(employeeFilterDTO.getEmail()))));
+                            }
+
+                            if (employeeFilterDTO.getId() != null) {
+                                b.filter(ff -> ff.bool(fb -> fb.should(q -> q.match().field("id").matching(employeeFilterDTO.getId()))));
+                            }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getDepartment())) {
+                                b.filter(ff -> ff.bool(fb -> fb.should(q -> q.match().fields("department.title_key", "department.departmentCode_key").matching(employeeFilterDTO.getDepartment()))));
+                            }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getPosition())) {
+                                b.filter(ff -> ff.bool(fb -> fb.should(q -> q.match().fields("position.title_key").matching(employeeFilterDTO.getPosition()))));
+                            }
+
+                            if (StringUtils.hasText(employeeFilterDTO.getQuery())) {
+                                b.filter(ff -> ff.bool(fb -> fb.should(q -> q.match().fields("employeeId", "fullname", "email", "department.title", "department.departmentCode", "position.title").matching(employeeFilterDTO.getQuery()))));
+                            }
+
+
+                        }
+                )).fetch(offset, limit);
+
+        return new EmployeeSearchDTO(employeeConverter.convertToDtoList(searchResult.hits()), searchResult.total().hitCount());
     }
 }

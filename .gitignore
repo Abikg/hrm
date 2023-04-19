@@ -31,3 +31,4 @@ hs_err_pid*
 /frontend/dist/
 /frontend/.node/
 /frontend/api-client/
+.makalu_hrm_index/

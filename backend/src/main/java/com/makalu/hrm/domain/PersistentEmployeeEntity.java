@@ -5,18 +5,22 @@ import com.makalu.hrm.enumconstant.EmployeeStatus;
 import com.makalu.hrm.model.ContactDetailDTO;
 import com.makalu.hrm.model.PersonalDetailDTO;
 import com.makalu.hrm.model.WorkExperienceDTO;
+import com.makalu.hrm.utils.UUIDGenerator;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
+import org.springframework.lang.NonNull;
 import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -25,21 +29,53 @@ import java.util.Objects;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @ToString(exclude = {"employeeId","subordinates"})
 public class PersistentEmployeeEntity extends AbstractEntity {
+@ToString(exclude = {"employeeId"})
+@Indexed
+public class PersistentEmployeeEntity{
 
+    @Id
+    @NonNull
+    @Type(type = "uuid-char")
+    @KeywordField
+    private UUID id;
+
+    @Basic(optional = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date")
+    private Date createdDate = new Date();
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_modified_date")
+    private Date lastModifiedDate;
+
+    @Version
+    @Column(name = "version")
+    private int version;
+
+   /* @Column(name = "created_by", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    private PersistentUserEntity createdBy;*/
+    
     @Column(nullable = false)
-    private long employeeId;
+    @FullTextField(analyzer = "ngram")
+    @KeywordField(normalizer = "lowercase", name="employeeId_key",sortable= Sortable.YES)
+    private String employeeId;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private EmployeeStatus employeeStatus;
 
     @Column(nullable = false)
+    @FullTextField(analyzer = "ngram")
+    @KeywordField(normalizer = "lowercase", name="fullname_key",sortable= Sortable.YES)
     private String fullname;
 
     @Column(nullable = false)
+    @FullTextField(analyzer = "ngram")
+    @KeywordField(normalizer = "lowercase", name="email_key",sortable= Sortable.YES)
     private String email;
 
-    @Basic(optional = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "join_date")
     private Date joinDate;
@@ -69,11 +105,15 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     private Date exitDate;
 
     @OneToOne
+    @IndexedEmbedded
+    @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     private PersistentPositionEntity position;
 
     @OneToOne
     @JoinColumn(name = "department_id")
     @JsonIgnore
+    @IndexedEmbedded
+    @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     private PersistentDepartmentEntity department;
 
     @OneToOne
@@ -92,6 +132,10 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     @Transient
     @OneToMany(mappedBy = "manager")
     private List<PersistentEmployeeEntity> subordinates;
+    public PersistentEmployeeEntity() {
+
+    }
+
 
     public String getEmployeeId() {
         return "MS"+this.employeeId;
@@ -109,5 +153,18 @@ public class PersistentEmployeeEntity extends AbstractEntity {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getEmployeeId(), getEmployeeStatus(), getFullname(), getEmail(), getJoinDate(), getContactDetail(), getPersonalDetail(), getWorkExperience(), getResignationReason(), getResignationDate(), getExitDate(), getPosition(), getUser(), getApprovedBy(), getImage(), getManager());
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.lastModifiedDate = new Date();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdDate = new Date();
+        setId(UUIDGenerator.INSTANCE().newUUID());
     }
 }
