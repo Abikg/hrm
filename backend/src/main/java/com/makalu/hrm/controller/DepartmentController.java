@@ -4,6 +4,8 @@ import com.makalu.hrm.constant.ParameterConstant;
 import com.makalu.hrm.model.DepartmentDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.service.DepartmentService;
+import com.makalu.hrm.service.EmployeeService;
+import com.makalu.hrm.service.ManagerService;
 import com.makalu.hrm.utils.FieldService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,8 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     private final FieldService fieldService;
+
+    private final ManagerService managerService;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
@@ -78,4 +82,10 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentService.delete(departmentId));
     }
 
+    @GetMapping("/getDepartmentEmployee")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<RestResponseDto> getEmployeeListByDepartment(){
+        return ResponseEntity.ok(managerService.getEmployeeList());
+    }
 }

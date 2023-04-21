@@ -31,6 +31,18 @@
     box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
     padding:12px;
 }
+.custom-label{
+    width: 150px;
+}
+.form-footer{
+    box-shadow: none;
+}
+.select2-container{
+    display: block;
+}
+.select2-container .select2-selection--single{
+    height: calc(2.25rem + 2px);
+}
 .mydatepicker {
     background-color: white !important;
 }

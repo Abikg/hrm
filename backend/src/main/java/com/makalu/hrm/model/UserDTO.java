@@ -3,6 +3,8 @@ package com.makalu.hrm.model;
 import com.makalu.hrm.enumconstant.UserType;
 import lombok.Data;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.UUID;
 
 
@@ -23,6 +25,9 @@ public class UserDTO {
 
     boolean passwordExpired = false;
 
+    @Enumerated(EnumType.STRING)
     private UserType userType;
+
+    private String fullName;
 
 }

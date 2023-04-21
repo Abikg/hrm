@@ -1,3 +1,5 @@
+
+let dataTable;
 let table = ''
 
 
@@ -26,20 +28,24 @@ function createTable(data, module, tableId) {
     actualData = data.detail
     var columns = data.column;
     $.each(actualData, function (k, v) {
-        let drillUrl = window.location.origin + "/" + module + "/show/" + v.id;
-        var actionDataElement = '<div class="actionElements">' +
-            '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm"' +
-            'style="width: 50px;">' +
-            '<i class="fa fa-edit" style="font-size:14px;color:white"></i>' +
-            '</a>' ;
-            if(module === "employee"){
-                actionDataElement += '<a href="#" onclick="viewRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-warning btn-sm ml-2" ' +
+
+        let drillUrl = window.location.origin + "/" + module + "/showMinute/" + v.id;
+        var actionDataElement='<div class="actionElements">';
+            if(module !== "user"){
+                actionDataElement += '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm mr-2"' +
                     'style="width: 50px;">' +
-                                    '<i class="fa fa-info-circle" style="font-size:14px;color:white"></i>' +
-                                    '</a>' +
-                                    '</div>';
+                    '<i class="fa fa-edit" style="font-size:14px;color:white"></i>' +
+                    '</a>' ;
+            }
+            if(module === "employee" || module === "user") {
+                    let drillUrl = window.location.origin + "/" + module + "/show/" + v.id;
+                    actionDataElement +='<a href="#" onclick="viewRecord(' + "'elementId'" + ', ' + "'module'" + ')" class="department-edit btn btn-warning btn-sm"' +
+                    'style="width: 50px;">' +
+                    '<i class="fa fa-info-circle" style="font-size:14px;color:white"></i>' +
+                    '</a>'+
+                    '</div>';
             }else{
-                actionDataElement += '<a href="#" onclick="deleteRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-danger btn-sm ml-2"' +
+                actionDataElement += '<a href="#" onclick="deleteRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-danger btn-sm"' +
                     'style="width: 50px;">' +
                     '<i class="fa fa-trash" style="font-size:14px;color:white"></i>' +
                     '</a>' +
@@ -75,10 +81,26 @@ function createTable(data, module, tableId) {
             render: function (data, type, row){
                     if(data == "ACTIVE") {
                         return '<span class="badge badge-success">' + data + '</span>'
-                    }else if(data == "RESIGNED"){
+                    }
+                    if(data == "RESIGNED"){
                         return '<span class="badge badge-danger">' + data + '</span>'
                     }
+                    if(data == "INACTIVE"){
+                        return '<span class="badge badge-warning">' + data + '</span>'
+                    }
             }}
+        }else if(val.name == "enabled"){
+            tableColumns[key] = {
+                "data": val.name,
+                "title": val.displayName + "<span></span>",
+                orderable: val.orderable,
+                render: function (data, type, row){
+                    if(data === true) {
+                        return '<span class="badge badge-success">Enabled</span>'
+                    }else{
+                        return '<span class="badge badge-danger">Disabled</span>'
+                    }
+                }}
         }
         else {
             tableColumns[key] = {"data": val.name, "title": val.displayName + "<span></span>", orderable: val.orderable}
@@ -133,5 +155,8 @@ function deleteRecord(id,module){
 function viewRecord(id, module){
     if(module === "employee"){
         viewEmployee(id,module);
+    }
+    else if(module === "user"){
+        viewUser(id,module);
     }
 }

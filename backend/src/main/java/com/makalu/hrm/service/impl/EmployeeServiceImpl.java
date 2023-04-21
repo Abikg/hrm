@@ -11,12 +11,13 @@ import com.makalu.hrm.validation.EmployeeValidation;
 import com.makalu.hrm.validation.error.EmployeeError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -34,6 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeImageService employeeImageService;
     private final UserService userService;
     private final UserRepository userRepository;
+    private final ManagerService managerService;
     private final EntityManager entityManager;
 
     @Override
@@ -46,7 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public RestResponseDto save(@NotNull EmployeeDTO employeeDTO) {
         try {
-
+            long entityCount;
             EmployeeError error = employeeValidation.validateOnSave(employeeDTO);
 
             if (!error.isValid()) {
@@ -68,14 +70,24 @@ public class EmployeeServiceImpl implements EmployeeService {
                 }
             }
             if (employeeDTO.isCreateUser()) {
-                RestResponseDto userResponseDto = userService.createEmployeeUser(employeeDTO.getEmail(),employeeDTO.getFullname());
+                RestResponseDto userResponseDto = userService.createEmployeeUser(employeeDTO.getEmail(), employeeDTO.getFullname());
 
                 if (userResponseDto.getStatus() == 200) {
                     UserDTO userDTO = (UserDTO) userResponseDto.getDetail();
                     employeeDTO.setUserId(userDTO.getId());
                 }
             }
-            employeeDTO.setEntityEmployeeId("Test");
+            if(employeeDTO.getManagerId() != null) {
+                PersistentEmployeeEntity manager = employeeRepository.findById(employeeDTO.getManagerId()).orElse(null);
+                RestResponseDto setNewManager = managerService.convertToManager(manager);
+                if(setNewManager.getStatus() != 200){
+                    return RestResponseDto.INSTANCE().internalServerError().message("Error creating manager");
+                }
+
+            }
+            entityCount = employeeRepository.count();
+            employeeDTO.setEmployeeId(String.valueOf( entityCount + 1));
+//            employeeDTO.setEntityEmployeeId("Test");
             employeeDTO.setEmployeeStatus(EmployeeStatus.ACTIVE);
             return RestResponseDto.INSTANCE()
                     .success().detail(employeeConverter.convertToDto(
@@ -108,31 +120,34 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employeeEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Employee not found");
         }
-        if(employeeEntity.getEmployeeStatus().equals(EmployeeStatus.RESIGNED)){
-            throw new EmployeeException("Can't update resigned employee");
+
+        if (!employeeEntity.getEmployeeStatus().equals(EmployeeStatus.ACTIVE)) {
+            throw new EmployeeException("Can't update " + employeeEntity.getEmployeeStatus() + " employee");
         }
 
-        return RestResponseDto.INSTANCE()
-                .success()
-                .detail(employeeConverter.convertToDto(employeeEntity));
+            return RestResponseDto.INSTANCE()
+                    .success()
+                    .detail(employeeConverter.convertToDto(employeeEntity));
     }
 
     @Override
     @Transactional
     public RestResponseDto update(EmployeeDTO employeeDTO) {
         try {
+            PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeDTO.getId()).orElse(null);
+            if (employeeEntity == null) {
+                return RestResponseDto.INSTANCE().notFound().message("Employee not found");
+            }
+            employeeDTO.setEmployeeStatus(employeeEntity.getEmployeeStatus());
+            employeeDTO.setEmployeeId(employeeEntity.getEmployeeId());
+            if(employeeEntity.getUser()!= null) {
+                employeeDTO.setUserId(employeeEntity.getUser().getId());
+            }
             EmployeeError error = employeeValidation.validateOnUpdate(employeeDTO);
             if (!error.isValid()) {
                 return RestResponseDto.INSTANCE().
                         validationError().
                         detail(Map.of("error", error, "data", employeeDTO));
-            }
-            PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeDTO.getId()).orElse(null);
-            if (employeeEntity == null) {
-                return RestResponseDto.INSTANCE().notFound().message("Employee not found");
-            }
-            if (employeeEntity.getUser() != null) {
-                employeeDTO.setUserId(employeeEntity.getUser().getId());
             }
             if (employeeEntity.getImage() != null) {
                 employeeDTO.setEmployeeImageId(employeeEntity.getImage().getId());
@@ -141,7 +156,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 //employee update garda email update garna mildaina hai so user ni update garna bhayana
                 //userService.updateEmployeeUser(employeeDTO.getEmail(), employeeDTO.getUserId());
             }
-            if (!employeeDTO.getEmpImage().isEmpty()) {
+            if (employeeDTO.getEmpImage() != null && !employeeDTO.getEmpImage().isEmpty()) {
                 if (employeeEntity.getImage() != null) {
                     employeeImageService.update(employeeDTO.getEmpImage(), employeeDTO.getEmployeeImageId());
                 } else {
@@ -167,6 +182,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (employeeEntity == null) {
                 return RestResponseDto.INSTANCE().notFound();
             }
+            if(! employeeEntity.getEmployeeStatus().equals(EmployeeStatus.ACTIVE)){
+                return RestResponseDto.INSTANCE().internalServerError();
+            }
             employeeEntity.setResignationReason(employeeDTO.getResignationReason());
             employeeEntity.setResignationDate(employeeDTO.getResignationDate());
             employeeEntity.setExitDate(employeeDTO.getExitDate());
@@ -186,6 +204,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             PersistentEmployeeEntity employeeEntity = employeeRepository.findById(employeeDTO.getId()).orElse(null);
             if (employeeEntity == null) {
                 return RestResponseDto.INSTANCE().notFound();
+            }
+            if(! employeeEntity.getEmployeeStatus().equals(EmployeeStatus.ACTIVE)){
+                return RestResponseDto.INSTANCE().internalServerError();
             }
             employeeEntity.setResignationReason(employeeDTO.getResignationReason());
             employeeEntity.setResignationDate(employeeDTO.getResignationDate());
@@ -244,6 +265,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public RestResponseDto employeeManagerGetSubordinates(UUID managerId){
+                List<PersistentEmployeeEntity> employeeEntities = employeeRepository.findAllByManager(managerId);
+                return RestResponseDto.INSTANCE().success().detail(employeeEntities);
+            }
     public EmployeeSearchDTO search(EmployeeFilterDTO employeeFilterDTO) {
 
         int offset = 0;

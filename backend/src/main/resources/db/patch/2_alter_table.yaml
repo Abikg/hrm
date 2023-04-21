@@ -1,1 +1,30 @@
 databaseChangeLog:
+  - changeSet:
+      id: 2023-03-17-department-table-add-manager
+      author: suvam
+      changes:
+        - addColumn:
+            tableName: department
+            columns:
+                - column:
+                    name: manager_id
+                    type: varchar(36)
+                    constraints:
+                      nullable: true
+                      foreignKeyName: fk_manager_id
+                      references: employee(id)
+
+  - changeSet:
+      id: 2023-03-17-employee-table-add-manager
+      author: suvam
+      changes:
+        - addColumn:
+            tableName: employee
+            columns:
+                - column:
+                    name: manager_id
+                    type: varchar(36)
+                    constraints:
+                      nullable: true
+                      foreignKeyName: fk_manager_id
+                      references: employee(id)

@@ -1,3 +1,4 @@
+let employeeReq = null;
 window.addEventListener('DOMContentLoaded', (event) => {
     listData("employee","api/list", "employee-table")
 });
@@ -5,7 +6,32 @@ function viewEmployee(id, module){
     window.location.href = "/"+module+"/view/" + id;
 }
 function editEmployee(id,module) {
-    window.location.href = "/"+module+"/edit/" + id;
+    const url = window.location.origin+"/"+module+"/isValid/"+id;
+    employeeReq = $.ajax(url,
+        {
+            method: "GET",
+            dataType: 'json',
+            timeout: 3000,
+            beforeSend: function () {
+                if (employeeReq !== undefined && employeeReq != null) {
+                    employeeReq.abort();
+                }
+            },
+            success: function (data, status, xhr) {
+                if (data.status === 400) {
+                    $.notify(data.message, {color: "#fff", background: "#D44950",align:"center", verticalAlign:"top"});
+                }else{
+                    window.location.href = "/"+module+"/edit/" + id;
+                }
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
+            }
+        });
+
 }
 $(document).ready(function(){
     $("#joinDate").text(moment($("#joinDate").text()).format("yyyy/MM/DD"));
@@ -51,7 +77,7 @@ $("#employeeResignationForm").submit(function (event) {
     saveData(url)
 })
 
-let employeeReq = null;
+
 function saveData(url) {
     employeeReq = $.ajax(url,
         {

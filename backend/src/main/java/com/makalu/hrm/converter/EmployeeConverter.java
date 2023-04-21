@@ -3,6 +3,7 @@ package com.makalu.hrm.converter;
 import com.makalu.hrm.domain.PersistentDepartmentEntity;
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentPositionEntity;
+import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +38,9 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
 
         EmployeeDTO dto = new EmployeeDTO();
 
+
         dto.setId(entity.getId());
         dto.setEmployeeId(entity.getEmployeeId());
-        dto.setEntityEmployeeId("Test");
         dto.setEmployeeStatus(entity.getEmployeeStatus());
         dto.setFullname(entity.getFullname());
         dto.setEmail(entity.getEmail());
@@ -52,18 +53,24 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         dto.setContactDetailDTO(entity.getContactDetail());
         dto.setPersonalDetailDTO(entity.getPersonalDetail());
         dto.setWorkExperienceDTO(entity.getWorkExperience());
-        if (entity.getResignationReason() != null) {
-            dto.setResignationReason(entity.getResignationReason());
-        }
-        if (entity.getResignationDate() != null) {
-            dto.setResignationDate(entity.getResignationDate());
-        }
-        if (entity.getExitDate() != null) {
-            dto.setExitDate(entity.getExitDate());
-        }
+        dto.setResignationReason(entity.getResignationReason());
+        dto.setResignationDate(entity.getResignationDate());
+        dto.setExitDate(entity.getExitDate());
         if (entity.getApprovedBy() != null) {
             dto.setApprovedById(entity.getApprovedBy().getId());
         }
+        if(entity.getUser()!= null && entity.getUser().getUserType().equals(UserType.MANAGER)){
+           dto.setSubordinates(employeeRepository.findAllByManager(entity.getId()).stream().map(PersistentEmployeeEntity :: getFullname).collect(Collectors.toList()));
+        }
+        if(entity.getUser() != null){
+            dto.setCreateUser(true);
+            dto.setUserId(entity.getUser().getId());
+        }
+        if(entity.getManager() != null){
+            dto.setReportingManagerName(entity.getManager().getFullname());
+            dto.setManagerId(entity.getManager().getId());
+        }
+
         if(entity.getUser() != null){
             boolean isManager= (entity.getUser().getUserType().toString().equals("Manager"))? true: false;
             dto.setManager(isManager);
@@ -78,7 +85,7 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
             return entity;
         }
 
-        entity.setEmployeeId(dto.getEntityEmployeeId());
+        entity.setEmployeeId(dto.getEmployeeId());
         entity.setEmployeeStatus(dto.getEmployeeStatus());
         entity.setFullname(dto.getFullname());
         entity.setEmail(dto.getEmail());
@@ -94,17 +101,14 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
         entity.setContactDetail(dto.getContactDetailDTO());
         entity.setPersonalDetail(dto.getPersonalDetailDTO());
         entity.setWorkExperience(dto.getWorkExperienceDTO());
-        if (dto.getResignationReason() != null) {
-            entity.setResignationReason(dto.getResignationReason());
-        }
-        if (dto.getResignationDate() != null) {
-            entity.setResignationDate(dto.getResignationDate());
-        }
-        if (dto.getExitDate() != null) {
-            entity.setExitDate(dto.getExitDate());
-        }
+        entity.setResignationReason(dto.getResignationReason());
+        entity.setResignationDate(dto.getResignationDate());
+        entity.setExitDate(dto.getExitDate());
         if (dto.getApprovedById() != null) {
             entity.setApprovedBy(userRepository.findById(dto.getApprovedById()).orElse(null));
+        }
+        if(dto.getManagerId() != null) {
+            entity.setManager(employeeRepository.findById(dto.getManagerId()).orElse(null));
         }
         return entity;
     }

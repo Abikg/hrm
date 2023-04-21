@@ -24,7 +24,7 @@ public class IPUtils {
                 remoteAddr = request.getRemoteAddr();
             }
             try {
-                System.out.println("Xforwarded : " + remoteAddr + " --- GetRemot: " + request.getRemoteAddr());
+                System.out.println("Xforwarded : " + remoteAddr + " --- GetRemote: " + request.getRemoteAddr());
             } catch (Exception e) {
 
             }

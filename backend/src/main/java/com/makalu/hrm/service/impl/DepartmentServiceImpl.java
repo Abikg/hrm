@@ -1,11 +1,20 @@
 package com.makalu.hrm.service.impl;
 
 import com.makalu.hrm.converter.DepartmentConverter;
+import com.makalu.hrm.converter.EmployeeConverter;
 import com.makalu.hrm.domain.PersistentDepartmentEntity;
+import com.makalu.hrm.domain.PersistentEmployeeEntity;
+import com.makalu.hrm.domain.PersistentUserEntity;
+import com.makalu.hrm.enumconstant.UserType;
 import com.makalu.hrm.model.DepartmentDTO;
+import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.repository.DepartmentRepository;
+import com.makalu.hrm.repository.EmployeeRepository;
+import com.makalu.hrm.repository.UserRepository;
 import com.makalu.hrm.service.DepartmentService;
+import com.makalu.hrm.service.EmployeeService;
+import com.makalu.hrm.service.ManagerService;
 import com.makalu.hrm.validation.DepartmentValidation;
 import com.makalu.hrm.validation.error.DepartmentError;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +38,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentValidation departmentValidation;
 
-    private final ServletContext context;
+    private final EmployeeRepository employeeRepository;
+
+   private final ManagerService managerService;
+
 
     @Override
     public List<DepartmentDTO> list() {
@@ -45,7 +57,13 @@ public class DepartmentServiceImpl implements DepartmentService {
             if (!error.isValid()) {
                 return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", departmentDTO));
             }
-
+            if(departmentDTO.getManagerId() != null){
+                RestResponseDto setNewManager = managerService.convertToManager(
+                        employeeRepository.findById(departmentDTO.getManagerId()).orElse(null));
+                if(setNewManager.getStatus() != 200){
+                    return RestResponseDto.INSTANCE().internalServerError().detail(departmentDTO);
+                }
+            }
             return RestResponseDto
                     .INSTANCE()
                     .success()
@@ -67,7 +85,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departmentEntity == null) {
             return RestResponseDto.INSTANCE().notFound().message("Department not found");
         }
-        return RestResponseDto.INSTANCE().success().detail(departmentConverter.convertToDto(departmentEntity));
+        DepartmentDTO dto = departmentConverter.convertToDto(departmentEntity);
+        return RestResponseDto.INSTANCE().success().detail(dto);
     }
 
     @Override
@@ -76,7 +95,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try {
             DepartmentError error = departmentValidation.validateOnUpdate(departmentDTO);
 
-            if (!error.isValid()) {
+           if (!error.isValid()) {
                 return RestResponseDto.INSTANCE().validationError().detail(Map.of("error", error, "data", departmentDTO));
             }
 
@@ -85,12 +104,25 @@ public class DepartmentServiceImpl implements DepartmentService {
             if (departmentEntity == null) {
                 return RestResponseDto.INSTANCE().validationError().message("Department not found").detail(departmentDTO);
             }
-
+            if(departmentDTO.getManagerId() != null) {
+                if (departmentEntity.getManager() != null && !departmentDTO.getManagerId().equals(departmentEntity.getManager().getId())) {
+                    RestResponseDto setNewManager = managerService.convertToManager(employeeRepository.findById(departmentDTO.getManagerId()).orElse(null));
+                    if (setNewManager.getStatus() != 200) {
+                        return RestResponseDto.INSTANCE().internalServerError().message("Error creating manager").detail(departmentDTO);
+                    }
+                }else {
+                        RestResponseDto setNewManager = managerService.convertToManager(employeeRepository.findById(departmentDTO.getManagerId()).orElse(null));
+                        if (setNewManager.getStatus() != 200) {
+                            return RestResponseDto.INSTANCE().internalServerError().message("Error creating manager").detail(departmentDTO);
+                        }
+                        departmentEntity.setManager((PersistentEmployeeEntity) setNewManager.getDetail());
+                }
+            }
             return RestResponseDto
                     .INSTANCE()
                     .success()
                     .detail(departmentConverter.convertToDto(
-                            departmentRepository.saveAndFlush(departmentConverter.copyConvertToEntity(departmentDTO, departmentEntity))
+                            departmentRepository.saveAndFlush(departmentEntity)
                     ));
         } catch (Exception ex) {
             log.error("Error while creating department", ex);
@@ -117,5 +149,6 @@ public class DepartmentServiceImpl implements DepartmentService {
             return RestResponseDto.INSTANCE().internalServerError();
         }
     }
+
 
 }

@@ -2,9 +2,9 @@ databaseChangeLog:
   - include:
       file: ../patch/1_create_table.yaml
       relativeToChangelogFile: true
-#  - include:
-#      file: ../patch/2_alter_table.yaml
-#      relativeToChangelogFile: true
+  - include:
+      file: ../patch/2_alter_table.yaml
+      relativeToChangelogFile: true
 #- include:
 #    file: ../patch/3_insert_into_table.yaml
 #    relativeToChangelogFile: true

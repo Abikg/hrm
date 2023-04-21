@@ -1,5 +1,6 @@
 package com.makalu.hrm.service;
 
+import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.model.EmployeeDTO;
 import com.makalu.hrm.model.EmployeeFilterDTO;
 import com.makalu.hrm.model.EmployeeSearchDTO;
@@ -29,5 +30,10 @@ public interface EmployeeService {
 
     RestResponseDto employeeExitResignation(UUID employeeId);
 
+
+    RestResponseDto employeeManagerGetSubordinates(UUID managerId);
+
+
     EmployeeSearchDTO search(EmployeeFilterDTO employeeFilterDTO);
+
 }

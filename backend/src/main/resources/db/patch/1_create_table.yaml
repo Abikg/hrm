@@ -114,6 +114,7 @@ databaseChangeLog:
                         nullable: false
 
       - changeSet:
+
           id: 2022-12-29-department-create-table
           author: suvam
           changes:

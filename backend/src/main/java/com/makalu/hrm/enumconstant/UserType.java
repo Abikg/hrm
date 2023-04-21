@@ -1,5 +1,10 @@
 package com.makalu.hrm.enumconstant;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public enum UserType {
     SUPER_ADMIN("Super Admin"),
     ADMIN("Admin"),
@@ -25,9 +30,21 @@ public enum UserType {
     public String getValue() {
         return this.value;
     }
+    public String getName(){
+        return this.name();
+    }
 
     @Override
     public String toString() {
         return this.value;
+    }
+
+    public static List<Map<String,String>> getAllUserType(){
+        List values = new ArrayList<>();
+        for(UserType userType : UserType.values()){
+            values.add(Map.of(userType.getName(), userType.getValue()));
+        }
+
+        return values;
     }
 }

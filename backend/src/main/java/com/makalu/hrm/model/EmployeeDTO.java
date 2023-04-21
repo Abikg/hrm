@@ -4,6 +4,8 @@ import com.makalu.hrm.enumconstant.EmployeeStatus;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +19,7 @@ public class EmployeeDTO {
 
     private String employeeId;
 
-    private String entityEmployeeId;
-
+    @Enumerated(EnumType.STRING)
     private EmployeeStatus employeeStatus;
 
     private String fullname;
@@ -60,6 +61,12 @@ public class EmployeeDTO {
     private PersonalDetailDTO personalDetailDTO = new PersonalDetailDTO();
 
     private List<WorkExperienceDTO> workExperienceDTO = new ArrayList<>();
+
+    private UUID managerId;
+
+    private String reportingManagerName;
+
+    private List<String> subordinates;
 
     public void setManager(boolean manager) {
         isManager = manager;

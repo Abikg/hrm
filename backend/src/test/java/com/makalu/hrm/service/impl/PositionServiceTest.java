@@ -14,6 +14,8 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -83,9 +85,9 @@ public class PositionServiceTest extends MvcBaseTest {
         assert persistentPositionEntity.getStatus() == 200;
         assert ((PositionDTO) persistentPositionEntity.getDetail()).getId() == positionDTO.getId();
 
-        positionDTO.setId(UUID.fromString("67428b0e-8f2b-4291-b390-9bc4d9bc5ec"));
+        positionDTO.setId(UUID.fromString("67428b0e-8f2b-4291-b390-9bc4d9bc5ece"));
         persistentPositionEntity = positionService.update(positionDTO);
-        Assertions.assertEquals(400, persistentPositionEntity.getStatus());
+        Assertions.assertEquals(404, persistentPositionEntity.getStatus());
 
         positionDTO.setTitle("This is rock");
         persistentPositionEntity = positionService.update(positionDTO);
@@ -122,6 +124,8 @@ public class PositionServiceTest extends MvcBaseTest {
         List<PositionDTO> positions= positionService.list();
         assert positions.size() == 2;
     }
+
+
 
 
 }

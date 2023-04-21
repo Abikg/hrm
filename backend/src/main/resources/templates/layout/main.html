@@ -27,6 +27,7 @@
     <link rel="stylesheet" th:href="@{/lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css}">
     <link rel="stylesheet" th:href="@{/lte/plugins/select2/css/select2.min.css}">
     <link rel="stylesheet" th:href="@{/bootstrap-datepicker/css/bootstrap-datepicker.css}">
+    <link rel="stylesheet" th:href="@{/css/select2.min.css}" />
     <!-- Theme style -->
     <link rel="stylesheet" th:href="@{/lte/dist/css/adminlte.min.css}">
     <link rel="stylesheet" th:href="@{/css/branding.css}">
@@ -44,6 +45,9 @@
 
     <script type="text/javascript" th:src="@{/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
 
+    <script type="text/javascript" th:src="@{/js/select2.min.js}"></script>
+
+    <script type="text/javascript" th:src="@{/js/notify.min.js}"></script>
 
 
 
@@ -124,13 +128,17 @@
             autoclose: true,
             todayHighlight: true
         });
+        $(".select2-container .select2-selection--single").css("height","inherit");
+        $(".select2-container--default .select2-selection--single .select2-selection__rendered").css("line-height", "none");
+
 
         $(function () {
             $('.select2').select2()
         });
+
     </script>
 
-    <th:block layout:fragment="script">
+    <th:block layout:fragment="script"></th:block>
 
 </body>
 </html>

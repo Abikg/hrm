@@ -17,6 +17,9 @@ public class DepartmentDTO {
     private String detail;
 
     private String departmentCode;
+    
+    private String managerName;
 
+    private UUID managerId;
 
 }
