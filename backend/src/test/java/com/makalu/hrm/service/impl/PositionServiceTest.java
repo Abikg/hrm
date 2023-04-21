@@ -87,7 +87,7 @@ public class PositionServiceTest extends MvcBaseTest {
 
         positionDTO.setId(UUID.fromString("67428b0e-8f2b-4291-b390-9bc4d9bc5ece"));
         persistentPositionEntity = positionService.update(positionDTO);
-        Assertions.assertEquals(400, persistentPositionEntity.getStatus());
+        Assertions.assertEquals(404, persistentPositionEntity.getStatus());
 
         positionDTO.setTitle("This is rock");
         persistentPositionEntity = positionService.update(positionDTO);
