@@ -30,30 +30,22 @@ function createTable(data, module, tableId) {
     $.each(actualData, function (k, v) {
 
         let drillUrl = window.location.origin + "/" + module + "/showMinute/" + v.id;
-        var actionDataElement='';
+        var actionDataElement='<div class="actionElements">';
             if(module !== "user"){
-                actionDataElement += '<div class="actionElements">' +
-                    '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm"' +
+                actionDataElement += '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm mr-2"' +
                     'style="width: 50px;">' +
                     '<i class="fa fa-edit" style="font-size:14px;color:white"></i>' +
                     '</a>' ;
             }
-            if(module === "employee" || module === "user"){
-        let drillUrl = window.location.origin + "/" + module + "/show/" + v.id;
-        var actionDataElement = '<div class="actionElements">' +
-            '<a href="#" onclick="editRecord(' + "'elementId'"+', ' + "'module'"+')" class="department-edit btn btn-info btn-sm"' +
-            'style="width: 50px;">' +
-            '<i class="fa fa-edit" style="font-size:14px;color:white"></i>' +
-            '</a>' ;
-            if(module === "employee"){
-
-                actionDataElement += '<a href="#" onclick="viewRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-warning btn-sm ml-2" ' +
+            if(module === "employee" || module === "user") {
+                    let drillUrl = window.location.origin + "/" + module + "/show/" + v.id;
+                    actionDataElement +='<a href="#" onclick="viewRecord(' + "'elementId'" + ', ' + "'module'" + ')" class="department-edit btn btn-warning btn-sm"' +
                     'style="width: 50px;">' +
-                                    '<i class="fa fa-info-circle" style="font-size:14px;color:white"></i>' +
-                                    '</a>' +
-                                    '</div>';
+                    '<i class="fa fa-info-circle" style="font-size:14px;color:white"></i>' +
+                    '</a>'+
+                    '</div>';
             }else{
-                actionDataElement += '<a href="#" onclick="deleteRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-danger btn-sm ml-2"' +
+                actionDataElement += '<a href="#" onclick="deleteRecord(' + "'elementId'"+', ' + "'module'"+')" class="btn btn-danger btn-sm"' +
                     'style="width: 50px;">' +
                     '<i class="fa fa-trash" style="font-size:14px;color:white"></i>' +
                     '</a>' +

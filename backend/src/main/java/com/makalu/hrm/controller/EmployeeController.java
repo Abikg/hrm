@@ -61,7 +61,6 @@ public class EmployeeController {
     @GetMapping("/create")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public String createEmployee(ModelMap map) {
-        log.info("controller create for admin");
         EmployeeDTO employeeDTO = new EmployeeDTO();
         map.put(ParameterConstant.DEPARTMENT_LIST, departmentService.list());
         map.put(ParameterConstant.POSITION_LIST, positionService.list());

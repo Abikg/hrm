@@ -41,7 +41,6 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
 
         dto.setId(entity.getId());
         dto.setEmployeeId(entity.getEmployeeId());
-        dto.setEntityEmployeeId("Test");
         dto.setEmployeeStatus(entity.getEmployeeStatus());
         dto.setFullname(entity.getFullname());
         dto.setEmail(entity.getEmail());
@@ -86,7 +85,7 @@ public class EmployeeConverter extends Convertable<PersistentEmployeeEntity, Emp
             return entity;
         }
 
-        entity.setEmployeeId(dto.getEntityEmployeeId());
+        entity.setEmployeeId(dto.getEmployeeId());
         entity.setEmployeeStatus(dto.getEmployeeStatus());
         entity.setFullname(dto.getFullname());
         entity.setEmail(dto.getEmail());

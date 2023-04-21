@@ -23,7 +23,6 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString(exclude = {"manager"})
-public class PersistentDepartmentEntity extends AbstractEntity {
 public class PersistentDepartmentEntity {
 
     @Id
@@ -64,6 +63,10 @@ public class PersistentDepartmentEntity {
     @JsonIgnore
     private PersistentEmployeeEntity manager;
 
+    public PersistentDepartmentEntity() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,8 +80,6 @@ public class PersistentDepartmentEntity {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getTitle(), getDetail(), getDepartmentCode());
-    public PersistentDepartmentEntity() {
-
     }
 
     private void setId(UUID id) {

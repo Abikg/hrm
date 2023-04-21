@@ -27,8 +27,6 @@ import java.util.UUID;
 @Table(name = "employee")
 @EqualsAndHashCode(callSuper = false)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-@ToString(exclude = {"employeeId","subordinates"})
-public class PersistentEmployeeEntity extends AbstractEntity {
 @ToString(exclude = {"employeeId"})
 @Indexed
 public class PersistentEmployeeEntity{
@@ -153,6 +151,7 @@ public class PersistentEmployeeEntity{
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getEmployeeId(), getEmployeeStatus(), getFullname(), getEmail(), getJoinDate(), getContactDetail(), getPersonalDetail(), getWorkExperience(), getResignationReason(), getResignationDate(), getExitDate(), getPosition(), getUser(), getApprovedBy(), getImage(), getManager());
+    }
     public void setId(UUID id) {
         this.id = id;
     }

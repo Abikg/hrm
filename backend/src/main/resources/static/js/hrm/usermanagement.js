@@ -26,17 +26,24 @@ $("#userPasswordForm").submit(function (event) {
     const url = event.target.action;
     saveData(url,jsonData);
 })
-function changeUserType(userId){
-    setupForChangeUserType(userId);
+function changeUserType(userId,userType){
     getAllUserType().then(result => {
         console.log("User Type List Fetched");
-        populateChangeUserTypeForm(result);
+        $('#userType').empty().select2({
+            data: populateChangeUserTypeForm(result),
+        })
+        setTimeout(() => {
+            setSelectedUserType(userType);
+        }, 300);
     });
+    setupForChangeUserType(userId,userType);
     $('#userChangeTypeModal').modal('toggle');
 };
-function setupForChangeUserType(userId) {
+function setupForChangeUserType(userId,userType) {
     $("#userChangeTypeForm")[0].reset();
     $("#userId2").val(userId);
+    $("#selectedUserType").val(userType);
+    $("#userType").val(userType).trigger("change");
     $("#userChangeTypeModalLabel").text("Change User Type");
     const formBaseUrl = $("#userChangeTypeForm").data("action-base-url");
     $("#userChangeTypeForm").attr("action", formBaseUrl + "changeUserType");
@@ -141,16 +148,18 @@ function populateChangeUserTypeForm(userType){
         userTypeList.push(u);
     });
 
-    $('#userType').empty().select2({
-        placeholder:{
-            id:'',
-            text:'Select Employee Type'
-        },
-        data: userTypeList,
-    });
+    return userTypeList;
 }
 $("#userType").change(function (){
     if($("#userType").val()){
         $("#selectedUserType").val($("#userType").val());
     }
 });
+function setSelectedUserType(userType){
+    if(userType != null || userType !== undefined) {
+        $('#userType').val(userType).trigger('change');
+    }
+    else{
+        $('#userType').val("").trigger('change');
+    }
+}

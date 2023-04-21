@@ -21,13 +21,13 @@
             <div class="col-lg-4 mb-4 mb-sm-0">
                 <div class="d-flex align-items-center h-100">
                     <div class="w-50 ml-auto">
-                        <button id="add-new-employee-resignation" th:onclick="changePassword([[${user.id}]])"
+                        <button id="user-change-pasword" th:onclick="changePassword([[${user.id}]])"
                                 class="btn btn-secondary btn-sm w-100">Reset Password</button>
-                        <button id="add-new-employee-resignation" th:onclick="changeUserType([[${user.id}]])"
+                        <button id="user-chnage-type" th:onclick="changeUserType([[${user.id}]],[[${user.userType.name()}]])"
                                 class="btn btn-primary btn-sm w-100 mt-2">Change User Type</button>
-                        <button th:if="${user.enabled}" id="add-new-employee-resignation" th:onclick="disableUser([[${user.id}]])"
+                        <button th:if="${user.enabled}" id="user-disable" th:onclick="disableUser([[${user.id}]])"
                                 class="btn btn-danger btn-sm w-100 mt-2">Disable User</button>
-                        <button th:unless="${user.enabled}" id="add-new-employee-resignation" th:onclick="disableUser([[${user.id}]])"
+                        <button th:unless="${user.enabled}" id="user-enable" th:onclick="disableUser([[${user.id}]])"
                                 class="btn btn-success btn-sm w-100 mt-2">Enable User</button>
                     </div>
                 </div>

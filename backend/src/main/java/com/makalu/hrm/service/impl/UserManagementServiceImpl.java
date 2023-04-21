@@ -1,6 +1,5 @@
 package com.makalu.hrm.service.impl;
 
-import com.makalu.hrm.converter.EmployeeConverter;
 import com.makalu.hrm.converter.UserConverter;
 import com.makalu.hrm.domain.PersistentEmployeeEntity;
 import com.makalu.hrm.domain.PersistentUserEntity;
@@ -9,7 +8,6 @@ import com.makalu.hrm.model.RestResponseDto;
 import com.makalu.hrm.model.UserDTO;
 import com.makalu.hrm.repository.EmployeeRepository;
 import com.makalu.hrm.repository.UserRepository;
-import com.makalu.hrm.service.EmployeeService;
 import com.makalu.hrm.service.MailService;
 import com.makalu.hrm.service.MailTemplateParser;
 import com.makalu.hrm.service.UserManagementService;

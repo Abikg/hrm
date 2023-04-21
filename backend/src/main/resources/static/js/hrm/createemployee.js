@@ -1,64 +1,93 @@
 let employeeListForManager='';
 let departmentListForEmployee='';
+let positionListForEmployee;
 let departmentRequest;
 let employeeRequest;
+let positionRequest;
 window.addEventListener('DOMContentLoaded', (event) => {
-    getDepartmentListForEmployee().then(result => {
-        console.log("Department list fetched");
-    });
-    getActiveEmployeeList().then(result => {
-        console.log("Active employee  list fetched");
-        $('#reportingManager').empty().select2({
-            data: getEmployeeData(employeeListForManager)
+        getDepartmentListForEmployee().then(result => {
+            console.log("Department list fetched");
+            $("#department").empty().select2({
+                placeholder: {
+                    id: null,
+                    text: 'Select Department',
+                },
+                data: setupSelectOptionForDepartment(departmentListForEmployee),
+                allowClear: true
+            })
+            setTimeout(() => {
+                setSelectedDepartment($("#selectedDepartment").val());
+            }, 300);
         });
-        setTimeout(() => {
-            setupSelectManagerList($("#selectedManagerId").val());
-        }, 2000);
-    });
-    if($(".alertSuccess").length){
-        $('#employeeForm input').attr('readonly', 'readonly');
-        $('#position').attr("disabled",true);
-        $('#department').attr("disabled",true);
-        window.setTimeout(function() {
-            window.location.href = "/employee/list";
-        }, 3000);
-    }
 
-    const imageCard = $(".imageCard");
-    if(imageCard.length){
-        $(".imageCard").css({
-            "width": "200px",
-            "height": "200px",
-            "display": "flex",
-            "justify-content": "center",
-            "align-items": "center",
-            "overflow": "hidden"
+        getPositionListForEmployee().then(result => {
+            console.log("Position list fetched");
+            $("#position").empty().select2({
+                placeholder: {
+                    id: null,
+                    text: 'Select Position',
+                },
+                data: setupSelectOptionForPosition(positionListForEmployee),
+                allowClear: true
+            });
+            setTimeout(() => {
+                setSelectedPosition($("#selectedPosition").val());
+            }, 300);
         });
-        $(".imageCard img").css({  "flex-shrink": "0",
-            "min-width": "100%",
-            "min-height": "100%"});
-    }
 
-    if($("input[name='joinDate']").val()){
-        const format = "ddd MMM D HH:mm:ss z yyyy";
-        if (moment($("input[name='joinDate']").val(), format).isValid()) {
-            $("input[name='joinDate']").val(moment($("input[name='joinDate']").val(), format).format("YYYY/MM/DD"));
-
-        } else {
-            $("input[name='joinDate']").val(moment($("input[name='joinDate']").val()).format("YYYY/MM/DD"));
+        getActiveEmployeeList().then(result => {
+            console.log("Active employee  list fetched");
+            $('#reportingManager').empty().select2({
+                placeholder: {
+                    id: null,
+                    text: 'Select Reporting Manager'
+                },
+                data: setupSelectOptionForEmployee(employeeListForManager),
+                allowClear: true
+            });
+            setTimeout(() => {
+                setSelectedManager($("#selectedManagerId").val());
+            }, 2000);
+        });
+        if ($(".alertSuccess").length) {
+            $('#employeeForm input').attr('readonly', 'readonly');
+            $('#position').attr("disabled", true);
+            $('#department').attr("disabled", true);
+            window.setTimeout(function () {
+                window.location.href = "/employee/list";
+            }, 3000);
         }
-    }
 
-    if($("#hiddenJoinDate").val()){
-        $(this).val(moment($(this).val()).format("YYYY/MM/DD"));
-    }
-    $('#position').select2({
-        placeholder:'Select Department',
-    });
-    $('#department').select2({
-        placeholder:'Select Position',
+        const imageCard = $(".imageCard");
+        if (imageCard.length) {
+            $(".imageCard").css({
+                "width": "200px",
+                "height": "200px",
+                "display": "flex",
+                "justify-content": "center",
+                "align-items": "center",
+                "overflow": "hidden"
+            });
+            $(".imageCard img").css({
+                "flex-shrink": "0",
+                "min-width": "100%",
+                "min-height": "100%"
+            });
+        }
 
-});
+        if ($("input[name='joinDate']").val()) {
+            const format = "ddd MMM D HH:mm:ss z yyyy";
+            if (moment($("input[name='joinDate']").val(), format).isValid()) {
+                $("input[name='joinDate']").val(moment($("input[name='joinDate']").val(), format).format("YYYY/MM/DD"));
+
+            } else {
+                $("input[name='joinDate']").val(moment($("input[name='joinDate']").val()).format("YYYY/MM/DD"));
+            }
+        }
+        if ($("#hiddenJoinDate").val()) {
+            $(this).val(moment($(this).val()).format("YYYY/MM/DD"));
+        }
+})
 $("#employeeForm").submit(function(e) {
     if ($("input[name='joinDate']").val() === ""){
         e.preventDefault();
@@ -189,6 +218,32 @@ function getDepartmentListForEmployee(){
         });
         return departmentRequest.then(() => departmentListForEmployee);
 }
+function getPositionListForEmployee(){
+    const url = window.location.origin + "/position/api/list";
+    positionRequest = $.ajax(url,
+        {
+            method: "GET",
+            dataType: 'json',
+            timeout: 3000,
+            beforeSend: function () {
+                if (positionRequest !== undefined && positionRequest != null) {
+                    positionRequest.abort();
+                }
+            },
+            success: function (data, status, xhr) {
+                if (data.status === 200) {
+                    positionListForEmployee = data.detail;
+                }
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log("error")
+                console.log(textStatus)
+                console.log(errorMessage)
+            }
+        });
+    return positionRequest.then(() => positionListForEmployee);
+}
 
 function getActiveEmployeeList(){
     const url = window.location.origin + "/employee/getActiveEmployees";
@@ -218,18 +273,21 @@ function getActiveEmployeeList(){
         return employeeRequest.then(() => employeeListForManager);
 }
 $("#department").on("change",function(){
-    if(this.value != null) {
-        setDepartmentManager(this.value);
-    }
+    setDepartmentManagerAsReporting($(this).val());
+    $("#selectedDepartment").val($(this).val())
+
 });
-function getEmployeeData(data){
+$("#position").on("change",function(){
+    $("#selectedPosition").val($(this).val())
+});
+function setupSelectOptionForEmployee(data){
     let employees=[];
-    let manager;
+    let employee;
     if(data.length <= 0  ) {
         $(".reportingManager").addClass("d-none");
     }else {
         for (let i = 0; i < data.length; i++) {
-            let employee = {
+           employee = {
                 id: data[i].id,
                 text: data[i].fullname
             }
@@ -238,31 +296,72 @@ function getEmployeeData(data){
     }
     return employees;
 }
-function getSelectedDepartmentManager(departmentId){
-    let selectedManagerId = null;
-    let selectedManager = departmentListForEmployee.find(e => e.id == departmentId);
-    if(selectedManager.managerId != null){
-        selectedManagerId = selectedManager.managerId;
+function setupSelectOptionForDepartment(data){
+    let dataList=[];
+    let val;
+    if(data.length <= 0  ) {
+        $(".error-department").val("No department found");
+    }else {
+        for (let i = 0; i < data.length; i++) {
+             val = {
+                id: data[i].id,
+                text: data[i].title
+            }
+            dataList.push(val);
+        }
     }
-    return selectedManagerId;
+    return dataList;
 }
-function setDepartmentManager(selectedDepId){
+function setupSelectOptionForPosition(data){
+    let dataList=[];
+    let val;
+    if(data.length <= 0  ) {
+        $(".error-position").val("No position found");
+    }else {
+        for (let i = 0; i < data.length; i++) {
+            val = {
+                id: data[i].id,
+                text: data[i].title
+            }
+            dataList.push(val);
+        }
+    }
+    return dataList;
+}
+function setDepartmentManagerAsReporting(selectedDepId){
     let selectedDeptManagerId = getSelectedDepartmentManager(selectedDepId);
+    let employeeId = $("#employeeId").val();
     if(employeeListForManager.length <= 0  ) {
         $(".reportingManager").addClass("d-none");
     }else{
-        if(selectedDeptManagerId != null) {
+        if(selectedDeptManagerId !== null && selectedDeptManagerId != employeeId) {
             $('#reportingManager').val(selectedDeptManagerId).trigger('change');
         }
 
     }
 
 }
-function setupSelectManagerList(managerId){
+function getSelectedDepartmentManager(departmentId){
+    let selectedManagerId = null;
+    let selectedManager = departmentListForEmployee.find(e => e.id == departmentId);
+    if(selectedManager !=null && selectedManager.managerId != null){
+        selectedManagerId = selectedManager.managerId;
+    }
+    return selectedManagerId;
+}
+function setSelectedManager(managerId){
     if(employeeListForManager.length > 0  ) {
         if(managerId != null || managerId !== undefined) {
             $('#reportingManager').val(managerId).trigger('change');
+        }else{
+            $('#reportingManager').val("").trigger('change');
         }
 
     }
+}
+function setSelectedDepartment(departmentId){
+    $('#department').val(departmentId).trigger('change');
+}
+function setSelectedPosition(positionId){
+  $('#position').val(positionId).trigger('change');
 }

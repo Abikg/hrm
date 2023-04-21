@@ -32,11 +32,7 @@ public class FieldService {
         fields.add(Map.of("name", "fullname", "displayName", "Full Name", "type", "string", "orderable", true));
         fields.add(Map.of("name", "departmentName", "displayName", "Department", "type", "string", "orderable", true));
         fields.add(Map.of("name", "positionName", "displayName", "Position", "type", "string", "orderable", true));
-
         fields.add(Map.of("name", "contactDetailDTO.contactPhone", "displayName", "Phone", "string", "Phone", "orderable", true));
-        fields.add(Map.of("name", "email", "displayName", "Email Address", "type", "string", "orderable", true));
-        fields.add(Map.of("name", "employeeStatus", "displayName", "Status", "type", "string", "orderable", false));
-        fields.add(Map.of("name", "contactDetailDTO.contactPhone", "displayName", "type", "string", "Phone", "orderable", true));
         fields.add(Map.of("name", "email", "displayName", "Email Address", "type", "string", "orderable", true));
         fields.add(Map.of("name", "employeeStatus", "displayName", "Status", "type", "string", "orderable", true));
         fields.add(Map.of("name", "action", "displayName", "Action", "type", "string", "orderable", false, "width", "120px"));
@@ -71,7 +67,6 @@ public class FieldService {
         fields.add(Map.of("name", "userType", "displayName", "User Type", "type", "string", "orderable", true));
         fields.add(Map.of("name", "enabled", "displayName", "Status", "type", "boolean", "orderable", false));
         fields.add(Map.of("name", "action", "displayName", "Action", "type", "string", "orderable", false, "width", "120px"));
-        fields.add(Map.of("name", "createdBy.username", "displayName", "Created By","type", "string",  "orderable", false));
         return fields;
     }
 
