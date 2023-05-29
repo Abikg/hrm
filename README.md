@@ -1,6 +1,7 @@
 # Makalu HRM
 
 # Deployment
+
 ### Environment Variables
 - SPRING_PROFILES_ACTIVE
 ~~~~
