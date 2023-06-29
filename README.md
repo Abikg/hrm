@@ -57,3 +57,4 @@ docker registry name
 ~~~~
 docker run  -e SPRING_PROFILES_ACTIVE=prod -e AUTH0_ISSUER_URI="https://dev-yztvar0b.us.auth0.com/" -e AUTH0_AUDIENCE="localhost:8080" -p 8080:8080 -t dhirajbadu/makalu/makalu_hrm:latest
 ~~~~
+"# hrm" 
